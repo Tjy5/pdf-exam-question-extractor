@@ -1,0 +1,312 @@
+{
+  "page_name": "page_8",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\page_8.png",
+  "questions": [
+    {
+      "qno": 47,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_8\\q47.png",
+      "crop_box_image": [
+        18,
+        104,
+        450,
+        302
+      ],
+      "crop_box_blocks": [
+        26,
+        109,
+        442,
+        297
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            109,
+            248,
+            120
+          ],
+          "text": "47.下列选项中最符合所给图形规律的是（）"
+        },
+        {
+          "bbox": [
+            423,
+            285,
+            442,
+            296
+          ],
+          "text": "D.D "
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            40,
+            124,
+            385,
+            275
+          ],
+          "content": "?A B C D ",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            41,
+            286,
+            59,
+            296
+          ],
+          "content": "A.A ",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            296,
+            286,
+            313,
+            297
+          ],
+          "content": "C.C ",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 48,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_8\\q48.png",
+      "crop_box_image": [
+        18,
+        299,
+        450,
+        496
+      ],
+      "crop_box_blocks": [
+        26,
+        304,
+        442,
+        491
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            304,
+            248,
+            315
+          ],
+          "text": "48.下列选项中最符合所给图形规律的是（）。"
+        },
+        {
+          "bbox": [
+            40,
+            479,
+            442,
+            491
+          ],
+          "text": "A.A B.B C.C D.D "
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            45,
+            322,
+            386,
+            378
+          ],
+          "content": "?",
+          "region_label": null
+        },
+        {
+          "label": "image",
+          "bbox": [
+            109,
+            390,
+            321,
+            448
+          ],
+          "content": "",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 49,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_8\\q49.png",
+      "crop_box_image": [
+        18,
+        493,
+        449,
+        733
+      ],
+      "crop_box_blocks": [
+        26,
+        498,
+        441,
+        728
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            498,
+            437,
+            509
+          ],
+          "text": "49.从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性（）。"
+        },
+        {
+          "bbox": [
+            41,
+            718,
+            60,
+            728
+          ],
+          "text": "A.A "
+        },
+        {
+          "bbox": [
+            169,
+            718,
+            185,
+            728
+          ],
+          "text": "B.B "
+        },
+        {
+          "bbox": [
+            296,
+            718,
+            313,
+            728
+          ],
+          "text": "C.C "
+        },
+        {
+          "bbox": [
+            423,
+            718,
+            441,
+            728
+          ],
+          "text": "D.D "
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            43,
+            514,
+            399,
+            589
+          ],
+          "content": "?",
+          "region_label": null
+        },
+        {
+          "label": "image",
+          "bbox": [
+            77,
+            605,
+            359,
+            681
+          ],
+          "content": "",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            176,
+            689,
+            188,
+            705
+          ],
+          "content": "B ",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            246,
+            689,
+            260,
+            706
+          ],
+          "content": "C ",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            314,
+            689,
+            329,
+            706
+          ],
+          "content": "D ",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 50,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_8\\q50.png",
+      "crop_box_image": [
+        17,
+        731,
+        402,
+        752
+      ],
+      "crop_box_blocks": [
+        25,
+        736,
+        394,
+        747
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            25,
+            736,
+            394,
+            747
+          ],
+          "text": "50.下列选项中，最有可能与所给的两个不规则立体图形形成正方体的是（）。"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "footer",
+          "bbox": [
+            35,
+            795,
+            188,
+            805
+          ],
+          "content": "：本试卷由粉笔用户用户08hYFT生成",
+          "region_label": null
+        },
+        {
+          "label": "footer",
+          "bbox": [
+            486,
+            795,
+            560,
+            805
+          ],
+          "content": "第8页，共18页",
+          "region_label": null
+        }
+      ]
+    }
+  ]
+}

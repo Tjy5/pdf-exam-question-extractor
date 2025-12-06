@@ -1,0 +1,313 @@
+{
+  "page_name": "page_15",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\page_15.png",
+  "questions": [
+    {
+      "qno": 81,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_15\\q81.png",
+      "crop_box_image": [
+        17,
+        472,
+        464,
+        512
+      ],
+      "crop_box_blocks": [
+        25,
+        477,
+        456,
+        507
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            25,
+            477,
+            244,
+            487
+          ],
+          "text": "81.2023年，G省博物馆数量同比增长约（）。"
+        },
+        {
+          "bbox": [
+            40,
+            497,
+            456,
+            507
+          ],
+          "text": "A.2.1%B.4.2%C.6.3%D.8.4%"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 82,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_15\\q82.png",
+      "crop_box_image": [
+        18,
+        511,
+        453,
+        550
+      ],
+      "crop_box_blocks": [
+        26,
+        516,
+        445,
+        545
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            516,
+            255,
+            526
+          ],
+          "text": "82.2016～2022年，G省博物馆年均增加（）家。"
+        },
+        {
+          "bbox": [
+            41,
+            535,
+            445,
+            545
+          ],
+          "text": "A.15B.16C.17D.18"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 83,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_15\\q83.png",
+      "crop_box_image": [
+        18,
+        549,
+        461,
+        588
+      ],
+      "crop_box_blocks": [
+        26,
+        554,
+        453,
+        583
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            554,
+            339,
+            564
+          ],
+          "text": "83.2023年，G省文物系统国有博物馆约占国有博物馆总量的（）。"
+        },
+        {
+          "bbox": [
+            40,
+            573,
+            453,
+            583
+          ],
+          "text": "A.55%B.66%C.77%Fb翻D.88%"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 84,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_15\\q84.png",
+      "crop_box_image": [
+        18,
+        587,
+        473,
+        626
+      ],
+      "crop_box_blocks": [
+        26,
+        592,
+        465,
+        621
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            592,
+            334,
+            602
+          ],
+          "text": "84.2017~2023年间，G省国有博物馆同比增加数量最多的是（）。"
+        },
+        {
+          "bbox": [
+            40,
+            611,
+            465,
+            621
+          ],
+          "text": "A.2017年B.2018年C.2019年D.2020年"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 85,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_15\\q85.png",
+      "crop_box_image": [
+        18,
+        626,
+        568,
+        810
+      ],
+      "crop_box_blocks": [
+        26,
+        631,
+        560,
+        805
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            631,
+            216,
+            641
+          ],
+          "text": "85.根据资料，以下说法正确的是（）。"
+        },
+        {
+          "bbox": [
+            40,
+            650,
+            260,
+            660
+          ],
+          "text": "A.2017～2023年，G省国有博物馆数量逐年增加"
+        },
+        {
+          "bbox": [
+            40,
+            666,
+            269,
+            676
+          ],
+          "text": "B.2017～2023年，G省非国有博物馆数量逐年增加"
+        },
+        {
+          "bbox": [
+            40,
+            682,
+            243,
+            692
+          ],
+          "text": "C.2019年，G省非国有博物馆首次超过100家"
+        },
+        {
+          "bbox": [
+            40,
+            698,
+            335,
+            708
+          ],
+          "text": "D.2023年，按G省常住人口1.27亿计算，每40万人拥有1家博物馆"
+        },
+        {
+          "bbox": [
+            283,
+            714,
+            310,
+            727
+          ],
+          "text": "（四）"
+        },
+        {
+          "bbox": [
+            40,
+            734,
+            546,
+            762
+          ],
+          "text": "2023年，我国铁路客运创历史最好水平，服务保障国家重大战略成效显著旅客运输。国家铁路旅客发送量完成36.85亿人，比上年增加20.75亿人：国家铁路旅客周转量（旅客周转量=旅客发送量×旅客平均运送距离）"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "footer",
+          "bbox": [
+            35,
+            796,
+            188,
+            805
+          ],
+          "content": "：本试卷由粉笔用户用户08hYFT生成",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            483,
+            796,
+            560,
+            805
+          ],
+          "content": "第15页，共18页",
+          "region_label": null
+        }
+      ]
+    }
+  ],
+  "big_questions": [
+    {
+      "id": "data_analysis_4",
+      "type": "data_analysis",
+      "pages": [
+        "page_15",
+        "page_16",
+        "page_17"
+      ],
+      "qnos": [
+        86,
+        87,
+        88,
+        90
+      ],
+      "segments": [
+        {
+          "page": "page_15",
+          "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_15\\big_4_part1.png",
+          "box": [
+            0,
+            709,
+            595,
+            772
+          ]
+        },
+        {
+          "page": "page_16",
+          "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_16\\big_4_part2.png",
+          "box": [
+            0,
+            85,
+            595,
+            776
+          ]
+        },
+        {
+          "page": "page_17",
+          "image": "D:\\1something\\Learning_Files\\newvl\\test\\pdf_images\\questions_page_17\\big_4_part3.png",
+          "box": [
+            0,
+            85,
+            595,
+            159
+          ]
+        }
+      ]
+    }
+  ]
+}

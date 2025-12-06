@@ -1,0 +1,191 @@
+{
+  "page_name": "page_16",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\page_16.png",
+  "questions": [
+    {
+      "qno": 86,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_16\\q86.png",
+      "crop_box_image": [
+        18,
+        598,
+        467,
+        637
+      ],
+      "crop_box_blocks": [
+        26,
+        603,
+        459,
+        632
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            603,
+            269,
+            613
+          ],
+          "text": "86.2023年，国家铁路旅客发送量同比增长约（）。"
+        },
+        {
+          "bbox": [
+            40,
+            622,
+            459,
+            632
+          ],
+          "text": "A.30%B.55%C.130%D.155%"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 87,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_16\\q87.png",
+      "crop_box_image": [
+        18,
+        636,
+        464,
+        675
+      ],
+      "crop_box_blocks": [
+        26,
+        641,
+        456,
+        670
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            641,
+            316,
+            651
+          ],
+          "text": "87.2018~2023年，国家铁路旅客发送量年均增长约（）万人。"
+        },
+        {
+          "bbox": [
+            41,
+            660,
+            456,
+            670
+          ],
+          "text": "A.6130B.7360C.8280D.9200"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 88,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_16\\q88.png",
+      "crop_box_image": [
+        18,
+        674,
+        482,
+        752
+      ],
+      "crop_box_blocks": [
+        26,
+        679,
+        474,
+        747
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            679,
+            296,
+            689
+          ],
+          "text": "88.2021~2023年，国家铁路旅客周转量年均增长率（）。"
+        },
+        {
+          "bbox": [
+            40,
+            698,
+            474,
+            709
+          ],
+          "text": "A.不到15%B.在15%到30%之间C.在30%到45%之间D.超过45%"
+        },
+        {
+          "bbox": [
+            26,
+            718,
+            369,
+            729
+          ],
+          "text": "o "
+        },
+        {
+          "bbox": [
+            40,
+            736,
+            466,
+            747
+          ],
+          "text": "A.2020年B.2021年C.2022年co D.2023年"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 90,
+      "image": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\questions_page_16\\q90.png",
+      "crop_box_image": [
+        18,
+        751,
+        234,
+        771
+      ],
+      "crop_box_blocks": [
+        26,
+        756,
+        226,
+        766
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            26,
+            756,
+            226,
+            766
+          ],
+          "text": "90.根据材料，以下说法不正确的是（）。"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "footer",
+          "bbox": [
+            35,
+            796,
+            189,
+            805
+          ],
+          "content": "：本试卷由粉笔用户用户08hYFT生成",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            483,
+            796,
+            560,
+            805
+          ],
+          "content": "第16页，共18页",
+          "region_label": null
+        }
+      ]
+    }
+  ],
+  "big_questions": []
+}

@@ -1,0 +1,4833 @@
+[
+  {
+    "page_name": "page_10",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_10.png",
+    "questions": [
+      {
+        "qno": 56,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_10\\q56.png",
+        "crop_box_image": [
+          18,
+          120,
+          554,
+          273
+        ],
+        "crop_box_blocks": [
+          26,
+          125,
+          546,
+          268
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              125,
+              546,
+              152
+            ],
+            "text": "56.庑殿顶是中国古代建筑的一种屋顶形式，由一条正脊和四条垂脊组成，而中国古代许多皇宫大殿有房殿顶，因\n此许多皇宫大殿的屋顶只有一条正脊。\n\nFb盼\n\n"
+          },
+          {
+            "bbox": [
+              41,
+              158,
+              258,
+              168
+            ],
+            "text": "以下选项的推理逻辑与题干最相似的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              177,
+              546,
+              204
+            ],
+            "text": "A.现代主义建筑通常没有复杂的装饰，追求功能属性与简约美，而西班牙的许多建筑造型奇特，装饰繁复，因此这些建筑不属于现代主义建筑\n"
+          },
+          {
+            "bbox": [
+              40,
+              209,
+              546,
+              236
+            ],
+            "text": "B.哥特式建筑都有尖形拱门，而欧洲中世纪的建筑多数属于哥特式建筑，因此部分欧洲中世纪的建筑有尖形拱门\n"
+          },
+          {
+            "bbox": [
+              40,
+              242,
+              504,
+              252
+            ],
+            "text": "C.古罗马时期的建筑多数都有穹顶，而同一时期的建筑多为砖石结构，因此有的砖石结构建筑有穹顶"
+          },
+          {
+            "bbox": [
+              41,
+              258,
+              463,
+              268
+            ],
+            "text": "D.客家围屋都设有用于防御土匪侵扰的炮楼，因此有客家围屋的地区，都需要防御土匪侵扰"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 57,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_10\\q57.png",
+        "crop_box_image": [
+          18,
+          271,
+          554,
+          391
+        ],
+        "crop_box_blocks": [
+          26,
+          276,
+          546,
+          386
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              276,
+              546,
+              304
+            ],
+            "text": "57.网络购物平台的数据分析显示，网店为商品提供免费的运费险能够增加销量，但其商品退费率远高于不提供这项服务的网店，从而增加了运营成本。但提供免费运费险的很多网店仍未关闭这一服务。"
+          },
+          {
+            "bbox": [
+              41,
+              309,
+              300,
+              319
+            ],
+            "text": "如果以下选项为真，最有可能解释这一现象的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              327,
+              336,
+              386
+            ],
+            "text": "A.提供这一服务的网店比其他网店获得了更高的净利润\nB商品销量和运费成本是衡量网店经营状况的两项关键指标\nC.人工、场地等成本不受退货率影响，且占运营成本的比重不低\nD.提供免费的运费险能够显著提升消费者的信任度\n"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 58,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_10\\q58.png",
+        "crop_box_image": [
+          18,
+          390,
+          554,
+          542
+        ],
+        "crop_box_blocks": [
+          26,
+          395,
+          546,
+          537
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              395,
+              546,
+              421
+            ],
+            "text": "58.古丝绸之路之所以举世闻名，靠的不仅是经济互利，更是丰富物产和多元文化交流，所以，只有经济互利，不可能重现古丝绸之路的辉煌。\n"
+          },
+          {
+            "bbox": [
+              41,
+              427,
+              248,
+              437
+            ],
+            "text": "以下选项推理逻辑与题干最相似的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              446,
+              545,
+              473
+            ],
+            "text": "A.我国要实现高水平科技自立自强，归根结底是要靠高水平创新人才，所以，创新能力培养应该成为人才培养的核心\n"
+          },
+          {
+            "bbox": [
+              40,
+              479,
+              462,
+              489
+            ],
+            "text": "B.粮食丰收，及时收割和晒干入库都是关键环节，所以，天气连续晴好有助于实现粮食丰收"
+          },
+          {
+            "bbox": [
+              40,
+              495,
+              545,
+              521
+            ],
+            "text": "C.高水平大学不仅要有完整的设施设备，更要有高水平的教师队伍，因此，仅靠完善设施设备并不能成为高水平大学\n"
+          },
+          {
+            "bbox": [
+              40,
+              526,
+              515,
+              537
+            ],
+            "text": "D.体育活动需要合适的运动场所，因此，如果城市缺少合适的运动场所，居民就难以积极参加体育活动"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 59,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_10\\q59.png",
+        "crop_box_image": [
+          18,
+          540,
+          549,
+          612
+        ],
+        "crop_box_blocks": [
+          26,
+          545,
+          541,
+          607
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              545,
+              541,
+              572
+            ],
+            "text": "59.在一次技能竞赛中，甲、乙、丙、丁4人排名前四且无人并列，已知甲和第三名是好友且名次比该好友高：丁和甲不是好友但和第一名是好友；乙的名次比丙高。\n"
+          },
+          {
+            "bbox": [
+              41,
+              578,
+              237,
+              588
+            ],
+            "text": "根据上述信息，以下判断错误的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              597,
+              518,
+              607
+            ],
+            "text": "A.丙的名次不高于第三名B.甲的名次一定高于丙C.乙和丁是好友D.乙不可能是第一名"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 60,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_10\\q60.png",
+        "crop_box_image": [
+          18,
+          610,
+          555,
+          716
+        ],
+        "crop_box_blocks": [
+          26,
+          615,
+          547,
+          711
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              615,
+              547,
+              659
+            ],
+            "text": "60.某研究者选取同一年级的两个班级进行教学实验，第一个班级的学生在听课过程中被鼓励随时提问，而第二个班级的学生没有受到同样的鼓励，结果显示，第一个班级学生的课堂专注度明显高于第二个班级。研究者据此建议在教学过程中学生应随时提问，以提升知识掌握效果。\n"
+          },
+          {
+            "bbox": [
+              41,
+              665,
+              290,
+              675
+            ],
+            "text": "如果以下选项为真，最能支持研究者建议的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              683,
+              507,
+              711
+            ],
+            "text": "A.学生在课堂上随时主动提问能活跃课堂气氛B.课堂专注度是影响知识掌握效果的重要因素C.这两个班级的学生在实验前的学习成绩相当D.随时提问能帮助学生增强自我认同感和自信"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 61,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_10\\q61.png",
+        "crop_box_image": [
+          18,
+          713,
+          555,
+          782
+        ],
+        "crop_box_blocks": [
+          26,
+          718,
+          547,
+          777
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              718,
+              547,
+              762
+            ],
+            "text": "61.作为高端羽毛球的必备原料，羽毛切片是鸭鹅养殖的副产品，其供应量上要取决于养殖规模，如果养殖规模有所下降，羽毛切片价格将会一路走高，进而导致高端羽毛球生产成本高企、厂家将因此被迫提高出厂价格，所以，如果近期鸭鹅养殖规模保持平稳，则高端羽毛球的出厂价格将不会明显上涨。"
+          },
+          {
+            "bbox": [
+              42,
+              767,
+              215,
+              777
+            ],
+            "text": "上述论证的主要逻辑错误在于（）。"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              483,
+              796,
+              560,
+              805
+            ],
+            "content": "第10页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_11",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_11.png",
+    "questions": [
+      {
+        "qno": 62,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_11\\q62.png",
+        "crop_box_image": [
+          18,
+          120,
+          554,
+          359
+        ],
+        "crop_box_blocks": [
+          26,
+          125,
+          546,
+          354
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              125,
+              521,
+              152
+            ],
+            "text": "62.根据法律，公共场所禁止吸烟，因此，如果有人在某个区域吸烟却不违法，说明该区域不属于公共场所。以下选项的推理逻辑与题干最相似的是（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              161,
+              358,
+              171
+            ],
+            "text": "A.长时间室内活动是近视的主要原因，因此近视的人都缺乏户外运动"
+          },
+          {
+            "bbox": [
+              40,
+              177,
+              492,
+              188
+            ],
+            "text": "B优秀的工匠在学徒时期就追求精益求精，如果某学徒自我要求不高，那他就无法成为优秀的工匠"
+          },
+          {
+            "bbox": [
+              40,
+              193,
+              431,
+              204
+            ],
+            "text": "C超过9层的楼房都会配建电梯，因此，如果某住宅楼低干9层，那么住户只能走楼梯"
+          },
+          {
+            "bbox": [
+              40,
+              210,
+              431,
+              220
+            ],
+            "text": "D.织物表面的纳米涂层可以阻止液体渗入，因此，某种面料防水，说明它有纳米涂层"
+          },
+          {
+            "bbox": [
+              26,
+              228,
+              546,
+              271
+            ],
+            "text": "Fb 63.某厂家用“除菌去残留，效果看得见”这一广告语，宣传其生产的果蔬清洗机，并展示该产品与其他果蔬清洗机清洗同一种水果的视频，视频显示，该清洗机清洗产生的泡沫最多。该厂家宣称泡沫是被清洗机清洗出来的有害残留，故其产品除菌去残留效果更好。\n"
+          },
+          {
+            "bbox": [
+              40,
+              277,
+              279,
+              287
+            ],
+            "text": "如果下列选项为真，最能反驳上述推论的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              295,
+              315,
+              354
+            ],
+            "text": "A用果蔬清洗机清洗食材，不管清洗多少遍，都会出现泡沫B.市面上绝大部分果蔬的农药残留均未超标，有害物质极少C.用普通烹饪方式加工肉类食材，或多或少也会产生泡沫D.专业化学检测是检验果蔬除菌去残留效果的唯一有效手段"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 64,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_11\\q64.png",
+        "crop_box_image": [
+          18,
+          358,
+          462,
+          494
+        ],
+        "crop_box_blocks": [
+          26,
+          363,
+          454,
+          489
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              363,
+              247,
+              373
+            ],
+            "text": "64.小陈计划假期前往某市旅游，他的设想如下："
+          },
+          {
+            "bbox": [
+              40,
+              379,
+              206,
+              389
+            ],
+            "text": "①欢乐世界，动物园至少会去一个；"
+          },
+          {
+            "bbox": [
+              40,
+              395,
+              268,
+              405
+            ],
+            "text": "②艺术中心，欢乐世界和人民公园至少会去一个："
+          },
+          {
+            "bbox": [
+              40,
+              411,
+              248,
+              421
+            ],
+            "text": "③动物园，人民公园和博物馆至少会去两个；"
+          },
+          {
+            "bbox": [
+              40,
+              427,
+              206,
+              437
+            ],
+            "text": "④如果去动物园，则不去艺术中心。"
+          },
+          {
+            "bbox": [
+              40,
+              444,
+              215,
+              454
+            ],
+            "text": "根据上述设想，可以得出小陈（）。"
+          },
+          {
+            "bbox": [
+              40,
+              463,
+              454,
+              473
+            ],
+            "text": "A.一定会去博物馆B.动物园，艺术中心至少会去一个"
+          },
+          {
+            "bbox": [
+              40,
+              479,
+              386,
+              489
+            ],
+            "text": "C.人民公园，欢乐世界至少会去一个D.至少会去3个景点"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 65,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_11\\q65.png",
+        "crop_box_image": [
+          18,
+          492,
+          556,
+          664
+        ],
+        "crop_box_blocks": [
+          26,
+          497,
+          548,
+          659
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              497,
+              546,
+              541
+            ],
+            "text": "65.鉴于漂流项目偶尔会出现游客落水伤亡的情况，某旅游景区为每一位参加漂流项目的游客购买了意外保险，并要求游客必须穿上景区配备的救生衣，有游客对此提出疑问，既然景区已经购买了意外保险，游客出现意外伤亡由保险公司赔付，那么游客为寻求刺激的漂流体验，可以选择不穿救生衣。"
+          },
+          {
+            "bbox": [
+              41,
+              546,
+              279,
+              556
+            ],
+            "text": "如果以下选项为真，最能反驳这一质疑的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              564,
+              326,
+              575
+            ],
+            "text": "A.如果未穿救生衣的游客出现意外伤亡，保险公司将不予赔付"
+          },
+          {
+            "bbox": [
+              41,
+              581,
+              325,
+              591
+            ],
+            "text": "B.该景区为参加蹦极、过山车等项目的游客也购买了意外保险"
+          },
+          {
+            "bbox": [
+              40,
+              597,
+              325,
+              607
+            ],
+            "text": "C.该景区在免费为游客提供了救生衣的同时，还配备了救生员"
+          },
+          {
+            "bbox": [
+              41,
+              613,
+              284,
+              623
+            ],
+            "text": "D.保障游客的人身安全是景区经营方的基本职责之一"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "doc_title",
+            "bbox": [
+              40,
+              632,
+              548,
+              659
+            ],
+            "content": "六.科学推理：每道题给出文字或图表信息，要求你在此基础上，用基本科学知识进行推理判断，从4个备选项 中选出最合理的1项。\n",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 66,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_11\\q66.png",
+        "crop_box_image": [
+          18,
+          663,
+          451,
+          770
+        ],
+        "crop_box_blocks": [
+          26,
+          668,
+          443,
+          765
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              668,
+              405,
+              678
+            ],
+            "text": "66.下表为一些常见溶液的酸碱度，根据表中的信息，以下说法不恰当的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              738,
+              443,
+              765
+            ],
+            "text": "A.草木灰水能改良酸性土壤B.食醋能中和皮蛋中的碱性物质C.肥皂水能中和蚂蚁叮咬皮肤时分泌的蚊酸D.胃酸过多的人适宜多喝苹果汁"
+          }
+        ],
+        "table_blocks": [
+          {
+            "bbox": [
+              43,
+              684,
+              430,
+              726
+            ],
+            "html": "<html><body><table><tr><td>c物质</td><td>食醋</td><td>苹果汁</td><td>肥皂水</td><td>草木灰水</td></tr><tr><td>ph</td><td>2</td><td>3</td><td>10</td><td>11</td></tr></table></body></html>"
+          }
+        ],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              484,
+              796,
+              560,
+              805
+            ],
+            "content": "第11页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_12",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_12.png",
+    "questions": [
+      {
+        "qno": 67,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_12\\q67.png",
+        "crop_box_image": [
+          17,
+          85,
+          540,
+          324
+        ],
+        "crop_box_blocks": [
+          25,
+          90,
+          532,
+          319
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              25,
+              90,
+              532,
+              117
+            ],
+            "text": "67.如图所示，通过夹物器匀速夹起表面粗糙的木块M1，M2，M3，木块M1、M2、M3始终保持相对静止，关于M1、M2、M3的受力情况，下列说法不正确的是（）\n"
+          },
+          {
+            "bbox": [
+              40,
+              260,
+              294,
+              319
+            ],
+            "text": "A.木块M2受到的摩擦力的方向竖直向上\n\nB.木块M1、M3受到的摩擦力数量相等\n\nC.木块M1、M2、M3都受到两个方向相同的摩擦力\nD.木块M2作用于M1、M3的摩擦力方向与重力方向相同\n"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "image",
+            "bbox": [
+              46,
+              130,
+              147,
+              248
+            ],
+            "content": "M1M2M3\n",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 68,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_12\\q68.png",
+        "crop_box_image": [
+          18,
+          322,
+          554,
+          485
+        ],
+        "crop_box_blocks": [
+          26,
+          327,
+          546,
+          480
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              327,
+              546,
+              354
+            ],
+            "text": "68.图示为海陆风示意图，昼夜交替过程中海洋与陆地间的气温差，造成了近地面大气的密度和气压差，推动气流由高压（低温）区域向低压（高温）区域运动，从而形成了海陆风，下列关于海陆风的说法正确的是（）"
+          },
+          {
+            "bbox": [
+              40,
+              453,
+              475,
+              480
+            ],
+            "text": "A.日间海面上气温低于陆地，而夜间则高于陆地B.日间，近地面气流由陆地向海面移动C.海面上的昼夜温差较陆地大D.图1是夜间海陆风示意图"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "image",
+            "bbox": [
+              56,
+              360,
+              159,
+              423
+            ],
+            "content": "二\n\n陆\n\n海\n",
+            "region_label": null
+          },
+          {
+            "label": "figure_title",
+            "bbox": [
+              113,
+              427,
+              128,
+              436
+            ],
+            "content": "图1",
+            "region_label": null
+          },
+          {
+            "label": "image",
+            "bbox": [
+              173,
+              360,
+              276,
+              423
+            ],
+            "content": "（二\n\n陆\n\n海\n",
+            "region_label": null
+          },
+          {
+            "label": "figure_title",
+            "bbox": [
+              231,
+              427,
+              246,
+              436
+            ],
+            "content": "图2",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 69,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_12\\q69.png",
+        "crop_box_image": [
+          18,
+          483,
+          548,
+          705
+        ],
+        "crop_box_blocks": [
+          26,
+          488,
+          540,
+          700
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              488,
+              540,
+              515
+            ],
+            "text": "69.如图所示，$R_{1}$ 是热敏电阻，其电阻值随温度升高而减小，已知电源电压不变，闭合开关S后，随着$R_{1}$ 温度升高，下列说法不正确的是（）\n"
+          },
+          {
+            "bbox": [
+              40,
+              641,
+              163,
+              700
+            ],
+            "text": "A.通过电阻$R_{2}$ 的电流变小\nB.电流表的读数增大\nC.灯泡亮度增大\n\nD.电路总电阻变大\n"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "image",
+            "bbox": [
+              49,
+              522,
+              202,
+              621
+            ],
+            "content": "R1\nS R2\n",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 70,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_12\\q70.png",
+        "crop_box_image": [
+          18,
+          704,
+          534,
+          760
+        ],
+        "crop_box_blocks": [
+          26,
+          709,
+          526,
+          755
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              709,
+              437,
+              720
+            ],
+            "text": "70.在日常生活中，人们总是难以避免与细菌接触，以下有关细菌的说法错误的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              728,
+              526,
+              755
+            ],
+            "text": "A.我国甲类传染病中的鼠疫是由细菌引发的B.有的细菌可用于食品生产、废水处理或生物分解C.细菌是微生物也是细胞，可以自行分裂繁殖D.杀灭细菌，只能依靠人体自身免疫力"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              483,
+              796,
+              560,
+              805
+            ],
+            "content": "第12页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_13",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_13.png",
+    "questions": [
+      {
+        "qno": 71,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_13\\q71.png",
+        "crop_box_image": [
+          18,
+          357,
+          461,
+          397
+        ],
+        "crop_box_blocks": [
+          26,
+          362,
+          453,
+          392
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              362,
+              307,
+              373
+            ],
+            "text": "71.2023年1~11月，G省社会消费品零售额约为（）万亿元。"
+          },
+          {
+            "bbox": [
+              41,
+              382,
+              453,
+              392
+            ],
+            "text": "A.4.34B.4.43C.4.54D.4.63"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 72,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_13\\q72.png",
+        "crop_box_image": [
+          18,
+          396,
+          482,
+          435
+        ],
+        "crop_box_blocks": [
+          26,
+          401,
+          474,
+          430
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              401,
+              265,
+              411
+            ],
+            "text": "72.2023年，G省社会消费品零售额同比增长（）。"
+          },
+          {
+            "bbox": [
+              40,
+              420,
+              474,
+              430
+            ],
+            "text": "A.不到5%B.在5%到10%之间C.在10%到15%之间D.超过15%"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 73,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_13\\q73.png",
+        "crop_box_image": [
+          18,
+          434,
+          469,
+          473
+        ],
+        "crop_box_blocks": [
+          26,
+          439,
+          461,
+          468
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              439,
+              359,
+              449
+            ],
+            "text": "73.2023年，G省城镇社会消费品零售额约占社会消费品零售额的（）。"
+          },
+          {
+            "bbox": [
+              41,
+              458,
+              461,
+              468
+            ],
+            "text": "A.79.8%B.83.4%C.87.1%D.90.0%"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 74,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_13\\q74.png",
+        "crop_box_image": [
+          18,
+          472,
+          484,
+          512
+        ],
+        "crop_box_blocks": [
+          26,
+          477,
+          476,
+          507
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              477,
+              370,
+              487
+            ],
+            "text": "74.2023年，G省下列指标的社会消费品零售额同比增长率最高的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              497,
+              476,
+              507
+            ],
+            "text": "A.城镇B.乡村C.商品零售D.餐饮收入"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 75,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_13\\q75.png",
+        "crop_box_image": [
+          18,
+          511,
+          555,
+          764
+        ],
+        "crop_box_blocks": [
+          26,
+          516,
+          547,
+          759
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              516,
+              216,
+              526
+            ],
+            "text": "75.根据资料，以下说法有误的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              535,
+              340,
+              594
+            ],
+            "text": "A.2023年12月G省社会消费品零售额高于当年月平均数B.2023年12月G省餐饮收入社会消费品零售额同比增长率超过50%C.2022年12月G省城镇社会消费品零售额中，城区占比超过九成D.2022年12月G省社会消费品零售额中，餐饮收入占比不足一成"
+          },
+          {
+            "bbox": [
+              40,
+              620,
+              547,
+              679
+            ],
+            "text": "2013~2023年，中国深入推进能源生产和消费方式变革，能源绿色低碳发展实现历史性突破。2023年，清洁能源消费占比26.4%，较2013年提高109个百分点，煤炭消费比率累计下降121个百分点，发电总装机容量达29.2亿千瓦。其中，清洁能源发电装机容量达17亿千瓦，清洁能源发电约3.8万亿千瓦，占总发电量的39.7%，比2013年提高约15个百分点。十年来，新增清洁能源发电量占全社会用电增量一半以上。"
+          },
+          {
+            "bbox": [
+              40,
+              685,
+              546,
+              727
+            ],
+            "text": "中国能源转型支撑经济社会高质量发展。十年来，能源领域固定资产投资39万亿元，推动上下游产业链及相关产业的投资增长。一系列能源领域，重大工程建成投产，建立起完备的能源装备制造产业链，新能源、水电、核电、输变电、新型储能等领域技术创新加快，推动清洁能源产业成长为现代化产业体系新支柱。"
+          },
+          {
+            "bbox": [
+              40,
+              733,
+              545,
+              759
+            ],
+            "text": "中国能源转型保障人民美好生活需要，十年来，14亿多人的能源安全得到有效保障。全国人均用电量从约500千瓦时增至接近1000千瓦时，天然气用户达5.6亿人，农村电网改造升级中央预算内总投资超千亿元。2015"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "paragraph_title",
+            "bbox": [
+              283,
+              600,
+              310,
+              611
+            ],
+            "content": "(二)",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              36,
+              796,
+              188,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              483,
+              796,
+              560,
+              805
+            ],
+            "content": "第13页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_14",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_14.png",
+    "questions": [
+      {
+        "qno": 76,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_14\\q76.png",
+        "crop_box_image": [
+          18,
+          185,
+          323,
+          273
+        ],
+        "crop_box_blocks": [
+          26,
+          190,
+          315,
+          268
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              190,
+              163,
+              200
+            ],
+            "text": "76.以下判断正确的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              210,
+              264,
+              220
+            ],
+            "text": "A.我国清洁能源消费比重已经超过煤炭消费比重"
+          },
+          {
+            "bbox": [
+              41,
+              226,
+              304,
+              236
+            ],
+            "text": "B.我国清洁能源发电装机容量不到发电总装机容量的一半"
+          },
+          {
+            "bbox": [
+              41,
+              242,
+              315,
+              252
+            ],
+            "text": "C.我国清洁能源发电量占总发电量的比重较10年前翻了一番F6笔"
+          },
+          {
+            "bbox": [
+              41,
+              258,
+              196,
+              268
+            ],
+            "text": "D.我国总发电量超过9万亿千瓦时"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 77,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_14\\q77.png",
+        "crop_box_image": [
+          18,
+          272,
+          350,
+          370
+        ],
+        "crop_box_blocks": [
+          26,
+          277,
+          342,
+          365
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              277,
+              216,
+              287
+            ],
+            "text": "77.根据资料，以下说法有误的是（）。"
+          },
+          {
+            "bbox": [
+              41,
+              296,
+              274,
+              306
+            ],
+            "text": "A.农村地区户用光伏可为农户增加收人和就业岗位"
+          },
+          {
+            "bbox": [
+              49,
+              322,
+              253,
+              333
+            ],
+            "text": "2023年我国已有超过2的人口用上了天然气"
+          },
+          {
+            "bbox": [
+              40,
+              339,
+              279,
+              349
+            ],
+            "text": "C.2013~2023年，我国人均生活用电量几平翻了一番"
+          },
+          {
+            "bbox": [
+              40,
+              354,
+              342,
+              365
+            ],
+            "text": "D.2013~2023年，新增清洁能源发电量占全社会用电增量一半以上"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 78,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_14\\q78.png",
+        "crop_box_image": [
+          18,
+          369,
+          453,
+          409
+        ],
+        "crop_box_blocks": [
+          26,
+          374,
+          445,
+          404
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              374,
+              305,
+              384
+            ],
+            "text": "78.2013-2023年，全国充电基础设施年均增加约（）万台。"
+          },
+          {
+            "bbox": [
+              40,
+              394,
+              445,
+              404
+            ],
+            "text": "A.60B.75Fb C.85D.95"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 79,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_14\\q79.png",
+        "crop_box_image": [
+          18,
+          408,
+          484,
+          511
+        ],
+        "crop_box_blocks": [
+          26,
+          413,
+          476,
+          506
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              413,
+              269,
+              423
+            ],
+            "text": "79.中国新能源产业对世界的影响，主要包括（）。"
+          },
+          {
+            "bbox": [
+              40,
+              429,
+              117,
+              439
+            ],
+            "text": "①丰富全球供给"
+          },
+          {
+            "bbox": [
+              40,
+              444,
+              138,
+              455
+            ],
+            "text": "②缓解全球通胀压力"
+          },
+          {
+            "bbox": [
+              40,
+              460,
+              169,
+              471
+            ],
+            "text": "③应对气候变化和绿色转型"
+          },
+          {
+            "bbox": [
+              40,
+              476,
+              169,
+              487
+            ],
+            "text": "④支撑经济社会高质量发展"
+          },
+          {
+            "bbox": [
+              40,
+              495,
+              476,
+              506
+            ],
+            "text": "A.①②③B.①③④C.②③④D.①②③④"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 80,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_14\\q80.png",
+        "crop_box_image": [
+          18,
+          510,
+          557,
+          683
+        ],
+        "crop_box_blocks": [
+          26,
+          515,
+          549,
+          678
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              515,
+              227,
+              525
+            ],
+            "text": "80.根据材料，以下说法不正确的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              534,
+              285,
+              544
+            ],
+            "text": "A.2023年，我国已建立起完备的能源装备制造产业链"
+          },
+          {
+            "bbox": [
+              40,
+              550,
+              263,
+              560
+            ],
+            "text": "B.2023年，我国是全球能源转型投资最多的国家"
+          },
+          {
+            "bbox": [
+              40,
+              565,
+              428,
+              576
+            ],
+            "text": "C.2013-2023年，我国累计出口的清洁能源产品助力其他国家减排二氧化碳约8.1亿吨"
+          },
+          {
+            "bbox": [
+              41,
+              582,
+              348,
+              592
+            ],
+            "text": "D.2013-2023年，我国与100多个国家和地区开展绿色能源项目合作"
+          },
+          {
+            "bbox": [
+              40,
+              620,
+              549,
+              646
+            ],
+            "text": "2023年，G省博物馆系统落实国家文物局、G省人民政府关于推进文物事业高质量发展战略合作协议，锚定博物馆事业高质量发展任务，全省博物馆事业发展取得明显成效。\n"
+          },
+          {
+            "bbox": [
+              40,
+              652,
+              548,
+              678
+            ],
+            "text": "截至2023年来，G省备案博物馆385家。其中，国有博物馆257家，非国有博物馆128家。国有博物馆中，文物系统国有博物馆227家，行业国有博物馆30家。G省国家一、二、三级博物馆共82家，数量位居全国第二。"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "paragraph_title",
+            "bbox": [
+              282,
+              599,
+              310,
+              611
+            ],
+            "content": "(三)",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              188,
+              805
+            ],
+            "content": "本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              483,
+              796,
+              560,
+              805
+            ],
+            "content": "第14页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_15",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_15.png",
+    "questions": [
+      {
+        "qno": 81,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_15\\q81.png",
+        "crop_box_image": [
+          17,
+          472,
+          464,
+          512
+        ],
+        "crop_box_blocks": [
+          25,
+          477,
+          456,
+          507
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              25,
+              477,
+              244,
+              487
+            ],
+            "text": "81.2023年，G省博物馆数量同比增长约（）。"
+          },
+          {
+            "bbox": [
+              40,
+              497,
+              456,
+              507
+            ],
+            "text": "A.2.1%B.4.2%C.6.3%D.8.4%"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 82,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_15\\q82.png",
+        "crop_box_image": [
+          18,
+          511,
+          453,
+          550
+        ],
+        "crop_box_blocks": [
+          26,
+          516,
+          445,
+          545
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              516,
+              255,
+              526
+            ],
+            "text": "82.2016～2022年，G省博物馆年均增加（）家。"
+          },
+          {
+            "bbox": [
+              41,
+              535,
+              445,
+              545
+            ],
+            "text": "A.15B.16C.17D.18"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 83,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_15\\q83.png",
+        "crop_box_image": [
+          18,
+          549,
+          461,
+          588
+        ],
+        "crop_box_blocks": [
+          26,
+          554,
+          453,
+          583
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              554,
+              339,
+              564
+            ],
+            "text": "83.2023年，G省文物系统国有博物馆约占国有博物馆总量的（）。"
+          },
+          {
+            "bbox": [
+              40,
+              573,
+              453,
+              583
+            ],
+            "text": "A.55%B.66%C.77%Fb翻D.88%"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 84,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_15\\q84.png",
+        "crop_box_image": [
+          18,
+          587,
+          473,
+          626
+        ],
+        "crop_box_blocks": [
+          26,
+          592,
+          465,
+          621
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              592,
+              334,
+              602
+            ],
+            "text": "84.2017~2023年间，G省国有博物馆同比增加数量最多的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              611,
+              465,
+              621
+            ],
+            "text": "A.2017年B.2018年C.2019年D.2020年"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 85,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_15\\q85.png",
+        "crop_box_image": [
+          18,
+          626,
+          554,
+          767
+        ],
+        "crop_box_blocks": [
+          26,
+          631,
+          546,
+          762
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              631,
+              216,
+              641
+            ],
+            "text": "85.根据资料，以下说法正确的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              650,
+              260,
+              660
+            ],
+            "text": "A.2017～2023年，G省国有博物馆数量逐年增加"
+          },
+          {
+            "bbox": [
+              40,
+              666,
+              269,
+              676
+            ],
+            "text": "B.2017～2023年，G省非国有博物馆数量逐年增加"
+          },
+          {
+            "bbox": [
+              40,
+              682,
+              243,
+              692
+            ],
+            "text": "C.2019年，G省非国有博物馆首次超过100家"
+          },
+          {
+            "bbox": [
+              40,
+              698,
+              335,
+              708
+            ],
+            "text": "D.2023年，按G省常住人口1.27亿计算，每40万人拥有1家博物馆"
+          },
+          {
+            "bbox": [
+              283,
+              714,
+              310,
+              727
+            ],
+            "text": "（四）"
+          },
+          {
+            "bbox": [
+              40,
+              734,
+              546,
+              762
+            ],
+            "text": "2023年，我国铁路客运创历史最好水平，服务保障国家重大战略成效显著旅客运输。国家铁路旅客发送量完成36.85亿人，比上年增加20.75亿人：国家铁路旅客周转量（旅客周转量=旅客发送量×旅客平均运送距离）"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              188,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              483,
+              796,
+              560,
+              805
+            ],
+            "content": "第15页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_16",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_16.png",
+    "questions": [
+      {
+        "qno": 86,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_16\\q86.png",
+        "crop_box_image": [
+          18,
+          598,
+          467,
+          637
+        ],
+        "crop_box_blocks": [
+          26,
+          603,
+          459,
+          632
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              603,
+              269,
+              613
+            ],
+            "text": "86.2023年，国家铁路旅客发送量同比增长约（）。"
+          },
+          {
+            "bbox": [
+              40,
+              622,
+              459,
+              632
+            ],
+            "text": "A.30%B.55%C.130%D.155%"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 87,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_16\\q87.png",
+        "crop_box_image": [
+          18,
+          636,
+          464,
+          675
+        ],
+        "crop_box_blocks": [
+          26,
+          641,
+          456,
+          670
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              641,
+              316,
+              651
+            ],
+            "text": "87.2018~2023年，国家铁路旅客发送量年均增长约（）万人。"
+          },
+          {
+            "bbox": [
+              41,
+              660,
+              456,
+              670
+            ],
+            "text": "A.6130B.7360C.8280D.9200"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 88,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_16\\q88.png",
+        "crop_box_image": [
+          18,
+          674,
+          482,
+          752
+        ],
+        "crop_box_blocks": [
+          26,
+          679,
+          474,
+          747
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              679,
+              296,
+              689
+            ],
+            "text": "88.2021~2023年，国家铁路旅客周转量年均增长率（）。"
+          },
+          {
+            "bbox": [
+              40,
+              698,
+              474,
+              709
+            ],
+            "text": "A.不到15%B.在15%到30%之间C.在30%到45%之间D.超过45%"
+          },
+          {
+            "bbox": [
+              26,
+              718,
+              369,
+              729
+            ],
+            "text": "o "
+          },
+          {
+            "bbox": [
+              40,
+              736,
+              466,
+              747
+            ],
+            "text": "A.2020年B.2021年C.2022年co D.2023年"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 90,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_16\\q90.png",
+        "crop_box_image": [
+          18,
+          751,
+          234,
+          771
+        ],
+        "crop_box_blocks": [
+          26,
+          756,
+          226,
+          766
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              756,
+              226,
+              766
+            ],
+            "text": "90.根据材料，以下说法不正确的是（）。"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              483,
+              796,
+              560,
+              805
+            ],
+            "content": "第16页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_2",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_2.png",
+    "questions": [
+      {
+        "qno": 1,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q1.png",
+        "crop_box_image": [
+          24,
+          104,
+          554,
+          142
+        ],
+        "crop_box_blocks": [
+          32,
+          109,
+          546,
+          137
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              32,
+              109,
+              546,
+              137
+            ],
+            "text": "1.（判断题）习近平文化思想是坚持“两个结合”、推进马克思主义文化理论创新的重大成果，其中“第二个结合”是指把马克思主义基本原理同中华优秀传统文化相结合。（）\n"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 2,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q2.png",
+        "crop_box_image": [
+          23,
+          139,
+          489,
+          160
+        ],
+        "crop_box_blocks": [
+          31,
+          144,
+          481,
+          155
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              31,
+              144,
+              481,
+              155
+            ],
+            "text": "2.（判断题）科技创新能够催生新产业，新模式，新动能，是发展新质生产力的核心要素。（）"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 3,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q3.png",
+        "crop_box_image": [
+          23,
+          160,
+          353,
+          180
+        ],
+        "crop_box_blocks": [
+          31,
+          165,
+          345,
+          175
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              31,
+              165,
+              345,
+              175
+            ],
+            "text": "3.（判断题）国家安全是中国式现代化行稳致远的重要基础。（）"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 4,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q4.png",
+        "crop_box_image": [
+          23,
+          179,
+          384,
+          199
+        ],
+        "crop_box_blocks": [
+          31,
+          184,
+          376,
+          194
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              31,
+              184,
+              376,
+              194
+            ],
+            "text": "4.（判断题）科学性是马克思主义理论区别于其他理论的根本特征。（）"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 5,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q5.png",
+        "crop_box_image": [
+          23,
+          197,
+          555,
+          253
+        ],
+        "crop_box_blocks": [
+          31,
+          202,
+          547,
+          248
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              31,
+              202,
+              547,
+              229
+            ],
+            "text": "5.古人说：“志之所趋，无远勿届，穷山距海，不能限也。志之所向，无坚不人，锐兵精甲，不能御也。”下列好干部的标准与这一古语的意思最为接近的是（）。\n"
+          },
+          {
+            "bbox": [
+              41,
+              238,
+              476,
+              248
+            ],
+            "text": "A.敢于担当B.勤政务实C.清正廉洁D.信念坚定"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 6,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q6.png",
+        "crop_box_image": [
+          23,
+          251,
+          555,
+          339
+        ],
+        "crop_box_blocks": [
+          31,
+          256,
+          547,
+          334
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              31,
+              256,
+              547,
+              316
+            ],
+            "text": "6.“我们要坚持对马克思主义的坚定信仰、对中国特色社会主义的坚定信念，坚定道路自信、理论自信、制度自信、文化自信，以更加积极的历史担当和创造精神为发展马克思主义作出新的贡献，既不能刻舟求剑，封闭僵化，也不能照抄照搬、食洋不化。”这段话最能体现习近平新时代中国特色社会主义思想（）的立场观点方法。\n"
+          },
+          {
+            "bbox": [
+              40,
+              324,
+              518,
+              334
+            ],
+            "text": "A.必须坚持问题导向B.必须坚持守正创新C.必须坚持自信自立D.必须坚持胸怀天下"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 7,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q7.png",
+        "crop_box_image": [
+          23,
+          339,
+          555,
+          411
+        ],
+        "crop_box_blocks": [
+          31,
+          344,
+          547,
+          406
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              31,
+              344,
+              547,
+              370
+            ],
+            "text": "7.习近平指出，法律是成文的道德，道德是内心的法律。法治和德治不可分离、不可偏废，国家治理需要法律和道德协同发力。下列关于思想道德和法律的认识不正确的是（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              378,
+              540,
+              406
+            ],
+            "text": "A.思想道德和法律都是上层建筑的重要组成部分B.思想道德建设为法治建设提供思想指引和价值基础C.思想道德是调节人们思想的重要手段，但法律不是D.法治建设为思想道德建设提供制度支撑和法律保障"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 8,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q8.png",
+        "crop_box_image": [
+          23,
+          408,
+          555,
+          528
+        ],
+        "crop_box_blocks": [
+          31,
+          413,
+          547,
+          523
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              31,
+              413,
+              547,
+              456
+            ],
+            "text": "8.坚持以人民为中心的发展思想，体现了党的理想信念、性质宗旨、初心使命，也是对党的奋斗历程和实践经验的深刻总结。领导人在不同场合多次强调，必须坚持人民至上。以下选项最能体现必须坚持人民至上这一理念的是（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              464,
+              315,
+              523
+            ],
+            "text": "A.能用众力，则无敌干天下矣：能用众智，则无畏于圣人矣B与天下同利者，天下持之：擅天下之利者，天下谋之C.贤良之士众，则国家之治厚；贤良之士寡，则国家之治薄D.畏则不敢肆而德以成，无畏则从其所欲而及于祸"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 9,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q9.png",
+        "crop_box_image": [
+          22,
+          526,
+          554,
+          648
+        ],
+        "crop_box_blocks": [
+          30,
+          531,
+          546,
+          643
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              30,
+              531,
+              546,
+              575
+            ],
+            "text": "9.（多选题）习近平总书记说，一百年来，中国共产党团结带领中国人民，以“为有牺牲多壮志，敢教日月换新Fb翻天”的大无畏气概，书写了中华民族几千年历史上最恢宏的史诗。以下有关党的奋斗历程的表述符合历史事实的有（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              583,
+              420,
+              643
+            ],
+            "text": "A.中国早期马克思主义思想运动，没有明确的与第二国际的社会民主主义划清界线\nB.第一次国共合作发生在新民主主义革命时期\n\nC.在社会主义建设时期，中共中央制定了“三步走”现代化发展战略\nD.党在社会主义初级阶段的基本路线的核心内容是“一个中心、两个基本点”\n"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 10,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_2\\q10.png",
+        "crop_box_image": [
+          19,
+          646,
+          555,
+          783
+        ],
+        "crop_box_blocks": [
+          27,
+          651,
+          547,
+          778
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              651,
+              547,
+              710
+            ],
+            "text": "10.（多选题）一个民族要走在时代前列，就一刻不能没有理论思维，一刻不能没有正确思想指引。中国共产党为什么能，中国特色社会主义为什么好，归根到底是马克思主义行，是中国化时代化的马克思主义行。唯物辩证法是马克思主义世界观和方法论的核心内容，为人们认识世界和改造世界提供了根本方法。以下关于唯物辩证法的认识正确的有（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              717,
+              305,
+              778
+            ],
+            "text": "A.矛盾分析法在唯物辩证法的方法论体系中居于核心地位\nB.唯物辩证法是客观辩证法在人的思维中的反映\nC.分析与综合不属于提高辩证思维能力的方法\nD.唯物辩证法本质上是批判的和革命的\n\n"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              486,
+              796,
+              560,
+              805
+            ],
+            "content": "第2页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_3",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_3.png",
+    "questions": [
+      {
+        "qno": 11,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q11.png",
+        "crop_box_image": [
+          19,
+          104,
+          554,
+          209
+        ],
+        "crop_box_blocks": [
+          27,
+          109,
+          546,
+          204
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              109,
+              546,
+              136
+            ],
+            "text": "11.2024年，中国科技以奋进姿态奏响创新强音，向着科技强国目标迈出更加坚实的步伐。以下有关2024年中国科技成就的表述有误的是（）。Fb "
+          },
+          {
+            "bbox": [
+              40,
+              145,
+              368,
+              155
+            ],
+            "text": "A.深海载人潜水器“梦想”号标志我国深海探测关键技术取得重大突破"
+          },
+          {
+            "bbox": [
+              40,
+              160,
+              331,
+              171
+            ],
+            "text": "B.深中通道联通陆海，为粤港澳大湾区协同发展按下“快捷键”"
+          },
+          {
+            "bbox": [
+              40,
+              178,
+              315,
+              188
+            ],
+            "text": "C.南极泰岭站建成并投入使用，开启新时代极地科考新征程"
+          },
+          {
+            "bbox": [
+              41,
+              194,
+              295,
+              204
+            ],
+            "text": "D.嫦娥六号在人类历史上首次实现了月球背面采样返回"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 12,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q12.png",
+        "crop_box_image": [
+          19,
+          207,
+          544,
+          263
+        ],
+        "crop_box_blocks": [
+          27,
+          212,
+          536,
+          258
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              212,
+              536,
+              239
+            ],
+            "text": "12.党的二十届三中全会提出，鼓励和规范发展天使投资、风险投资，私募股权投资，更好发挥政府投资基金作用，发展耐心资本，耐心资本是一种专注于（）的资本形式。\n"
+          },
+          {
+            "bbox": [
+              40,
+              247,
+              477,
+              258
+            ],
+            "text": "A.中短期投资B.长期投资C.中期投资D.短期投资"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 13,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q13.png",
+        "crop_box_image": [
+          19,
+          261,
+          554,
+          317
+        ],
+        "crop_box_blocks": [
+          27,
+          266,
+          546,
+          312
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              266,
+              546,
+              293
+            ],
+            "text": "13.党的二十届三中全会提出，健全保障耕地用于种植基本农作物管理体系，基本农作物是指为了满足人们基本生产生活需要而大面积裁培的农作物，以下不属于国家层面的基本农作物的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              302,
+              455,
+              312
+            ],
+            "text": "A.粮食B.油料C.蔬菜D.苗木"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 14,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q14.png",
+        "crop_box_image": [
+          19,
+          315,
+          548,
+          388
+        ],
+        "crop_box_blocks": [
+          27,
+          320,
+          540,
+          383
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              320,
+              540,
+              363
+            ],
+            "text": "14.国家建立基本养老保险、基本医疗保险、工伤保险、失业保险、生育保险等社会保险制度，保障公民在年老、疾病、工伤、失业、生育等情况下依法从国家和社会获得物质帮助的权利，根据《中华人民共和国社会保险法》：由用人单位缴纳保险费，职工不缴纳保险费用的是（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              373,
+              498,
+              383
+            ],
+            "text": "A.工伤保险和生育保险B.失业保险C.基本养老保险D.基本医疗保险"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 15,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q15.png",
+        "crop_box_image": [
+          19,
+          386,
+          554,
+          542
+        ],
+        "crop_box_blocks": [
+          27,
+          391,
+          546,
+          537
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              391,
+              546,
+              434
+            ],
+            "text": "15.2025年2月召开的广东省高质量发展大会指出，自改革开放以来，广东从“三来一补”起步，从相对落后的农业省发展到牵动全球的世界工厂，再到（），产业体系的迭代升级，带来生产力的不断跃迁，支撑广东取得举世瞩目的发展成就。Fb \n"
+          },
+          {
+            "bbox": [
+              40,
+              443,
+              274,
+              453
+            ],
+            "text": "A.国家重要先进制造业高地和新兴产业重要策源地"
+          },
+          {
+            "bbox": [
+              40,
+              459,
+              293,
+              469
+            ],
+            "text": "B.国家重要先进制造业高地和发展新质生产力的主阵地"
+          },
+          {
+            "bbox": [
+              40,
+              475,
+              252,
+              485
+            ],
+            "text": "C引领全球的智造基地和新兴产业重要策源地"
+          },
+          {
+            "bbox": [
+              41,
+              491,
+              274,
+              501
+            ],
+            "text": "D.引领全球的智造基地和发展新质生产力的主阵地"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "paragraph_title",
+            "bbox": [
+              40,
+              510,
+              542,
+              537
+            ],
+            "content": "三，言语理解与表达：本部分包括表达与理解两方面的内容。请根据题目要求，在四个选项中选出一个最恰当的答案。\n",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 16,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q16.png",
+        "crop_box_image": [
+          19,
+          539,
+          549,
+          644
+        ],
+        "crop_box_blocks": [
+          27,
+          544,
+          541,
+          639
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              544,
+              541,
+              587
+            ],
+            "text": "16.繁杂问题、苗头问题、偶然问题都是问题的具体形态，背后隐藏着不同类型的矛盾。从繁杂问题中把握事物的、从苗头问题中发现事物的、从偶然问题中认识事物的，才能看清本质，抓住解决问题的根本。\n"
+          },
+          {
+            "bbox": [
+              40,
+              594,
+              205,
+              604
+            ],
+            "text": "依次填入画横线处最正确的一项是："
+          },
+          {
+            "bbox": [
+              40,
+              612,
+              407,
+              639
+            ],
+            "text": "A.必然性趋势性规律性B.规律性必然性趋势性C.趋势性规律性必然性D.规律性趋势性必然性"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 17,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q17.png",
+        "crop_box_image": [
+          19,
+          642,
+          554,
+          715
+        ],
+        "crop_box_blocks": [
+          27,
+          647,
+          546,
+          710
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              647,
+              546,
+              676
+            ],
+            "text": "17.浪费与消费一字之差，含义却反对餐饮浪费行为，并不是反对正常的、健康的餐饮消费，而是倡导取之有度、用之有节的健康餐饮文化。\n"
+          },
+          {
+            "bbox": [
+              41,
+              680,
+              184,
+              690
+            ],
+            "text": "填入画横线处最正确的一项是："
+          },
+          {
+            "bbox": [
+              40,
+              699,
+              477,
+              710
+            ],
+            "text": "A.截然相反B.南辕北辙C.大相径庭D.求同存异"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 18,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q18.png",
+        "crop_box_image": [
+          19,
+          713,
+          554,
+          765
+        ],
+        "crop_box_blocks": [
+          27,
+          718,
+          546,
+          760
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              718,
+              546,
+              745
+            ],
+            "text": "18.一个人的能力有大小，做不了的大事，或做些的小事。只要每个人都发挥潜能，为自己的梦想努力奋斗，国家和社会也会因此变得更加美好。\n"
+          },
+          {
+            "bbox": [
+              41,
+              750,
+              205,
+              760
+            ],
+            "text": "依次填入画横线处最正确的一项是："
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              486,
+              796,
+              560,
+              805
+            ],
+            "content": "第3页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_4",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_4.png",
+    "questions": [
+      {
+        "qno": 19,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_4\\q19.png",
+        "crop_box_image": [
+          19,
+          104,
+          557,
+          193
+        ],
+        "crop_box_blocks": [
+          27,
+          109,
+          549,
+          188
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              27,
+              109,
+              549,
+              154
+            ],
+            "text": "19.党员干部的政绩观与事业发展的成效紧密相关，党员干部树立什么样的政绩观，就会产生什么样的发展观。如果一开始政绩观没有摆正，从政的“第一粒扣子”没有系好，做决策、抓发展、促改革就会错位偏离，甚至会Fb "
+          },
+          {
+            "bbox": [
+              40,
+              158,
+              183,
+              168
+            ],
+            "text": "填入画横线处最正确的一项是："
+          },
+          {
+            "bbox": [
+              40,
+              177,
+              529,
+              188
+            ],
+            "text": "A.失之毫厘，谬以千里B缘木求鱼，水中捞月C.得不偿失，因小失大D.胜地不常，盛筵难再"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 20,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_4\\q20.png",
+        "crop_box_image": [
+          18,
+          191,
+          555,
+          263
+        ],
+        "crop_box_blocks": [
+          26,
+          196,
+          547,
+          258
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              196,
+              547,
+              239
+            ],
+            "text": "20.实践证明，改革越是深水区，越是“牵一发而动全身”，越要注重系统集成。面对一些深层次矛盾，单兵\n突进式的改革难以奏效。的改革更可能造成“合成谬误”，唯有凝聚合力才能催生“化学反应”。\n依次填入画横线处最正确的一项是：Fb \n\n"
+          },
+          {
+            "bbox": [
+              40,
+              247,
+              500,
+              258
+            ],
+            "text": "A.进入各尽所能B.迈向各有千秋C.步入各式各样D.挺进各行其是"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 21,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_4\\q21.png",
+        "crop_box_image": [
+          18,
+          261,
+          555,
+          500
+        ],
+        "crop_box_blocks": [
+          26,
+          266,
+          547,
+          495
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              266,
+              547,
+              343
+            ],
+            "text": "21.我国农业基础还不稳固，城乡区域发展和居民收入差距仍然较大，城乡发展不平衡、农村发展不充分仍是社会主要矛盾的集中体现。完善城乡融合发展体制机制是补上农业农村短板、建设农业强国的必然选择，能够促进各类要素更多向乡村流动，让农业农村在现代化进程中不掉队、逐步赶上来：是满足人民对美好生活的向往、促进共同富裕的内在要求，将解放和发展农村社会生产力，拓展农民增收致富渠道，推动城乡基本公共服务均等化，让农村逐步具备现代化生活条件，让农民过上更加富饶美好的生活。\n"
+          },
+          {
+            "bbox": [
+              41,
+              347,
+              310,
+              357
+            ],
+            "text": "上述文段主要说明了完善城乡融合发展体制机制的（）。"
+          },
+          {
+            "bbox": [
+              41,
+              365,
+              477,
+              377
+            ],
+            "text": "A.重要意义B.主要内容C.基本要求D.实践路径"
+          },
+          {
+            "bbox": [
+              26,
+              385,
+              547,
+              445
+            ],
+            "text": "2经验可以让人少走弯路，但一味迷信，生搬硬套经验，就会陷人“经验主义”，随着进一步全面深化改革的推进，我们将遇到更多难啃的“硬骨头”，涉及的都是体制机制深层次的间题，抓好改革落实，既要善用经验。又要打破思维定式、跳出路径依赖，干前人没干过的事，根据实践需要和试点探索提出新的改革措施，在继承"
+          },
+          {
+            "bbox": [
+              40,
+              450,
+              447,
+              460
+            ],
+            "text": "对上述文段提及的在推进改革过程中对待经验的正确态度，以下概括最准确的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              468,
+              459,
+              495
+            ],
+            "text": "A.警惕“经验主义”，避免迷信盲从B既“善用经验”，又“推陈出新”C.坚持与时俱进，不断创新发展D.打破思维定式，跳出路径依赖"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 23,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_4\\q23.png",
+        "crop_box_image": [
+          18,
+          498,
+          554,
+          619
+        ],
+        "crop_box_blocks": [
+          26,
+          503,
+          546,
+          614
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              503,
+              546,
+              563
+            ],
+            "text": "23.新中国成立75年来，全省干部群众持续奋斗，经过几代人的努力，终于使南粤大地重塑绿颜，成为全国最“绿”省份之一。。两年来，广东森林质量的提升更加贴近群众的日常生活，丰富的林下经济形态、蓬勃发展的森林旅游、愈发活跃的生态市场，使“靠山吃山”成为南粤广袤山区的发展新动力。“看得见、摸得着，有欣喜”的绿美广东逐步走进现实。\n"
+          },
+          {
+            "bbox": [
+              41,
+              568,
+              237,
+              580
+            ],
+            "text": "以下句子填入划线处，最恰当的是（\n"
+          },
+          {
+            "bbox": [
+              40,
+              587,
+              464,
+              614
+            ],
+            "text": "A.草木蔓发，春山可望B人不负青山，青山定不负人C.踏遍青山人未老，风景这边独好D.追风赶月莫停留，平芜尽处是春山"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 24,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_4\\q24.png",
+        "crop_box_image": [
+          18,
+          618,
+          551,
+          753
+        ],
+        "crop_box_blocks": [
+          26,
+          623,
+          543,
+          748
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              623,
+              269,
+              633
+            ],
+            "text": "24.将下列句子重新排列，顺序最为恰当的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              639,
+              352,
+              649
+            ],
+            "text": "①马达加斯加已成为非洲杂交水稻种植面积最大、产量最高的国家。"
+          },
+          {
+            "bbox": [
+              39,
+              654,
+              536,
+              681
+            ],
+            "text": "②马达加斯加是传统农业国，学农业生产方式传统、土地荒漠化等影响，该国水稻产量无法完全满足本国需求。\n"
+          },
+          {
+            "bbox": [
+              40,
+              686,
+              543,
+              714
+            ],
+            "text": "③十多年来，中国杂交水稻已在马达加斯加累计推广7万多公顷，平均每公顷单产达7.8吨，最高单产可达每公顷12吨。\n"
+          },
+          {
+            "bbox": [
+              40,
+              718,
+              478,
+              729
+            ],
+            "text": "④2007年，中国援马达加斯加杂交水稻示范中心正式启动，帮助当地民众圆粮食自给自足之梦。"
+          },
+          {
+            "bbox": [
+              40,
+              737,
+              477,
+              748
+            ],
+            "text": "A.①④②③B.①③④②C.②④③①D.②①③④Fb "
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              188,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              486,
+              796,
+              560,
+              805
+            ],
+            "content": "第4页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_5",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_5.png",
+    "questions": [
+      {
+        "qno": 25,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_5\\q25.png",
+        "crop_box_image": [
+          18,
+          85,
+          555,
+          189
+        ],
+        "crop_box_blocks": [
+          26,
+          90,
+          547,
+          184
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              90,
+              547,
+              150
+            ],
+            "text": "25.中国气候类型多样，拥有丰富的高温生存经验，现代都市应从中国传统的建筑设计与生活方式中学习如何规避高温，如街道设计尽可能保留“骑楼街”这类遮风群雨建筑元素：对于高温高湿地区来说，遮阴，通风比单纯的环境绿化更重要。此外，通过酒水给街道降温应考虑空气热容量的影响，一般不宜在白天进行。上述文段的主旨是（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              157,
+              475,
+              184
+            ],
+            "text": "A.高温地区适宜采用遮阴、通风的建筑B.规避高温是城市规划主要考虑的方面C.现代都市应向传统借鉴高温适应经验D.应对高温应综合考虑气候和生活方式"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 26,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_5\\q26.png",
+        "crop_box_image": [
+          17,
+          188,
+          554,
+          308
+        ],
+        "crop_box_blocks": [
+          25,
+          193,
+          546,
+          303
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              25,
+              193,
+              546,
+              253
+            ],
+            "text": "26.“大数据杀熟”是商家利用互联网平台的技术，信息和市场地位优势而实施的一种差异化定价策略，本质上是一种价格歧视，即同样的产品或服务对用户设置不同的价格。“大数据杀熟”之所以遭人诉病，是因为它对部分消费者群体设置了相对不公平的高价。“不公平”指平台在获取用户个人信息后，隐瞒商品或服务的有效价格信息，抬高消费者的比价成本，从而侵犯了消费者的知情权、选择权和公平交易权。"
+          },
+          {
+            "bbox": [
+              40,
+              258,
+              216,
+              269
+            ],
+            "text": "根据上述文段，不能得出的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              276,
+              496,
+              303
+            ],
+            "text": "A.“大数据杀熟”对部分消费者设置了高价B\"大数据杀熟”侵犯了消费者的合法权益C.“大数据杀熟”影响了消费者的比价成本D.“大数据杀熟”的主要目的是差异化定价"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 27,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_5\\q27.png",
+        "crop_box_image": [
+          18,
+          306,
+          555,
+          426
+        ],
+        "crop_box_blocks": [
+          26,
+          311,
+          547,
+          421
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              311,
+              547,
+              371
+            ],
+            "text": "27.只要代表人民的利益，为社会发展作出贡献的人都能成为戏曲作品的主要人物，如革命英雄，卓有贡献的科学家，劳动道德模范及普罗大众。就艺术创作而言，为了使戏曲人物形象更富有艺术典型性，即便是取自历史事实或当代现实中的人物，也必须进行艺术创造，而不能把人物的现实生活轨迹完全照搬到舞台上。毕竞戏曲艺术创作就是“美的发现和美的创造”，即把现实美转化为更具有吸引力的艺术关。"
+          },
+          {
+            "bbox": [
+              41,
+              376,
+              173,
+              386
+            ],
+            "text": "上述文段主要说的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              394,
+              475,
+              421
+            ],
+            "text": "A.戏曲作品创作要以实现艺术美为目的B.戏曲作晶中的现实性和艺术性的平衡C.戏曲作品塑造主要人物应遵循的原则D.现实人物是戏曲作品创作的主要来源"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 28,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_5\\q28.png",
+        "crop_box_image": [
+          18,
+          425,
+          554,
+          545
+        ],
+        "crop_box_blocks": [
+          26,
+          430,
+          546,
+          540
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              430,
+              546,
+              490
+            ],
+            "text": "28.城市化进程历史性地改变了基层社会结构，现代都市生活带来一系列社会问题，促使学界重新认识以儒家思想为核心的传统伦理的恒久价值，在城市化的“后半程”，家庭仍然是社会的基本单元。如何发掘传统伦理的现代意义，打造一种新型“东方伦理型生活方式”，不仅是“以人为核心的新型城镇化”的题中应有之义，也将有中国式现代化提供强大的社会基础和道义支撑。\n"
+          },
+          {
+            "bbox": [
+              40,
+              495,
+              216,
+              506
+            ],
+            "text": "根据上述文段，无法得出的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              513,
+              517,
+              540
+            ],
+            "text": "A.在现代基层社会结构中，传统伦理已丧失其价值B.在城市化进程中，家庭始终是社会的基本单元C.打造“以人为核心的新型城镇化”正当其时D.城市化进程极大地改变了基层社会结构"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 29,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_5\\q29.png",
+        "crop_box_image": [
+          18,
+          544,
+          554,
+          696
+        ],
+        "crop_box_blocks": [
+          26,
+          549,
+          546,
+          691
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              549,
+              269,
+              559
+            ],
+            "text": "29.将下列句子重新排列，顺序最为恰当的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              564,
+              384,
+              575
+            ],
+            "text": "①所以篆书的书写如同画画一般，比较繁复，从而导致了“隶变”的发生。"
+          },
+          {
+            "bbox": [
+              39,
+              580,
+              520,
+              591
+            ],
+            "text": "②魏晋时期是楷书的形成期，楷书在隶书的基础上简化了笔法，将运笔动作集中在起笔、收笔和弯折处。"
+          },
+          {
+            "bbox": [
+              39,
+              596,
+              546,
+              623
+            ],
+            "text": "③隶书与小篆同时产生于秦始皇时期，就是“篆之捷也”，得名隶书，是因为它是一种流行于下层皂隶之间的字体。\n"
+          },
+          {
+            "bbox": [
+              39,
+              628,
+              530,
+              656
+            ],
+            "text": "④行书出现的时间则和楷书不相上下，也是在隶书之上加快运笔速度，草率起来，笔画之间有了映带连属。⑤到了汉代，为了进一步追求效率，人们书写更加潦草，就出现了草书。\n"
+          },
+          {
+            "bbox": [
+              40,
+              661,
+              405,
+              671
+            ],
+            "text": "⑥汉字在发展演变的历程中共形成了五种字体，篆书是最早的，象形意味较强。"
+          },
+          {
+            "bbox": [
+              40,
+              680,
+              498,
+              691
+            ],
+            "text": "A.⑥①③⑤②④B.③⑥①②④⑤C.⑥③⑤①④②D.③①⑥④⑤②"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 30,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_5\\q30.png",
+        "crop_box_image": [
+          18,
+          694,
+          555,
+          780
+        ],
+        "crop_box_blocks": [
+          26,
+          699,
+          547,
+          775
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              699,
+              547,
+              759
+            ],
+            "text": "30.非物质文化遗产的“非物质”属性，决定了非遗不能仅被宜之于展板，陈列干展架，更需要活态的保护、传承与发展。活态保护的重要出发点之一，就是从非遗所处的社会文化系统出发，更好地涵养滋生其上、浸润其中的一方水土。无论是美术、曲艺等艺术形式，玉雕、刺绣等精工绝艺，还是礼仪、节庆等民俗活动，非遗保护的背后应该是文化生态的保护，如此才能让非遗在活的土壤中生生不息。\n"
+          },
+          {
+            "bbox": [
+              42,
+              764,
+              173,
+              775
+            ],
+            "text": "上述文段主要说的是（）。"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              486,
+              796,
+              560,
+              805
+            ],
+            "content": "第5页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_6",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_6.png",
+    "questions": [
+      {
+        "qno": 31,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q31.png",
+        "crop_box_image": [
+          18,
+          156,
+          459,
+          196
+        ],
+        "crop_box_blocks": [
+          26,
+          161,
+          451,
+          191
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              161,
+              171,
+              171
+            ],
+            "text": "31.3.7.17.43.113.(）"
+          },
+          {
+            "bbox": [
+              40,
+              181,
+              451,
+              191
+            ],
+            "text": "A.307B.373C.417D.437"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 32,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q32.png",
+        "crop_box_image": [
+          18,
+          195,
+          453,
+          234
+        ],
+        "crop_box_blocks": [
+          26,
+          200,
+          445,
+          229
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              200,
+              176,
+              210
+            ],
+            "text": "32.12.13.25.37.49.(）"
+          },
+          {
+            "bbox": [
+              40,
+              219,
+              445,
+              229
+            ],
+            "text": "8A.46B.57C.61D.78"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 33,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q33.png",
+        "crop_box_image": [
+          18,
+          233,
+          459,
+          272
+        ],
+        "crop_box_blocks": [
+          26,
+          238,
+          451,
+          267
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              238,
+              192,
+              248
+            ],
+            "text": "33.1,4.27.16.125,36,（）"
+          },
+          {
+            "bbox": [
+              40,
+              257,
+              451,
+              267
+            ],
+            "text": "A.271B.512C.400D.343"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 34,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q34.png",
+        "crop_box_image": [
+          18,
+          269,
+          180,
+          416
+        ],
+        "crop_box_blocks": [
+          26,
+          274,
+          172,
+          411
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              274,
+              172,
+              299
+            ],
+            "text": "34.1176.7.36.51.（）"
+          },
+          {
+            "bbox": [
+              40,
+              305,
+              68,
+              411
+            ],
+            "text": "A.1$1v B.322C.344D.957"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 35,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q35.png",
+        "crop_box_image": [
+          18,
+          412,
+          496,
+          539
+        ],
+        "crop_box_blocks": [
+          26,
+          417,
+          488,
+          534
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              417,
+              71,
+              428
+            ],
+            "text": "35.()"
+          },
+          {
+            "bbox": [
+              41,
+              524,
+              488,
+              534
+            ],
+            "text": "A.55,11,5.5B.40,10,2.5C.75,15,10D.60,15,12"
+          }
+        ],
+        "table_blocks": [
+          {
+            "bbox": [
+              45,
+              435,
+              316,
+              511
+            ],
+            "html": "<html><body><table><tr><td>5</td><td>5</td><td>2.5</td></tr><tr><td>24</td><td>12</td><td>8</td></tr><tr><td>54</td><td>18</td><td>13.5</td></tr><tr><td>?</td><td>?</td><td>?</td></tr></table></body></html>"
+          }
+        ],
+        "other_blocks": []
+      },
+      {
+        "qno": 36,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q36.png",
+        "crop_box_image": [
+          18,
+          538,
+          555,
+          594
+        ],
+        "crop_box_blocks": [
+          26,
+          543,
+          547,
+          589
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              543,
+              547,
+              570
+            ],
+            "text": "36.箱子里装有红，蓝、绿、白、墨五种颜色的小球各20个。如果从箱子里取出若干个小球，且确保其中有10个小球颜色相同，则至少要取出（）个小球。\n"
+          },
+          {
+            "bbox": [
+              41,
+              579,
+              446,
+              589
+            ],
+            "text": "A.56B.51C.50D.46"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 37,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q37.png",
+        "crop_box_image": [
+          18,
+          592,
+          550,
+          648
+        ],
+        "crop_box_blocks": [
+          26,
+          597,
+          542,
+          643
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              597,
+              542,
+              624
+            ],
+            "text": "37.某服务大厅设有若于个服务窗口，其中1个是快捷服务窗口，某日服务窗口的平均业务量为29单，其中快捷服务窗口的业务量为41单，其余窗口的平均业务量为28单，则服务大厅共有（）个窗口。"
+          },
+          {
+            "bbox": [
+              41,
+              633,
+              446,
+              643
+            ],
+            "text": "A.13B.14C.15D.16"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 38,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q38.png",
+        "crop_box_image": [
+          18,
+          646,
+          554,
+          702
+        ],
+        "crop_box_blocks": [
+          26,
+          651,
+          546,
+          697
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              651,
+              546,
+              678
+            ],
+            "text": "38.父子两人在百米赛道上匀速跑步，两人从赛道起点同时出发，父亲跑到终点时，儿子距离终点还有40米，若父亲立即折返跑向赛道起点，则两人相遇时，儿子距离终点还有（）米。\n"
+          },
+          {
+            "bbox": [
+              42,
+              687,
+              63,
+              697
+            ],
+            "text": "A.35"
+          },
+          {
+            "bbox": [
+              168,
+              687,
+              190,
+              697
+            ],
+            "text": "B.30"
+          },
+          {
+            "bbox": [
+              296,
+              687,
+              317,
+              697
+            ],
+            "text": "C.25"
+          },
+          {
+            "bbox": [
+              423,
+              687,
+              445,
+              697
+            ],
+            "text": "D.15"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 39,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_6\\q39.png",
+        "crop_box_image": [
+          18,
+          700,
+          555,
+          773
+        ],
+        "crop_box_blocks": [
+          26,
+          705,
+          547,
+          768
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              705,
+              547,
+              749
+            ],
+            "text": "39.甲、乙两个工程队合作实施某项工程，原计划30天完成，但工作5天后甲被抽调到其他工程，又过了15天该工程正好完成一半，此时丙工程队加入，3天后甲工程队返回，最终该工程比原计划提前2天完成，则丙工程队的效率是甲工程队的（）倍。0"
+          },
+          {
+            "bbox": [
+              40,
+              758,
+              440,
+              768
+            ],
+            "text": "A.1.5B.2C.2.5D.3"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              486,
+              795,
+              560,
+              805
+            ],
+            "content": "第6页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_7",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_7.png",
+    "questions": [
+      {
+        "qno": 40,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_7\\q40.png",
+        "crop_box_image": [
+          18,
+          85,
+          548,
+          142
+        ],
+        "crop_box_blocks": [
+          26,
+          90,
+          540,
+          137
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              90,
+              540,
+              117
+            ],
+            "text": "40.某单位计划在一块直角三角形的绿地周边栽种树木，先在3个顶点各栽种1棵，再从顶点开始每隔4米裁种1棵，如果两条直角边（包含顶点）分别裁种4棵和5棵，则该绿地周边一共栽种了（）棵树"
+          },
+          {
+            "bbox": [
+              40,
+              126,
+              446,
+              137
+            ],
+            "text": "A.12B.13C.14D.15"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 41,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_7\\q41.png",
+        "crop_box_image": [
+          18,
+          139,
+          553,
+          335
+        ],
+        "crop_box_blocks": [
+          26,
+          144,
+          545,
+          330
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              144,
+              545,
+              188
+            ],
+            "text": "41.某商场在售的四款家电产品能效，标价及折扣等信息如下表所示。根据补贴规则，二级能效的家电产品可获得最终销售价格15%的补贴，一级能效的家电产品可获得最终销售价格20%的补贴，如果家电产品的最终销售价格=标价×折扣，则购买以下家电中的（）获得的补贴金额最多。\n"
+          },
+          {
+            "bbox": [
+              40,
+              319,
+              466,
+              330
+            ],
+            "text": "A.甲冰箱Fb粗B.乙油烟机C.丙电视D.丁空调"
+          }
+        ],
+        "table_blocks": [
+          {
+            "bbox": [
+              44,
+              194,
+              429,
+              306
+            ],
+            "html": "<html><body><table><tr><td>家电</td><td>能效</td><td>标价（元）</td><td>折扣</td></tr><tr><td>甲冰箱</td><td>二级</td><td>2000</td><td>七折</td></tr><tr><td>乙油烟机</td><td>一级</td><td>1500</td><td>九折</td></tr><tr><td>丙电视</td><td>二级</td><td>3000</td><td>六折</td></tr><tr><td>丁空调</td><td>一级</td><td>1800</td><td>八折</td></tr></table></body></html>"
+          }
+        ],
+        "other_blocks": []
+      },
+      {
+        "qno": 42,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_7\\q42.png",
+        "crop_box_image": [
+          18,
+          333,
+          554,
+          405
+        ],
+        "crop_box_blocks": [
+          26,
+          338,
+          546,
+          400
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              338,
+              546,
+              381
+            ],
+            "text": "42.某企业技术部门有7名员工，其中，有3人只能提供软件支持，有2人只能提供硬件支持，另外2人能同时提供软、硬件支持。现该部门向甲，乙两个客户派驻技术团队，要求每个团队中正好有2人能提供软件支持，2人能提供硬件支持。则不同的派驻方式共有（）种。\n"
+          },
+          {
+            "bbox": [
+              41,
+              390,
+              451,
+              400
+            ],
+            "text": "A.30B.42C.70D.144"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 43,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_7\\q43.png",
+        "crop_box_image": [
+          18,
+          404,
+          552,
+          476
+        ],
+        "crop_box_blocks": [
+          26,
+          409,
+          544,
+          471
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              409,
+              544,
+              453
+            ],
+            "text": "43.某助农电商企业销售柠模，蜜柚两种水果，由于季节变化，这个月蜜柚的销量比上月增加了40%，而柠模的销量降低了20%，最终当月这两种水果的总销量比上个月增加4%，则蜜柚上月销量占这两种水果上月销量的（）。\n"
+          },
+          {
+            "bbox": [
+              41,
+              461,
+              454,
+              471
+            ],
+            "text": "A.60%B.50%C.40%D.30%"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 44,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_7\\q44.png",
+        "crop_box_image": [
+          18,
+          474,
+          554,
+          530
+        ],
+        "crop_box_blocks": [
+          26,
+          479,
+          546,
+          525
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              479,
+              546,
+              506
+            ],
+            "text": "44.小王参加工作时的年龄，和他弟弟现在的年龄相同，小王工作两年后，弟弟也正式参加工作，现在兄弟俩的年龄之和，正好是他们工龄之和的8倍。如果弟弟20岁正式参加工作，则小王比弟弟大（）岁。"
+          },
+          {
+            "bbox": [
+              41,
+              515,
+              58,
+              525
+            ],
+            "text": "A.3"
+          },
+          {
+            "bbox": [
+              168,
+              515,
+              184,
+              525
+            ],
+            "text": "B.4"
+          },
+          {
+            "bbox": [
+              296,
+              515,
+              312,
+              525
+            ],
+            "text": "C.5"
+          },
+          {
+            "bbox": [
+              423,
+              515,
+              440,
+              525
+            ],
+            "text": "D.6"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 45,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_7\\q45.png",
+        "crop_box_image": [
+          18,
+          529,
+          554,
+          584
+        ],
+        "crop_box_blocks": [
+          26,
+          534,
+          546,
+          579
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              534,
+              546,
+              561
+            ],
+            "text": "45.3名求职者参加某企业的面试，每人在6道面试题中随机抽取2道题作答，则有且仅有1道题没有被任何人抽到的概率（）。\n"
+          },
+          {
+            "bbox": [
+              40,
+              569,
+              475,
+              579
+            ],
+            "text": "A.不到20%B.在20%到25%之间C.在25%到30%之间D.超过30%"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 46,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_7\\q46.png",
+        "crop_box_image": [
+          18,
+          583,
+          523,
+          767
+        ],
+        "crop_box_blocks": [
+          26,
+          588,
+          515,
+          762
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              588,
+              515,
+              618
+            ],
+            "text": "46.如图所示，四棱锥的底面为矩形，其中一条棱垂直于底面，那么该四棱锥的俯视图最有可能是（）"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "image",
+            "bbox": [
+              145,
+              625,
+              219,
+              681
+            ],
+            "content": "",
+            "region_label": null
+          },
+          {
+            "label": "image",
+            "bbox": [
+              44,
+              709,
+              317,
+              762
+            ],
+            "content": "A B C D ",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "number",
+            "bbox": [
+              486,
+              796,
+              560,
+              805
+            ],
+            "content": "第7页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_8",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_8.png",
+    "questions": [
+      {
+        "qno": 47,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_8\\q47.png",
+        "crop_box_image": [
+          18,
+          104,
+          450,
+          302
+        ],
+        "crop_box_blocks": [
+          26,
+          109,
+          442,
+          297
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              109,
+              248,
+              120
+            ],
+            "text": "47.下列选项中最符合所给图形规律的是（）"
+          },
+          {
+            "bbox": [
+              423,
+              285,
+              442,
+              296
+            ],
+            "text": "D.D "
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "image",
+            "bbox": [
+              40,
+              124,
+              385,
+              275
+            ],
+            "content": "?A B C D ",
+            "region_label": null
+          },
+          {
+            "label": "vision_footnote",
+            "bbox": [
+              41,
+              286,
+              59,
+              296
+            ],
+            "content": "A.A ",
+            "region_label": null
+          },
+          {
+            "label": "vision_footnote",
+            "bbox": [
+              296,
+              286,
+              313,
+              297
+            ],
+            "content": "C.C ",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 48,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_8\\q48.png",
+        "crop_box_image": [
+          18,
+          299,
+          450,
+          496
+        ],
+        "crop_box_blocks": [
+          26,
+          304,
+          442,
+          491
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              304,
+              248,
+              315
+            ],
+            "text": "48.下列选项中最符合所给图形规律的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              479,
+              442,
+              491
+            ],
+            "text": "A.A B.B C.C D.D "
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "image",
+            "bbox": [
+              45,
+              322,
+              386,
+              378
+            ],
+            "content": "?",
+            "region_label": null
+          },
+          {
+            "label": "image",
+            "bbox": [
+              109,
+              390,
+              321,
+              448
+            ],
+            "content": "",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 49,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_8\\q49.png",
+        "crop_box_image": [
+          18,
+          493,
+          449,
+          733
+        ],
+        "crop_box_blocks": [
+          26,
+          498,
+          441,
+          728
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              498,
+              437,
+              509
+            ],
+            "text": "49.从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性（）。"
+          },
+          {
+            "bbox": [
+              41,
+              718,
+              60,
+              728
+            ],
+            "text": "A.A "
+          },
+          {
+            "bbox": [
+              169,
+              718,
+              185,
+              728
+            ],
+            "text": "B.B "
+          },
+          {
+            "bbox": [
+              296,
+              718,
+              313,
+              728
+            ],
+            "text": "C.C "
+          },
+          {
+            "bbox": [
+              423,
+              718,
+              441,
+              728
+            ],
+            "text": "D.D "
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "image",
+            "bbox": [
+              43,
+              514,
+              399,
+              589
+            ],
+            "content": "?",
+            "region_label": null
+          },
+          {
+            "label": "image",
+            "bbox": [
+              77,
+              605,
+              359,
+              681
+            ],
+            "content": "",
+            "region_label": null
+          },
+          {
+            "label": "vision_footnote",
+            "bbox": [
+              176,
+              689,
+              188,
+              705
+            ],
+            "content": "B ",
+            "region_label": null
+          },
+          {
+            "label": "vision_footnote",
+            "bbox": [
+              246,
+              689,
+              260,
+              706
+            ],
+            "content": "C ",
+            "region_label": null
+          },
+          {
+            "label": "vision_footnote",
+            "bbox": [
+              314,
+              689,
+              329,
+              706
+            ],
+            "content": "D ",
+            "region_label": null
+          }
+        ]
+      },
+      {
+        "qno": 50,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_8\\q50.png",
+        "crop_box_image": [
+          17,
+          731,
+          402,
+          752
+        ],
+        "crop_box_blocks": [
+          25,
+          736,
+          394,
+          747
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              25,
+              736,
+              394,
+              747
+            ],
+            "text": "50.下列选项中，最有可能与所给的两个不规则立体图形形成正方体的是（）。"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              795,
+              188,
+              805
+            ],
+            "content": "：本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              486,
+              795,
+              560,
+              805
+            ],
+            "content": "第8页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page_name": "page_9",
+    "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_9.png",
+    "questions": [
+      {
+        "qno": 51,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_9\\q51.png",
+        "crop_box_image": [
+          18,
+          267,
+          554,
+          404
+        ],
+        "crop_box_blocks": [
+          26,
+          272,
+          546,
+          399
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              272,
+              546,
+              316
+            ],
+            "text": "51.具身智能是能感知决策并与物理世界互动的人工智能系统，目前具身智能机器人强调“大脑”和“小脑”的协同工作，它能精准的完成细节操作，且能合理规划任务。因此，外科手术机器人“达芬奇”，虽具备精密操作能力，但仍不能算是具身智能机器人。\n"
+          },
+          {
+            "bbox": [
+              40,
+              321,
+              258,
+              331
+            ],
+            "text": "要使上述结论成立，需要补充的前提是（）。"
+          },
+          {
+            "bbox": [
+              41,
+              340,
+              295,
+              350
+            ],
+            "text": "A.只有具备规划任务能力的机器人才是具身智能机器人"
+          },
+          {
+            "bbox": [
+              41,
+              357,
+              283,
+              367
+            ],
+            "text": "B.外科手术机器人“达芬奇”不能做到合理规划任务"
+          },
+          {
+            "bbox": [
+              41,
+              373,
+              304,
+              383
+            ],
+            "text": "C.具身智能机器人的核心特征体现在能够感知并作出决策"
+          },
+          {
+            "bbox": [
+              41,
+              388,
+              336,
+              399
+            ],
+            "text": "D.具身智能赋予传统机器人“大脑”和“小脑”协同工作的能力"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 52,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_9\\q52.png",
+        "crop_box_image": [
+          18,
+          402,
+          552,
+          538
+        ],
+        "crop_box_blocks": [
+          26,
+          407,
+          544,
+          533
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              407,
+              544,
+              450
+            ],
+            "text": "52.某地共享单车采用阶段收费模式，第一小时收费1.5元，其后每半小时收费1元。最近，共享单车运营商调整了收费标准，第一小时收费不变，其后每半小时收费2元，涨幅高达100%，但当地共享单车月均使用人次并未因价格调整而减少。\n"
+          },
+          {
+            "bbox": [
+              40,
+              456,
+              248,
+              466
+            ],
+            "text": "对上述现象，以下解释最为合理的是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              475,
+              274,
+              485
+            ],
+            "text": "A.与多次换乘公交相比，使用共享单车的花费更低"
+          },
+          {
+            "bbox": [
+              41,
+              491,
+              273,
+              501
+            ],
+            "text": "B.随着生活水平的提高，人们的消费意愿逐步增强"
+          },
+          {
+            "bbox": [
+              41,
+              506,
+              304,
+              517
+            ],
+            "text": "C.单次使用共享单车时长超过一小时的当地市民微平其微"
+          },
+          {
+            "bbox": [
+              41,
+              523,
+              263,
+              533
+            ],
+            "text": "D.当地仅有一家共享单车运营商，市场缺乏竞争"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 53,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_9\\q53.png",
+        "crop_box_image": [
+          18,
+          536,
+          546,
+          625
+        ],
+        "crop_box_blocks": [
+          26,
+          541,
+          538,
+          620
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              541,
+              538,
+              571
+            ],
+            "text": "53.研究所计划从7名在读研究生中，推选2名男生、2名女生到企业实习。已知：（1）赵、钱、孙是男生：（2）李、刘、王、吴是女生；（3）如果推选刘、吴其中一人，那么孙也会被推选。"
+          },
+          {
+            "bbox": [
+              41,
+              574,
+              194,
+              584
+            ],
+            "text": "根据上述陈述，可以得知（）。"
+          },
+          {
+            "bbox": [
+              40,
+              593,
+              428,
+              620
+            ],
+            "text": "A.赵、李中至少有1人被推选B孙，王中至少有1人被推选C.钱、王中至少有1人被推选D孙、刘中至少有1人被推选"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 54,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_9\\q54.png",
+        "crop_box_image": [
+          18,
+          623,
+          554,
+          727
+        ],
+        "crop_box_blocks": [
+          26,
+          628,
+          546,
+          722
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              628,
+              546,
+              671
+            ],
+            "text": "54.某种贫血症属于遗传性疾病，患者的血红蛋白分子结构异常，从而影响红细胞正常功能。目前，科学家已能够利用基因组编辑技术，治疗因基因突变导致的遗传性疾病。因此，这种贫血症患者有望通过基因组编辑技术被治愈。Fb "
+          },
+          {
+            "bbox": [
+              40,
+              677,
+              258,
+              687
+            ],
+            "text": "要使上述结论成立，需要补充的前提是（）。"
+          },
+          {
+            "bbox": [
+              40,
+              695,
+              527,
+              722
+            ],
+            "text": "A.血红蛋白分子结构异常是这种贫血症的主要表现B.这种贫血症是一种由基因突变导致的遗传性疾病C.这种贫血症患者的红细胞可由直系亲属的代替D.血红蛋白基因是导致这种贫血症的相关基因"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": []
+      },
+      {
+        "qno": 55,
+        "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_9\\q55.png",
+        "crop_box_image": [
+          18,
+          725,
+          554,
+          778
+        ],
+        "crop_box_blocks": [
+          26,
+          730,
+          546,
+          773
+        ],
+        "text_blocks": [
+          {
+            "bbox": [
+              26,
+              730,
+              546,
+              757
+            ],
+            "text": "55.如果没有强健的体魄，就不会有好的学习状态，如果学习状态不好，学习成绩就不可能提升。因此，学校要提\n升学生的学习成绩，就必须开设体育课。\n\nFb粉\n\n"
+          },
+          {
+            "bbox": [
+              41,
+              763,
+              258,
+              773
+            ],
+            "text": "要使上述结论成立，必需补充的前提是（）。"
+          }
+        ],
+        "table_blocks": [],
+        "other_blocks": [
+          {
+            "label": "footer",
+            "bbox": [
+              35,
+              796,
+              189,
+              805
+            ],
+            "content": "本试卷由粉笔用户用户08hYFT生成",
+            "region_label": null
+          },
+          {
+            "label": "footer",
+            "bbox": [
+              486,
+              796,
+              560,
+              805
+            ],
+            "content": "第9页，共18页",
+            "region_label": null
+          }
+        ]
+      }
+    ]
+  }
+]

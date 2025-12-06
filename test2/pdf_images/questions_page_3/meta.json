@@ -1,0 +1,417 @@
+{
+  "page_name": "page_3",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\page_3.png",
+  "questions": [
+    {
+      "qno": 11,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q11.png",
+      "crop_box_image": [
+        19,
+        104,
+        554,
+        209
+      ],
+      "crop_box_blocks": [
+        27,
+        109,
+        546,
+        204
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            109,
+            546,
+            136
+          ],
+          "text": "11.2024年，中国科技以奋进姿态奏响创新强音，向着科技强国目标迈出更加坚实的步伐。以下有关2024年中国科技成就的表述有误的是（）。Fb "
+        },
+        {
+          "bbox": [
+            40,
+            145,
+            368,
+            155
+          ],
+          "text": "A.深海载人潜水器“梦想”号标志我国深海探测关键技术取得重大突破"
+        },
+        {
+          "bbox": [
+            40,
+            160,
+            331,
+            171
+          ],
+          "text": "B.深中通道联通陆海，为粤港澳大湾区协同发展按下“快捷键”"
+        },
+        {
+          "bbox": [
+            40,
+            178,
+            315,
+            188
+          ],
+          "text": "C.南极泰岭站建成并投入使用，开启新时代极地科考新征程"
+        },
+        {
+          "bbox": [
+            41,
+            194,
+            295,
+            204
+          ],
+          "text": "D.嫦娥六号在人类历史上首次实现了月球背面采样返回"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 12,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q12.png",
+      "crop_box_image": [
+        19,
+        207,
+        544,
+        263
+      ],
+      "crop_box_blocks": [
+        27,
+        212,
+        536,
+        258
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            212,
+            536,
+            239
+          ],
+          "text": "12.党的二十届三中全会提出，鼓励和规范发展天使投资、风险投资，私募股权投资，更好发挥政府投资基金作用，发展耐心资本，耐心资本是一种专注于（）的资本形式。\n"
+        },
+        {
+          "bbox": [
+            40,
+            247,
+            477,
+            258
+          ],
+          "text": "A.中短期投资B.长期投资C.中期投资D.短期投资"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 13,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q13.png",
+      "crop_box_image": [
+        19,
+        261,
+        554,
+        317
+      ],
+      "crop_box_blocks": [
+        27,
+        266,
+        546,
+        312
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            266,
+            546,
+            293
+          ],
+          "text": "13.党的二十届三中全会提出，健全保障耕地用于种植基本农作物管理体系，基本农作物是指为了满足人们基本生产生活需要而大面积裁培的农作物，以下不属于国家层面的基本农作物的是（）。"
+        },
+        {
+          "bbox": [
+            40,
+            302,
+            455,
+            312
+          ],
+          "text": "A.粮食B.油料C.蔬菜D.苗木"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 14,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q14.png",
+      "crop_box_image": [
+        19,
+        315,
+        548,
+        388
+      ],
+      "crop_box_blocks": [
+        27,
+        320,
+        540,
+        383
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            320,
+            540,
+            363
+          ],
+          "text": "14.国家建立基本养老保险、基本医疗保险、工伤保险、失业保险、生育保险等社会保险制度，保障公民在年老、疾病、工伤、失业、生育等情况下依法从国家和社会获得物质帮助的权利，根据《中华人民共和国社会保险法》：由用人单位缴纳保险费，职工不缴纳保险费用的是（）。\n"
+        },
+        {
+          "bbox": [
+            40,
+            373,
+            498,
+            383
+          ],
+          "text": "A.工伤保险和生育保险B.失业保险C.基本养老保险D.基本医疗保险"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 15,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q15.png",
+      "crop_box_image": [
+        19,
+        386,
+        554,
+        542
+      ],
+      "crop_box_blocks": [
+        27,
+        391,
+        546,
+        537
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            391,
+            546,
+            434
+          ],
+          "text": "15.2025年2月召开的广东省高质量发展大会指出，自改革开放以来，广东从“三来一补”起步，从相对落后的农业省发展到牵动全球的世界工厂，再到（），产业体系的迭代升级，带来生产力的不断跃迁，支撑广东取得举世瞩目的发展成就。Fb \n"
+        },
+        {
+          "bbox": [
+            40,
+            443,
+            274,
+            453
+          ],
+          "text": "A.国家重要先进制造业高地和新兴产业重要策源地"
+        },
+        {
+          "bbox": [
+            40,
+            459,
+            293,
+            469
+          ],
+          "text": "B.国家重要先进制造业高地和发展新质生产力的主阵地"
+        },
+        {
+          "bbox": [
+            40,
+            475,
+            252,
+            485
+          ],
+          "text": "C引领全球的智造基地和新兴产业重要策源地"
+        },
+        {
+          "bbox": [
+            41,
+            491,
+            274,
+            501
+          ],
+          "text": "D.引领全球的智造基地和发展新质生产力的主阵地"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "paragraph_title",
+          "bbox": [
+            40,
+            510,
+            542,
+            537
+          ],
+          "content": "三，言语理解与表达：本部分包括表达与理解两方面的内容。请根据题目要求，在四个选项中选出一个最恰当的答案。\n",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 16,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q16.png",
+      "crop_box_image": [
+        19,
+        539,
+        549,
+        644
+      ],
+      "crop_box_blocks": [
+        27,
+        544,
+        541,
+        639
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            544,
+            541,
+            587
+          ],
+          "text": "16.繁杂问题、苗头问题、偶然问题都是问题的具体形态，背后隐藏着不同类型的矛盾。从繁杂问题中把握事物的、从苗头问题中发现事物的、从偶然问题中认识事物的，才能看清本质，抓住解决问题的根本。\n"
+        },
+        {
+          "bbox": [
+            40,
+            594,
+            205,
+            604
+          ],
+          "text": "依次填入画横线处最正确的一项是："
+        },
+        {
+          "bbox": [
+            40,
+            612,
+            407,
+            639
+          ],
+          "text": "A.必然性趋势性规律性B.规律性必然性趋势性C.趋势性规律性必然性D.规律性趋势性必然性"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 17,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q17.png",
+      "crop_box_image": [
+        19,
+        642,
+        554,
+        715
+      ],
+      "crop_box_blocks": [
+        27,
+        647,
+        546,
+        710
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            647,
+            546,
+            676
+          ],
+          "text": "17.浪费与消费一字之差，含义却反对餐饮浪费行为，并不是反对正常的、健康的餐饮消费，而是倡导取之有度、用之有节的健康餐饮文化。\n"
+        },
+        {
+          "bbox": [
+            41,
+            680,
+            184,
+            690
+          ],
+          "text": "填入画横线处最正确的一项是："
+        },
+        {
+          "bbox": [
+            40,
+            699,
+            477,
+            710
+          ],
+          "text": "A.截然相反B.南辕北辙C.大相径庭D.求同存异"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 18,
+      "image": "D:\\1something\\Learning_Files\\newvl\\test2\\pdf_images\\questions_page_3\\q18.png",
+      "crop_box_image": [
+        19,
+        713,
+        554,
+        765
+      ],
+      "crop_box_blocks": [
+        27,
+        718,
+        546,
+        760
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            27,
+            718,
+            546,
+            745
+          ],
+          "text": "18.一个人的能力有大小，做不了的大事，或做些的小事。只要每个人都发挥潜能，为自己的梦想努力奋斗，国家和社会也会因此变得更加美好。\n"
+        },
+        {
+          "bbox": [
+            41,
+            750,
+            205,
+            760
+          ],
+          "text": "依次填入画横线处最正确的一项是："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "footer",
+          "bbox": [
+            35,
+            796,
+            189,
+            805
+          ],
+          "content": "：本试卷由粉笔用户用户08hYFT生成",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            486,
+            796,
+            560,
+            805
+          ],
+          "content": "第3页，共18页",
+          "region_label": null
+        }
+      ]
+    }
+  ]
+}
