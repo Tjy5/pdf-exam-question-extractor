@@ -1,15 +1,27 @@
 import json
 import re
 import sys
+import argparse
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from PIL import Image
 from paddleocr import PPStructureV3
 
 
-# 题号行匹配：支持 “40.”、“40．”、“40、”
-QUESTION_HEAD_PATTERN = re.compile(r"^\s*(\d{1,3})[\.．、]\s*")
+# 题号行匹配：支持 “40.”、“40．”、“40、”，并兼顾出现在句首/换行/句号后的题号
+# 示例：开头的 "45."，或者 "。46." 这类紧跟在句号后的新题号
+QUESTION_HEAD_PATTERN = re.compile(r"(?:^|\n|。)\s*(\d{1,3})[\.．、]\s*")
+
+
+def page_index(page_name: str) -> int:
+    """
+    提取 page_6, page_10 里的数字部分，用于排序。
+    """
+    try:
+        return int(page_name.split("_")[-1])
+    except Exception:
+        return 0
 
 
 def load_ppstructure() -> PPStructureV3:
@@ -76,7 +88,10 @@ def find_question_spans(blocks: List[Dict[str, Any]]) -> List[Dict[str, int]]:
     for idx, blk in enumerate(blocks):
         if blk["label"] != "text":
             continue
-        m = QUESTION_HEAD_PATTERN.match(blk["content"])
+        content = blk.get("content") or ""
+        if not isinstance(content, str):
+            content = str(content)
+        m = QUESTION_HEAD_PATTERN.search(content)
         if not m:
             continue
         try:
@@ -91,6 +106,64 @@ def find_question_spans(blocks: List[Dict[str, Any]]) -> List[Dict[str, int]]:
         end = heads[i + 1]["start"] if i + 1 < len(heads) else len(blocks)
         spans.append({"qno": head["qno"], "start": start, "end": end})
     return spans
+
+
+SECTION_HEAD_KEYWORDS = ["资料分析", "判断推理", "言语理解与表达", "数量关系"]
+
+
+def detect_continuation_blocks(
+    blocks: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    在当前页的版面块中，找到“出现在第一个题号之前的正文块”，
+    作为上一题跨页续接内容的候选。
+
+    - 忽略 header/footer/number 等块；
+    - 一旦遇到第一个题号行，就停止。
+    """
+    # 如果当前页已经出现了新的大题/部分标题（如“资料分析”“判断推理”等），
+    # 则不再视为上一题的跨页续接，直接返回空。
+    for blk in blocks:
+        if blk.get("label") != "text":
+            continue
+        content = blk.get("content") or ""
+        if isinstance(content, str) and any(
+            key in content for key in SECTION_HEAD_KEYWORDS
+        ):
+            return []
+
+    first_head_idx: Optional[int] = None
+    for idx, blk in enumerate(blocks):
+        if blk.get("label") != "text":
+            continue
+        content = blk.get("content") or ""
+        if not isinstance(content, str):
+            content = str(content)
+        if QUESTION_HEAD_PATTERN.search(content):
+            first_head_idx = idx
+            break
+
+    candidates: List[Dict[str, Any]] = []
+    for idx, blk in enumerate(blocks):
+        if first_head_idx is not None and idx >= first_head_idx:
+            break
+        label = blk.get("label")
+        bbox = blk.get("bbox")
+        if (
+            label in {"footer", "number", "header"}
+            or not isinstance(bbox, (list, tuple))
+            or len(bbox) != 4
+        ):
+            continue
+        # 如果是新大题/新部分的标题（例如“资料分析”“判断推理”等），不视为上一题的续接内容
+        content = blk.get("content") or ""
+        if isinstance(content, str) and any(
+            key in content for key in SECTION_HEAD_KEYWORDS
+        ):
+            continue
+        candidates.append(blk)
+
+    return candidates
 
 
 def extract_questions_from_page(
@@ -244,10 +317,16 @@ def save_questions_for_page(
         out_img_path = page_out_dir / img_name
         crop_img.save(out_img_path)
 
+        # 存储相对路径，方便跨平台/移动
+        try:
+            rel_path = out_img_path.relative_to(base_output_dir.parent)
+        except ValueError:
+            rel_path = out_img_path
+
         page_summary["questions"].append(
             {
                 "qno": qno,
-                "image": str(out_img_path),
+                "image": str(rel_path),
                 "crop_box_image": q["crop_box_image"],
                 "crop_box_blocks": q["crop_box_blocks"],
                 "text_blocks": q["text_blocks"],
@@ -264,44 +343,191 @@ def save_questions_for_page(
     return page_summary
 
 
+def add_cross_page_segments(
+    img_paths: List[Path],
+    all_page_summaries: List[Dict[str, Any]],
+    pipeline: PPStructureV3,
+    base_output_dir: Path,
+) -> None:
+    """
+    处理“小题跨两页”的情况：
+
+    - 按页顺序遍历所有 page_*.png；
+    - 如果当前页顶部（第一个题号之前）存在正文块，则将这些块视为
+      “上一道题的续接部分”，为上一道题裁剪一张新的续接图片；
+    - 在上一页的题目条目中增加 `segments` 字段，结构与 big_questions 的 segments 类似：
+        segments: [
+          {"page": "page_6", "image": ".../q39.png", "box": [..]},
+          {"page": "page_7", "image": ".../q39_part2.png", "box": [..]}
+        ]
+
+    说明：
+    - 为兼容性考虑，只在检测到跨页续接时才新增 segments；
+    - text_blocks 目前仍然只包含本页内容，如需跨页文本汇总，可在后续脚本中基于 segments 再做 OCR。
+    """
+    if not all_page_summaries:
+        return
+
+    # 方便通过 page_name 找到对应的 summary
+    summary_by_page: Dict[str, Dict[str, Any]] = {
+        s["page_name"]: s for s in all_page_summaries
+    }
+
+    # 记录最近出现的“有题目”的那一道题，用于多页连续续接
+    last_q_entry: Optional[Dict[str, Any]] = None
+    last_q_page_name: Optional[str] = None
+
+    # 将图片按页码顺序遍历
+    sorted_img_paths = sorted(img_paths, key=lambda p: page_index(p.stem))
+
+    for img_path in sorted_img_paths:
+        page_name = img_path.stem  # page_6
+        summary = summary_by_page.get(page_name)
+
+        # 第一步：如果已经有上一道题，则尝试在当前页顶部寻找续接内容
+        if last_q_entry is not None and last_q_page_name is not None:
+            try:
+                doc = pipeline.predict(str(img_path))[0]
+            except Exception:
+                doc = {}
+
+            blocks = layout_blocks_from_doc(doc) if doc else []
+            cand_blocks = detect_continuation_blocks(blocks)
+            if cand_blocks:
+                # 计算这些续接块的裁剪范围
+                img = Image.open(img_path)
+                width, height = img.size
+
+                xs: List[int] = []
+                ys: List[int] = []
+                for blk in cand_blocks:
+                    bbox = blk.get("bbox")
+                    if (
+                        not isinstance(bbox, (list, tuple))
+                        or len(bbox) != 4
+                    ):
+                        continue
+                    x1, y1, x2, y2 = bbox
+                    xs.extend([int(x1), int(x2)])
+                    ys.extend([int(y1), int(y2)])
+
+                if xs and ys:
+                    # 同样考虑页脚，避免把页码截进去
+                    footer_ys: List[int] = []
+                    for blk in blocks:
+                        label = blk.get("label")
+                        bbox = blk.get("bbox")
+                        if (
+                            label in {"footer", "number"}
+                            and isinstance(bbox, (list, tuple))
+                            and len(bbox) == 4
+                        ):
+                            footer_ys.append(int(bbox[1]))
+                    footer_top: Optional[int] = min(footer_ys) if footer_ys else None
+
+                    margin_y = 5
+                    margin_x = 8
+                    top = max(0, min(ys) - margin_y)
+                    bottom = min(height, max(ys) + margin_y)
+                    if footer_top is not None:
+                        bottom = min(bottom, max(0, footer_top - 5))
+
+                    min_x, max_x = min(xs), max(xs)
+                    left = max(0, min_x - margin_x)
+                    right = min(width, max_x + margin_x)
+                    if right > left and bottom > top:
+                        crop_box = [left, top, right, bottom]
+                        page_out_dir = base_output_dir / f"questions_{page_name}"
+                        page_out_dir.mkdir(parents=True, exist_ok=True)
+
+                        qno = last_q_entry.get("qno")
+                        # 计算当前是第几个片段，用于命名 part2/part3...
+                        segments: List[Dict[str, Any]] = last_q_entry.get("segments") or []
+                        next_part_idx = 2 if not segments else len(segments) + 1
+                        img_name = f"q{qno}_part{next_part_idx}.png"
+                        out_img_path = page_out_dir / img_name
+
+                        crop_img = img.crop(tuple(crop_box))
+                        crop_img.save(out_img_path)
+
+                        try:
+                            rel_path = out_img_path.relative_to(base_output_dir.parent)
+                        except ValueError:
+                            rel_path = out_img_path
+
+                        # 初始化 segments 时，把原始那一页也作为第一个片段挂进去
+                        if not segments:
+                            segments.append(
+                                {
+                                    "page": last_q_page_name,
+                                    "image": last_q_entry.get("image"),
+                                    "box": last_q_entry.get("crop_box_image"),
+                                }
+                            )
+                        segments.append(
+                            {
+                                "page": page_name,
+                                "image": str(rel_path),
+                                "box": crop_box,
+                            }
+                        )
+                        last_q_entry["segments"] = segments
+
+        # 第二步：更新“最近一道题”的指针（如果本页有题）
+        if summary and summary.get("questions"):
+            # 按题号顺序，本页最后一题视为“最近一道题”
+            last_q_entry = summary["questions"][-1]
+            last_q_page_name = page_name
+
+    # 所有跨页信息处理完毕后，统一回写各页的 meta.json
+    for page_name, summary in summary_by_page.items():
+        meta_path = base_output_dir / f"questions_{page_name}" / "meta.json"
+        meta_path.parent.mkdir(parents=True, exist_ok=True)
+        with meta_path.open("w", encoding="utf-8") as f:
+            json.dump(summary, f, ensure_ascii=False, indent=2)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Extract questions from exam pages.")
+    parser.add_argument(
+        "--dir", 
+        type=str, 
+        default="pdf_images", 
+        help="Input directory containing page_*.png (default: pdf_images)"
+    )
+    parser.add_argument(
+        "pages", 
+        nargs="*", 
+        help="Specific pages to process (e.g., 6 7 or page_6.png). If empty, process all."
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
     """
-    Batch process page_*.png images under ./pdf_images.
-
-    默认：处理所有 `page_*.png`。
-    如果在命令行传入参数，则只处理指定页面，例如：
-
-        python extract_questions_ppstruct.py 6 7
-        python extract_questions_ppstruct.py page_6.png page_7.png
-
-    - Use PP-StructureV3 做版面解析
-    - 自动按题号切题
-    - 为每页保存 questions_{page_name} 目录下的题目图片和 meta.json
-
-    后续如果要整套卷子的结构化数据，可以再把所有 meta.json 汇总。
+    Batch process page_*.png images.
     """
-    root = Path(".").resolve()
-    img_dir = root / "pdf_images"
+    args = parse_args()
+    
+    # 允许指定子目录
+    img_dir = Path(args.dir).resolve()
 
     if not img_dir.is_dir():
-        raise SystemExit(f"目录不存在: {img_dir}")
+        print(f"错误: 目录不存在: {img_dir}")
+        sys.exit(1)
 
-    # 不动原始图片，只在 pdf_images 下创建 questions_* 子目录
+    print(f"正在处理目录: {img_dir}")
+
     pipeline = load_ppstructure()
-
     all_page_summaries: List[Dict[str, Any]] = []
 
-    # 根据命令行参数决定要处理哪些页面
-    argv = sys.argv[1:]
     img_paths: List[Path] = []
-    if not argv:
+    if not args.pages:
         # 默认处理所有 page_*.png
         img_paths = sorted(img_dir.glob("page_*.png"))
     else:
-        # 支持两种写法：
-        #   6 7            -> page_6.png, page_7.png
-        #   page_6.png ... -> 直接使用给定文件名
-        for arg in argv:
+        # 支持两种写法：6 7 或 page_6.png
+        for arg in args.pages:
             if arg.isdigit():
                 name = f"page_{arg}.png"
             else:
@@ -315,9 +541,15 @@ def main() -> None:
             img_paths.append(path)
         img_paths.sort()
 
+    if not img_paths:
+        print("未找到任何需要处理的 page_*.png 图片。")
+        return
+
     for img_path in img_paths:
+        print(f"正在处理: {img_path.name}")
         questions = extract_questions_from_page(img_path, pipeline)
         if not questions:
+            print(f"  - 未在该页提取到题目。")
             continue
         summary = save_questions_for_page(
             img_path=img_path,
@@ -326,11 +558,21 @@ def main() -> None:
         )
         all_page_summaries.append(summary)
 
+    # 处理“小题跨两页”的续接片段（如有），会在相应题目下增加 segments 字段并更新各页 meta.json
+    if all_page_summaries:
+        add_cross_page_segments(
+            img_paths=img_paths,
+            all_page_summaries=all_page_summaries,
+            pipeline=pipeline,
+            base_output_dir=img_dir,
+        )
+
     # 可选：输出一个总的 exam_questions.json
     if all_page_summaries:
         out_path = img_dir / "exam_questions.json"
         with out_path.open("w", encoding="utf-8") as f:
             json.dump(all_page_summaries, f, ensure_ascii=False, indent=2)
+        print(f"处理完成！结果汇总于: {out_path}")
 
 
 if __name__ == "__main__":

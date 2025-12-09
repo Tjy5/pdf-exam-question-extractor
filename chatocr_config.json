@@ -1,9 +1,9 @@
 {
   "chat_bot_config": {
     "api_type": "openai",
-    "base_url": "https://sdwfger.edu.kg/v1",
-    "api_key": "sk-Cqu25UZlIq017he42tM1u8aVZL4vtUaoPNuOQDCbZhtA1kOK",
-    "model_name": "gemini-2.5-flash",
+    "base_url": "https://newapi.netlib.re/v1",
+    "api_key": "sk-r8oFS5fO8PYoOOInAnRiYmdQwk06FvmRmU5ycxX5QaEIdtat",
+    "model_name": "gemini-2.5-pro",
     "module_name": "chat_bot",
     "temperature": 0.2,
     "max_tokens": 1024,
