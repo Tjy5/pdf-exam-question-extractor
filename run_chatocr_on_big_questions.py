@@ -1,12 +1,14 @@
+import argparse
 import json
 from pathlib import Path
 from typing import Any, Dict, List
 
 from paddleocr import PPChatOCRv4Doc
 
+from common import iter_meta_paths, resolve_image_path, auto_latest_exam_dir
+
 
 ROOT = Path(__file__).resolve().parent
-IMG_DIR = ROOT / "pdf_images"
 CONFIG_PATH = ROOT / "chatocr_config.json"
 
 
@@ -37,15 +39,12 @@ def load_chat_bot_config() -> Dict[str, Any]:
     return cfg
 
 
-def iter_meta_paths() -> List[Path]:
-    """遍历所有 questions_page_*/meta.json 文件。"""
-    paths: List[Path] = []
-    for meta_path in sorted(IMG_DIR.glob("questions_page_*/meta.json")):
-        paths.append(meta_path)
-    return paths
-
-
-def run_chatocr_on_meta(meta_path: Path, pipeline: PPChatOCRv4Doc, chat_bot_config: Dict[str, Any]) -> None:
+def run_chatocr_on_meta(
+    meta_path: Path,
+    pipeline: PPChatOCRv4Doc,
+    chat_bot_config: Dict[str, Any],
+    img_dir: Path,
+) -> None:
     """
     对某一页的 big_questions 段落运行 PP-ChatOCRv4，将摘要写回 meta.json。
 
@@ -66,8 +65,14 @@ def run_chatocr_on_meta(meta_path: Path, pipeline: PPChatOCRv4Doc, chat_bot_conf
             if not img_path or "chatocr_chat_res" in seg:
                 continue
 
-            print(f"[ChatOCR] {meta_path.name} - {bq.get('id')} - {img_path}")
-            visual_info = pipeline.visual_predict(input=img_path)
+            # 解析相对路径为可用的绝对路径
+            img_abs = resolve_image_path(str(img_path), img_dir.parent)
+            if not img_abs.is_file():
+                print(f"[ChatOCR][WARN] 找不到图片: {img_path}（解析到 {img_abs}），已跳过")
+                continue
+
+            print(f"[ChatOCR] {meta_path.name} - {bq.get('id')} - {img_abs}")
+            visual_info = pipeline.visual_predict(input=str(img_abs))
 
             # 这里给一个默认的“摘要型”任务描述，你可以在需要时调整 prompt
             chat_res = pipeline.chat(
@@ -85,14 +90,31 @@ def run_chatocr_on_meta(meta_path: Path, pipeline: PPChatOCRv4Doc, chat_bot_conf
         meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Run ChatOCR on big questions (资料分析等) and write back to meta.json"
+    )
+    parser.add_argument(
+        "--dir",
+        type=str,
+        default=None,
+        help="Directory containing questions_page_*/meta.json (可指向具体试卷子目录); if omitted auto-select latest under pdf_images",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
+    img_dir = Path(args.dir).resolve() if args.dir else auto_latest_exam_dir().resolve()
+    if not img_dir.is_dir():
+        raise SystemExit(f"目录不存在: {img_dir}")
+
     chat_bot_config = load_chat_bot_config()
     pipeline = PPChatOCRv4Doc()
 
-    for meta_path in iter_meta_paths():
-        run_chatocr_on_meta(meta_path, pipeline, chat_bot_config)
+    for meta_path in iter_meta_paths(img_dir):
+        run_chatocr_on_meta(meta_path, pipeline, chat_bot_config, img_dir)
 
 
 if __name__ == "__main__":
     main()
-

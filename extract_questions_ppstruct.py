@@ -1,82 +1,37 @@
 import json
-import re
 import sys
 import argparse
+import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 from PIL import Image
-from paddleocr import PPStructureV3
+
+# 导入公共模块
+from common import (
+    QUESTION_HEAD_PATTERN,
+    page_index,
+    get_ppstructure,
+    layout_blocks_from_doc,
+    save_meta,
+    is_section_boundary_block,
+    detect_section_boundaries,
+    detect_continuation_blocks,
+    compute_smart_crop_box,
+    auto_latest_exam_dir,
+)
 
 
-# 题号行匹配：支持 “40.”、“40．”、“40、”，并兼顾出现在句首/换行/句号后的题号
-# 示例：开头的 "45."，或者 "。46." 这类紧跟在句号后的新题号
-QUESTION_HEAD_PATTERN = re.compile(r"(?:^|\n|。)\s*(\d{1,3})[\.．、]\s*")
+INTRO_PATTERNS = [
+    re.compile(r"资料分析"),
+    re.compile(r"(根据|依据).{0,12}(资料|材料|图表)"),
+    re.compile(r"回答\s*\d+\s*[-~－—]\s*\d+\s*题"),
+]
 
 
-def page_index(page_name: str) -> int:
-    """
-    提取 page_6, page_10 里的数字部分，用于排序。
-    """
-    try:
-        return int(page_name.split("_")[-1])
-    except Exception:
-        return 0
-
-
-def load_ppstructure() -> PPStructureV3:
-    """
-    Initialize a shared PP-StructureV3 pipeline instance.
-    """
-    pipeline = PPStructureV3(
-        use_doc_orientation_classify=False,
-        use_doc_unwarping=False,
-    )
-    return pipeline
-
-
-def layout_blocks_from_doc(doc: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """
-    Convert PP-StructureV3 parsing_res_list into a list of plain dict blocks.
-    Each block dict contains at least: index, label, region_label, bbox, content.
-    """
-    blocks: List[Dict[str, Any]] = []
-
-    parsing_list = doc.get("parsing_res_list") or []
-    for blk in parsing_list:
-        # blk is a LayoutBlock object
-        if hasattr(blk, "to_dict"):
-            info = blk.to_dict()
-        else:
-            # Fallback: try to use its __dict__
-            info = getattr(blk, "__dict__", {})
-
-        if not info:
-            continue
-
-        label = info.get("label")
-        bbox = info.get("bbox")
-        content = info.get("content", "")
-
-        if not bbox or label is None:
-            continue
-
-        blocks.append(
-            {
-                "index": info.get("index", 0),
-                "label": label,
-                "region_label": info.get("region_label"),
-                "bbox": bbox,
-                "content": content if isinstance(content, str) else str(content),
-            }
-        )
-
-    # Ensure blocks are in reading order (index and then top y as a tiebreaker)
-    blocks.sort(key=lambda b: (b["index"], b["bbox"][1], b["bbox"][0]))
-    return blocks
-
-
-def find_question_spans(blocks: List[Dict[str, Any]]) -> List[Dict[str, int]]:
+def find_question_spans(
+    blocks: List[Dict[str, Any]], section_boundaries: Optional[Set[int]] = None
+) -> List[Dict[str, int]]:
     """
     Find spans of blocks belonging to each question, based on question-number
     headings in text blocks.
@@ -85,6 +40,7 @@ def find_question_spans(blocks: List[Dict[str, Any]]) -> List[Dict[str, int]]:
     in the blocks list (end is exclusive).
     """
     heads: List[Dict[str, int]] = []
+    boundary_set: Set[int] = section_boundaries or set()
     for idx, blk in enumerate(blocks):
         if blk["label"] != "text":
             continue
@@ -104,83 +60,34 @@ def find_question_spans(blocks: List[Dict[str, Any]]) -> List[Dict[str, int]]:
     for i, head in enumerate(heads):
         start = head["start"]
         end = heads[i + 1]["start"] if i + 1 < len(heads) else len(blocks)
+
+        # 如果在当前题号之后、下一题号之前出现了 section boundary，
+        # 则将该 boundary 视为本题的结束位置（不包含 boundary 本身）。
+        if boundary_set:
+            after_start = [b for b in boundary_set if start < b < end]
+            if after_start:
+                end = min(after_start)
         spans.append({"qno": head["qno"], "start": start, "end": end})
     return spans
 
 
-SECTION_HEAD_KEYWORDS = ["资料分析", "判断推理", "言语理解与表达", "数量关系"]
-
-
-def detect_continuation_blocks(
-    blocks: List[Dict[str, Any]],
-) -> List[Dict[str, Any]]:
-    """
-    在当前页的版面块中，找到“出现在第一个题号之前的正文块”，
-    作为上一题跨页续接内容的候选。
-
-    - 忽略 header/footer/number 等块；
-    - 一旦遇到第一个题号行，就停止。
-    """
-    # 如果当前页已经出现了新的大题/部分标题（如“资料分析”“判断推理”等），
-    # 则不再视为上一题的跨页续接，直接返回空。
-    for blk in blocks:
-        if blk.get("label") != "text":
-            continue
-        content = blk.get("content") or ""
-        if isinstance(content, str) and any(
-            key in content for key in SECTION_HEAD_KEYWORDS
-        ):
-            return []
-
-    first_head_idx: Optional[int] = None
-    for idx, blk in enumerate(blocks):
-        if blk.get("label") != "text":
-            continue
-        content = blk.get("content") or ""
-        if not isinstance(content, str):
-            content = str(content)
-        if QUESTION_HEAD_PATTERN.search(content):
-            first_head_idx = idx
-            break
-
-    candidates: List[Dict[str, Any]] = []
-    for idx, blk in enumerate(blocks):
-        if first_head_idx is not None and idx >= first_head_idx:
-            break
-        label = blk.get("label")
-        bbox = blk.get("bbox")
-        if (
-            label in {"footer", "number", "header"}
-            or not isinstance(bbox, (list, tuple))
-            or len(bbox) != 4
-        ):
-            continue
-        # 如果是新大题/新部分的标题（例如“资料分析”“判断推理”等），不视为上一题的续接内容
-        content = blk.get("content") or ""
-        if isinstance(content, str) and any(
-            key in content for key in SECTION_HEAD_KEYWORDS
-        ):
-            continue
-        candidates.append(blk)
-
-    return candidates
-
-
 def extract_questions_from_page(
     img_path: Path,
-    pipeline: PPStructureV3,
-    margin_y: int = 5,
-    margin_x: int = 8,
+    pipeline: Any,
 ) -> List[Dict[str, Any]]:
     """
     Run PP-StructureV3 on a single page image and return a list of question
     structures, each containing text/table blocks and suggested crop boxes.
+
+    使用智能裁剪边界，margin 根据页面尺寸动态计算。
     """
     img = Image.open(img_path)
     width, height = img.size
+    page_size = (width, height)
 
     doc = pipeline.predict(str(img_path))[0]
     blocks = layout_blocks_from_doc(doc)
+    section_boundaries = detect_section_boundaries(blocks)
 
     # 预先统计整页的页脚位置（footer/number），用于后面裁剪时避免把页脚截进去
     footer_ys: List[int] = []
@@ -195,7 +102,7 @@ def extract_questions_from_page(
             footer_ys.append(int(bbox[1]))
     footer_top: int | None = min(footer_ys) if footer_ys else None
 
-    spans = find_question_spans(blocks)
+    spans = find_question_spans(blocks, section_boundaries=section_boundaries)
 
     questions: List[Dict[str, Any]] = []
     for span in spans:
@@ -203,10 +110,17 @@ def extract_questions_from_page(
         if not q_blocks:
             continue
 
-        # Compute vertical span of all blocks in this question
-        # 注意：这里刻意排除 header/footer/number 等块，避免把页眉页脚算进题目高度
-        ys: List[int] = []
+        # 使用智能裁剪边界计算
+        crop_box_image = compute_smart_crop_box(
+            blocks=q_blocks,
+            page_size=page_size,
+            footer_top=footer_top,
+            use_full_width=True,
+        )
+
+        # 计算紧凑版 crop_box_blocks（基于内容边界，不含 margin）
         xs: List[int] = []
+        ys: List[int] = []
         for blk in q_blocks:
             label = blk.get("label")
             bbox = blk.get("bbox")
@@ -216,42 +130,20 @@ def extract_questions_from_page(
                 or len(bbox) != 4
             ):
                 continue
-            x1, y1, x2, y2 = bbox
-            xs.extend([x1, x2])
-            ys.extend([y1, y2])
+            xs.extend([int(bbox[0]), int(bbox[2])])
+            ys.extend([int(bbox[1]), int(bbox[3])])
 
-        # 极端情况下，如果上面的过滤导致没有有效块，则退回到原始 q_blocks 全量计算
         if not ys:
             for blk in q_blocks:
                 bbox = blk.get("bbox")
-                if (
-                    not isinstance(bbox, (list, tuple))
-                    or len(bbox) != 4
-                ):
-                    continue
-                x1, y1, x2, y2 = bbox
-                xs.extend([x1, x2])
-                ys.extend([y1, y2])
+                if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+                    xs.extend([int(bbox[0]), int(bbox[2])])
+                    ys.extend([int(bbox[1]), int(bbox[3])])
 
         if not ys:
             continue
 
-        top = max(0, min(ys) - margin_y)
-        bottom = min(height, max(ys) + margin_y)
-
-        # 如果整页识别到了 footer/number，则再用 footer_top 把题目底部“卡”在页脚上方
-        if footer_top is not None:
-            bottom = min(bottom, max(0, footer_top - 5))
-
-        min_x, max_x = min(xs), max(xs)
-        left = max(0, min_x - margin_x)
-        right = min(width, max_x + margin_x)
-        # fallback: if宽度异常（极端情况），退回整页宽
-        if right <= left:
-            left, right = 0, width
-
-        crop_box_image = [left, top, right, bottom]
-        crop_box_blocks = [min_x, min(ys), max_x, max(ys)]
+        crop_box_blocks = [min(xs), min(ys), max(xs), max(ys)]
 
         text_blocks: List[Dict[str, Any]] = []
         table_blocks: List[Dict[str, Any]] = []
@@ -278,7 +170,7 @@ def extract_questions_from_page(
         questions.append(
             {
                 "qno": span["qno"],
-                "crop_box_image": crop_box_image,
+                "crop_box_image": list(crop_box_image),
                 "crop_box_blocks": crop_box_blocks,
                 "text_blocks": text_blocks,
                 "table_blocks": table_blocks,
@@ -287,6 +179,22 @@ def extract_questions_from_page(
         )
 
     return questions
+
+
+def looks_like_new_section_intro(blocks: List[Dict[str, Any]]) -> bool:
+    """
+    判断由若干块组成的片段是否更像“新部分/资料分析开头”，
+    用于避免把整页材料误判为上一题的续接内容。
+    """
+    texts: List[str] = []
+    for blk in blocks:
+        content = blk.get("content")
+        if isinstance(content, str):
+            texts.append(content.strip())
+    if not texts:
+        return False
+    blob = "".join(texts).replace("\n", "")
+    return any(p.search(blob) for p in INTRO_PATTERNS)
 
 
 def save_questions_for_page(
@@ -346,15 +254,15 @@ def save_questions_for_page(
 def add_cross_page_segments(
     img_paths: List[Path],
     all_page_summaries: List[Dict[str, Any]],
-    pipeline: PPStructureV3,
+    pipeline: Any,
     base_output_dir: Path,
 ) -> None:
     """
-    处理“小题跨两页”的情况：
+    处理"小题跨两页"的情况：
 
     - 按页顺序遍历所有 page_*.png；
     - 如果当前页顶部（第一个题号之前）存在正文块，则将这些块视为
-      “上一道题的续接部分”，为上一道题裁剪一张新的续接图片；
+      "上一道题的续接部分"，为上一道题裁剪一张新的续接图片；
     - 在上一页的题目条目中增加 `segments` 字段，结构与 big_questions 的 segments 类似：
         segments: [
           {"page": "page_6", "image": ".../q39.png", "box": [..]},
@@ -364,6 +272,7 @@ def add_cross_page_segments(
     说明：
     - 为兼容性考虑，只在检测到跨页续接时才新增 segments；
     - text_blocks 目前仍然只包含本页内容，如需跨页文本汇总，可在后续脚本中基于 segments 再做 OCR。
+    - 改进：使用智能裁剪边界和置信度评估
     """
     if not all_page_summaries:
         return
@@ -373,7 +282,7 @@ def add_cross_page_segments(
         s["page_name"]: s for s in all_page_summaries
     }
 
-    # 记录最近出现的“有题目”的那一道题，用于多页连续续接
+    # 记录最近出现的"有题目"的那一道题，用于多页连续续接
     last_q_entry: Optional[Dict[str, Any]] = None
     last_q_page_name: Optional[str] = None
 
@@ -392,113 +301,114 @@ def add_cross_page_segments(
                 doc = {}
 
             blocks = layout_blocks_from_doc(doc) if doc else []
-            cand_blocks = detect_continuation_blocks(blocks)
-            if cand_blocks:
-                # 计算这些续接块的裁剪范围
+            section_boundaries = detect_section_boundaries(blocks)
+
+            # 使用改进的续接检测（返回置信度）
+            cand_blocks, confidence = detect_continuation_blocks(
+                blocks, section_boundaries=section_boundaries
+            )
+
+            # 只有置信度足够高时才生成续接图片
+            if cand_blocks and confidence >= 0.5:
                 img = Image.open(img_path)
                 width, height = img.size
+                page_size = (width, height)
 
-                xs: List[int] = []
-                ys: List[int] = []
-                for blk in cand_blocks:
+                # 计算页脚位置
+                footer_ys: List[int] = []
+                for blk in blocks:
+                    label = blk.get("label")
                     bbox = blk.get("bbox")
                     if (
-                        not isinstance(bbox, (list, tuple))
-                        or len(bbox) != 4
+                        label in {"footer", "number"}
+                        and isinstance(bbox, (list, tuple))
+                        and len(bbox) == 4
                     ):
-                        continue
-                    x1, y1, x2, y2 = bbox
-                    xs.extend([int(x1), int(x2)])
-                    ys.extend([int(y1), int(y2)])
+                        footer_ys.append(int(bbox[1]))
+                footer_top: Optional[int] = min(footer_ys) if footer_ys else None
 
-                if xs and ys:
-                    # 同样考虑页脚，避免把页码截进去
-                    footer_ys: List[int] = []
-                    for blk in blocks:
-                        label = blk.get("label")
-                        bbox = blk.get("bbox")
-                        if (
-                            label in {"footer", "number"}
-                            and isinstance(bbox, (list, tuple))
-                            and len(bbox) == 4
-                        ):
-                            footer_ys.append(int(bbox[1]))
-                    footer_top: Optional[int] = min(footer_ys) if footer_ys else None
+                # 使用智能裁剪边界计算续接内容的裁剪框
+                crop_box = compute_smart_crop_box(
+                    blocks=cand_blocks,
+                    page_size=page_size,
+                    footer_top=footer_top,
+                    use_full_width=True,
+                )
 
-                    margin_y = 5
-                    margin_x = 8
-                    top = max(0, min(ys) - margin_y)
-                    bottom = min(height, max(ys) + margin_y)
-                    if footer_top is not None:
-                        bottom = min(bottom, max(0, footer_top - 5))
+                left, top, right, bottom = crop_box
+                height_ratio = (bottom - top) / float(height) if height else 1.0
 
-                    min_x, max_x = min(xs), max(xs)
-                    left = max(0, min_x - margin_x)
-                    right = min(width, max_x + margin_x)
-                    if right > left and bottom > top:
-                        crop_box = [left, top, right, bottom]
-                        page_out_dir = base_output_dir / f"questions_{page_name}"
-                        page_out_dir.mkdir(parents=True, exist_ok=True)
+                # 大块材料页（如资料分析提示页）不应归为上一题续接
+                if looks_like_new_section_intro(cand_blocks) or height_ratio > 0.35:
+                    continue
 
-                        qno = last_q_entry.get("qno")
-                        # 计算当前是第几个片段，用于命名 part2/part3...
-                        segments: List[Dict[str, Any]] = last_q_entry.get("segments") or []
-                        next_part_idx = 2 if not segments else len(segments) + 1
-                        img_name = f"q{qno}_part{next_part_idx}.png"
-                        out_img_path = page_out_dir / img_name
+                if right > left and bottom > top:
+                    page_out_dir = base_output_dir / f"questions_{page_name}"
+                    page_out_dir.mkdir(parents=True, exist_ok=True)
 
-                        crop_img = img.crop(tuple(crop_box))
-                        crop_img.save(out_img_path)
+                    qno = last_q_entry.get("qno")
+                    # 计算当前是第几个片段，用于命名 part2/part3...
+                    segments: List[Dict[str, Any]] = last_q_entry.get("segments") or []
+                    next_part_idx = 2 if not segments else len(segments) + 1
+                    img_name = f"q{qno}_part{next_part_idx}.png"
+                    out_img_path = page_out_dir / img_name
 
-                        try:
-                            rel_path = out_img_path.relative_to(base_output_dir.parent)
-                        except ValueError:
-                            rel_path = out_img_path
+                    crop_img = img.crop(crop_box)
+                    crop_img.save(out_img_path)
 
-                        # 初始化 segments 时，把原始那一页也作为第一个片段挂进去
-                        if not segments:
-                            segments.append(
-                                {
-                                    "page": last_q_page_name,
-                                    "image": last_q_entry.get("image"),
-                                    "box": last_q_entry.get("crop_box_image"),
-                                }
-                            )
+                    try:
+                        rel_path = out_img_path.relative_to(base_output_dir.parent)
+                    except ValueError:
+                        rel_path = out_img_path
+
+                    # 初始化 segments 时，把原始那一页也作为第一个片段挂进去
+                    if not segments:
                         segments.append(
                             {
-                                "page": page_name,
-                                "image": str(rel_path),
-                                "box": crop_box,
+                                "page": last_q_page_name,
+                                "image": last_q_entry.get("image"),
+                                "box": last_q_entry.get("crop_box_image"),
                             }
                         )
-                        last_q_entry["segments"] = segments
+                    segments.append(
+                        {
+                            "page": page_name,
+                            "image": str(rel_path),
+                            "box": list(crop_box),
+                            "confidence": confidence,  # 记录置信度
+                        }
+                    )
+                    last_q_entry["segments"] = segments
 
-        # 第二步：更新“最近一道题”的指针（如果本页有题）
+        # 第二步：更新"最近一道题"的指针（如果本页有题）
         if summary and summary.get("questions"):
-            # 按题号顺序，本页最后一题视为“最近一道题”
+            # 按题号顺序，本页最后一题视为"最近一道题"
             last_q_entry = summary["questions"][-1]
             last_q_page_name = page_name
 
     # 所有跨页信息处理完毕后，统一回写各页的 meta.json
     for page_name, summary in summary_by_page.items():
         meta_path = base_output_dir / f"questions_{page_name}" / "meta.json"
-        meta_path.parent.mkdir(parents=True, exist_ok=True)
-        with meta_path.open("w", encoding="utf-8") as f:
-            json.dump(summary, f, ensure_ascii=False, indent=2)
+        save_meta(meta_path, summary)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Extract questions from exam pages.")
     parser.add_argument(
-        "--dir", 
-        type=str, 
-        default="pdf_images", 
-        help="Input directory containing page_*.png (default: pdf_images)"
+        "--dir",
+        type=str,
+        default=None,
+        help="Input directory containing page_*.png. If omitted, auto-pick latest under pdf_images/.last_processed",
     )
     parser.add_argument(
-        "pages", 
-        nargs="*", 
-        help="Specific pages to process (e.g., 6 7 or page_6.png). If empty, process all."
+        "--skip-existing",
+        action="store_true",
+        help="Skip pages whose questions_page_X/meta.json already exists",
+    )
+    parser.add_argument(
+        "pages",
+        nargs="*",
+        help="Specific pages to process (e.g., 6 7 or page_6.png). If empty, process all.",
     )
     return parser.parse_args()
 
@@ -509,8 +419,8 @@ def main() -> None:
     """
     args = parse_args()
     
-    # 允许指定子目录
-    img_dir = Path(args.dir).resolve()
+    # 允许指定子目录；未指定时自动选择最近的试卷目录
+    img_dir = Path(args.dir).resolve() if args.dir else auto_latest_exam_dir().resolve()
 
     if not img_dir.is_dir():
         print(f"错误: 目录不存在: {img_dir}")
@@ -518,7 +428,7 @@ def main() -> None:
 
     print(f"正在处理目录: {img_dir}")
 
-    pipeline = load_ppstructure()
+    pipeline = get_ppstructure()
     all_page_summaries: List[Dict[str, Any]] = []
 
     img_paths: List[Path] = []
@@ -546,6 +456,11 @@ def main() -> None:
         return
 
     for img_path in img_paths:
+        meta_path = img_dir / f"questions_{img_path.stem}" / "meta.json"
+        if args.skip_existing and meta_path.is_file():
+            print(f"跳过已存在: {img_path.name}")
+            continue
+
         print(f"正在处理: {img_path.name}")
         questions = extract_questions_from_page(img_path, pipeline)
         if not questions:

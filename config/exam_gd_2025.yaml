@@ -1,0 +1,19 @@
+# 广东省公务员考试2025配置
+# 继承全局配置，只需指定差异部分
+
+# 试卷信息
+exam_info:
+  id: gd_2025
+  name: "2025年广东省公务员录用考试_行测_题_网友回忆版"
+  description: "广东省考行测真题（网友回忆版）"
+  year: 2025
+  province: "广东"
+
+# 覆盖全局配置（如需要）
+# extraction:
+#   margin_ratio: 0.010  # 如果这套卷子需要更大的margin
+
+# 路径配置（自动生成）
+paths:
+  output_dir: data/output/gd_2025
+  interim_dir: data/interim/gd_2025

@@ -1,314 +1,356 @@
-# 项目说明 & 给后续 AI 的提示
+# PDF试卷自动切题与结构化工具 v2.0
 
-这个目录里存放的是：**把 PDF 试卷页面自动切分成单题图片，并保留题目文字 / 表格结构** 的脚本和示例数据。目前主要针对 `pdf_images/page_*.png` 里的行测试卷截图。
+![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
+![PaddleOCR](https://img.shields.io/badge/PaddleOCR-3.x-green.svg)
+![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
-下面说明当前状态、文件结构，以及后续人类或新的 AI 需要注意的约定。
-
----
-
-## 目标与现状
-
-### 总体目标
-
-- 对一张试卷页面（PNG）：
-  - 自动识别页面布局和文字；
-  - 按题号将页面划分成一题一块；
-  - 输出：每道题的截图 + 对应的文字和表格结构（方便出题、批改或下游 NLP）。
-- 需要支持 **很多页、不止一套卷子**，而不仅仅是当前的第 6 页。
-
-### 当前已经完成的内容
-
-1. 使用 **PaddleOCR 3.x + PP-StructureV3** 做版面解析和文字识别。
-2. 实现了一个脚本 `extract_questions_ppstruct.py`：
-   - 自动扫描 `pdf_images/page_*.png`；
-   - 调用 `PPStructureV3` 得到布局块（文字块 / 表格块等）；
-   - 在文字块中用正则匹配题号（形如 `31.`、`32．`、`33、` 等）；
-   - 把“某个题号块到下一个题号块之前”的所有布局块聚合成一道题；
-   - 根据这些块的坐标计算裁剪范围，并裁出题目图片；
-   - 保存每页的结构化信息到 JSON。
-3. 对 `pdf_images/page_6.png` 的 **31～39 题** 做了人工精调裁剪，放在单独的目录里，作为“黄金标准”。
-
-> **重要约定：`pdf_images/questions_page6` 目录下的 31～39 题图片已经人工确认“完美”，后续任何脚本和 AI 都不要再改动这个目录里的内容。**
+一个基于 **PaddleOCR + PP-StructureV3** 的智能试卷处理工具，可自动将 PDF 试卷切分成单个题目图片，并提取文字和表格结构。
 
 ---
 
-## 目录结构约定
+## ✨ 特性
 
-当前仓库关键结构（只列出和本任务相关的部分）：
-
-- `PaddleOCR完整使用指南.md`
-  - 最新的 **PaddleOCR 3.x 使用指南**（更新到 2025-12-05），涵盖安装、`PaddleOCR` / `PPStructureV3` / `PaddleOCR-VL` 的命令行与 Python 用法、离线部署提示等。
-- `extract_questions_ppstruct.py`
-  - 主脚本：使用 PP-StructureV3 对 `pdf_images/page_*.png` 自动按题号切题，并输出结构化 JSON。
-  - 调用方式：
-    - 不带参数：处理所有 `page_*.png`
-      ```bash
-      python extract_questions_ppstruct.py
-      ```
-    - 带参数：只处理指定页面（推荐）
-      ```bash
-      python extract_questions_ppstruct.py 6 7      # 只处理 page_6.png 和 page_7.png
-      python extract_questions_ppstruct.py page_6.png page_13.png
-      ```
-- `make_data_analysis_big.py`
-  - 辅助脚本：针对**资料分析**大题，生成“大题级截图”和结构化分组信息。
-  - 不再写死题号范围（如 71～75、76～80），而是基于：
-    - 资料分析所在页面范围：默认**自动识别**（扫描所有 `page_*.png`，找到包含“资料分析”标题的页面作为起点，一直到试卷末尾）；如需强制指定，可在脚本顶部设置 `DATA_ANALYSIS_PAGES`；
-    - PP-StructureV3 识别到的「（一）（二）（三）（四）」等大题标题；
-    - 小题顺序（每道大题默认 5 个小题，可通过 `DATA_ANALYSIS_GROUP_SIZE` 调整）。
-  - 对当前试卷会自动得到 4 道资料分析大题：
-    - `data_analysis_1`：只在 `page_13`，输出 `questions_page_13/big_1.png`；
-    - `data_analysis_2`：跨 `page_13` & `page_14`，输出 `big_2_part1.png`、`big_2_part2.png`；
-    - `data_analysis_3`：跨 `page_14` & `page_15`，输出 `big_3_part1.png`、`big_3_part2.png`；
-    - `data_analysis_4`：跨 `page_15`、`page_16`，如有需要还可延伸到 `page_17`（例如材料继续出现在下一页），输出 `big_4_part1.png`、`big_4_part2.png`、`big_4_part3.png` 等。
-  - 对应的大题结构分别写在每道大题**首个出现页面**的 `meta.json` 的 `big_questions` 字段中，例如：
-    - 第 1、2 道大题记录在 `questions_page_13/meta.json`；
-    - 第 3 道大题记录在 `questions_page_14/meta.json`；
-    - 第 4 道大题记录在 `questions_page_15/meta.json`。
-  - 使用方式（推荐先对整套或至少后几页跑一遍结构化脚本）：
-    ```bash
-    python extract_questions_ppstruct.py           # 先生成 questions_page_X/meta.json
-    python make_data_analysis_big.py               # 自动识别资料分析页并生成 big_*.png
-    ```
-- `run_chatocr_on_big_questions.py` / `run_vl_on_big_questions.py`
-  - 第三层：在大题截图的基础上，接入 **PP-ChatOCRv4** 和 **PaddleOCR-VL** 做语义理解 / 信息抽取。
-  - 典型用法：
-    - 配置好 `chatocr_config.json` 后，运行 ChatOCR：
-      ```bash
-      python run_chatocr_on_big_questions.py
-      ```
-      会对每个 `big_questions[*].segments[*].image` 生成摘要信息，写回对应 `meta.json` 的 `chatocr_chat_res` 字段。
-      - 配置文件位置：项目根目录下的 `chatocr_config.json`，结构大致为：
-        ```json
-        {
-          "chat_bot_config": {
-            "api_type": "openai",
-            "base_url": "https://你的LLM服务地址/v1",
-            "api_key": "YOUR_API_KEY",
-            "model_name": "你的模型名",
-            "module_name": "chat_bot",
-            "temperature": 0.2,
-            "max_tokens": 1024,
-            "top_p": 0.9
-          }
-        }
-        ```
-        只要是 **OpenAI 接口格式** 的第三方大模型（如兼容 `/v1/chat/completions`），都可以在这里配置。
-    - 安装好 `paddleocr[doc-parser]` 后，运行 VL：
-      ```bash
-      python run_vl_on_big_questions.py
-      ```
-      会对每个大题截图调用 `PaddleOCRVL`，把结果保存为 JSON 文件，并在 `meta.json` 中记录 `vl_json_path`。
-- `pdf_images/`
-  - `page_6.png` 等：从 PDF 导出的整页图片。
-  - `questions_page6/`
-    - **手工裁好的第 6 页题目图**，目前只关心 31～39 题。
-    - 这是人工标注的“金标准”，请不要覆盖或重裁这里的图片。
-  - `questions_page_6/`、`questions_page_7/` 等（下划线版）
-    - 由 `extract_questions_ppstruct.py` 自动生成的 **按页划分的题目图片 + 元数据**。
-    - 示例：`pdf_images/questions_page_6/q35.png`、`meta.json`。
-  - `exam_questions.json`
-    - 脚本汇总所有页面 `meta.json` 生成的一个总览文件（如果存在的话）。
-
-> 注意：`questions_page6`（无下划线）是人工结果；`questions_page_6`（有下划线）是脚本输出，两者不要混淆。
+- 🎯 **智能识别**: 自动识别题号、大题标题、跨页续接
+- 📊 **结构化输出**: 生成JSON格式的题目元数据
+- 🖼️ **高质量切图**: 智能裁剪边界，支持长图拼接
+- 📈 **资料分析**: 特殊处理资料分析大题
+- 🌐 **双模式**: 支持CLI命令行和Web界面
+- ⚙️ **可配置**: YAML配置文件管理不同试卷参数
 
 ---
 
-## `extract_questions_ppstruct.py` 的核心逻辑
+## 📦 快速开始
 
-这是未来扩展的核心脚本。主要由以下步骤组成（仅说明思路，具体实现逻辑请看脚本内函数）：
+### 1. 安装依赖
 
-1. **加载 PP-StructureV3**
+```bash
+# 创建虚拟环境（推荐）
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-```python
-from paddleocr import PPStructureV3
-
-pipeline = PPStructureV3(
-    use_doc_orientation_classify=False,
-    use_doc_unwarping=False,
-)
+# 安装依赖
+pip install -r requirements.txt
 ```
 
-2. **版面块抽取**
+> **注意**: PaddleOCR 会根据环境自动选择 CPU/GPU 版本。国内用户建议使用清华镜像源：
+> ```bash
+> pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+> ```
 
-```python
-doc = pipeline.predict("pdf_images/page_6.png")[0]
-parsing_res_list = doc["parsing_res_list"]  # List[LayoutBlock]
+### 2. 快速体验
 
-blocks = [
-    {
-        "index": blk.index,
-        "label": blk.label,              # "text" / "table" / "footer" ...
-        "bbox": blk.bbox,                # [x1, y1, x2, y2]
-        "content": blk.content,          # str 或 HTML
-        "region_label": blk.region_label # 细分类型，可选
-    }
-    for blk in parsing_res_list
-]
+```bash
+# 启动CLI交互式菜单（推荐新手）
+python manage.py
+
+# 或者启动Web界面
+python manage.py web
+# 然后访问 http://127.0.0.1:8000
 ```
 
-3. **按题号分段**
+---
 
-- 用正则 `^\s*(\d{1,3})[\.．、]\s*` 在 `label == "text"` 的块中匹配题号；
-- 把这些题号块在列表中的索引记为 `head[i].start`，题号值为 `head[i].qno`；
-- 每道题的块范围为：`start = head[i].start`，`end = head[i+1].start`（最后一道题的 `end = len(blocks)`）。
+## 📖 使用指南
 
-4. **为每道题计算裁剪框**
+### CLI模式（命令行）
 
-- 对属于本题的所有块，收集其 `bbox` 的 x/y 坐标；
-- 在垂直方向上取这些块的最小 y / 最大 y，再加一个安全 `margin`；
-- 横向裁剪通常使用页面全宽 `[0, top, page_width, bottom]`，避免漏字；
-- 同时记录一个紧凑版的 `crop_box_blocks = [min_x, min_y, max_x, max_y]` 以备后续使用。
+```bash
+# 启动交互式菜单
+python manage.py cli
 
-5. **输出结果**
+# 处理单个PDF（开发中）
+python manage.py process input.pdf --config config/exam_gd_2025.yaml
 
-对每一页：
+# 批量处理目录（开发中）
+python manage.py batch ./pdfs/
+```
 
-- 创建 `pdf_images/questions_page_X/` 目录；
-- 保存本页每一道题：
-  - `q{题号}.png`：按裁剪框截出的题目图；
-  - `meta.json`：包括
-    - `qno`、`image` 路径、两种 crop box；
-    - 所有 `text_blocks`（bbox + 文本内容）；
-    - 所有 `table_blocks`（bbox + HTML 表格）。
-- 整体上，`exam_questions.json` 是所有页面 `meta.json` 的汇总。
+### Web模式（网页界面）
 
-此外，当运行 `make_data_analysis_big.py` 时，会在相关页的 `meta.json` 中增加一个可选的：
+```bash
+# 启动Web服务器（推荐）
+python manage.py web
 
-- `big_questions`: `List[BigQuestion]`
-  - 目前用于“资料分析”这种**一份材料 + 多个小问**的大题。
-  - 结构大致如下（以第 2 道资料分析大题为例）：
-    ```json
-    "big_questions": [
-      {
-        "id": "data_analysis_2",
-        "type": "data_analysis",
-        "pages": ["page_13", "page_14"],
-        "qnos": [76, 77, 78, 79, 80],
-        "segments": [
-          {
-            "page": "page_13",
-            "image": "pdf_images/questions_page_13/big_2_part1.png",
-            "box": [0, 598, 595, 791]
-          },
-          {
-            "page": "page_14",
-            "image": "pdf_images/questions_page_14/big_2_part2.png",
-            "box": [0, 85, 595, 597]
-          }
-        ]
-      }
-    ]
-    ```
-  - 未来如果要生成“一整张超长大图”，可以直接使用 `segments` 中的 `image` + `box` 信息进行拼接。
+# Windows快捷启动
+start_web.bat
+
+# 自定义端口
+python manage.py web --port 9000
+
+# 调试模式
+python manage.py web --debug
+```
+
+> **提示**: Windows用户可直接双击 `start_web.bat` 启动Web界面
 
 ---
 
-## 重要约定（给未来人类和 AI）
+## 📁 项目结构
 
-1. **不要再改动 `pdf_images/questions_page6` 下的文件**
-   - 这里的 31～39 题是当前用户人工检查、微调后的“完美版本”。
-   - 任何新脚本、新 AI 如需改进算法，请在新的目录（如 `questions_page_6`）里输出结果进行对比，不要覆盖。
-
-2. **如需调整裁剪策略，请优先修改脚本逻辑而不是直接覆盖图片**
-   - 例如：
-     - 调整题号识别正则（有些试卷题号格式不同）；
-     - 增大/减小裁剪 margin；
-     - 对双栏排版或跨页题做特殊处理。
-   - 做完调整后，可以重新跑 `extract_questions_ppstruct.py`，观察 `questions_page_X` 目录中的变化。
-
-3. **PP-StructureV3 / PaddleOCR 版本**
-   - 当前环境基于 PaddleOCR 3.x，接口使用的是新的 `predict` 风格 API；
-   - 如果将来升级 PaddleOCR 或 PaddlePaddle，请优先参考 `PaddleOCR完整使用指南.md` 中的最新说明；
-   - 版本变更时要注意：
-     - `PPStructureV3` 的输出结构是否有字段变化；
-     - `parsing_res_list` / `LayoutBlock` 的字段和 `to_dict()` 行为是否一致。
-
-4. **后续可能的扩展方向**
-
-- 在 `meta.json` 的基础上：
-  - 把 `text_blocks` 自动拆成「题干 + 选项 A/B/C/D」；
-  - 对表格题（如第 35 题）使用 `table_blocks.html` 重建成结构化表格；
-  - 做题目去重、难度分析、知识点标注等。
-- 对更复杂的文档（双栏、多种题型混排）：
-  - 可以引入 PaddleOCR-VL 等视觉语言模型做更高层的语义划分；
-  - 但仍建议保留“版面块 + 题号规则”这一层逻辑，以便可控和可解释。
-
----
-
-## 资料分析大题的特殊说明
-
-- 当前对 **第 13～16 页的资料分析部分** 做了“大题级别”的额外裁剪，逻辑都集中在 `make_data_analysis_big.py` 里：
-  - 自动识别这些页面中的「（一）（二）（三）（四）」等大题标题；
-  - 假定每道资料分析大题包含 5 个小题（可在脚本顶部 `DATA_ANALYSIS_GROUP_SIZE` 调整）；
-  - 按标题 + 版面块顺序，将小题聚合成若干大题，并为每道大题生成 1～2 张跨页截图。
-- 这些大题截图 **不会替代单题截图**：
-  - 例如本卷中，`q71`～`q90` 仍然按普通题目方式单独裁剪并记录在各页的 `questions` 列表里；
-  - 大题信息额外写在 `big_questions` 字段中，作为“材料 + 多个小问”的结构化描述。
-- 对于跨页大题，目前的约定是：
-  - 先分别保留每一页的片段（`segments` 列表）；
-  - 将来如果要生成“一张超长大图”，可以另写脚本遍历 `big_questions[*].segments`，把这些片段拼接起来。
-- 如果之后的试卷里还有新的资料分析大题（尤其是跨页的），一般只需要：
-  - 把新试卷页面导出为 `pdf_images/page_*.png` 并跑一遍 `extract_questions_ppstruct.py`；
-  - 根据新试卷的资料分析所在页，调整 `make_data_analysis_big.py` 顶部的 `DATA_ANALYSIS_PAGES`（一般不需要再写死题号范围）。
-
----
-
-## 长图拼接（未来方案草案）
-
-目前 **尚未实现代码**，这里只是预留一个设计思路，方便之后的人或 AI 来补全：
-
-- 新脚本建议命名为：`compose_big_questions_long_image.py`（示例名，自由调整）。
-- 基本流程：
-  1. 遍历 `pdf_images/questions_page_*/meta.json`；
-  2. 找到其中的 `big_questions` 列表；
-  3. 对每个 big question 的 `segments`：
-     - 读取 `segment["image"]` 指向的图片（通常已经是按页裁剪好的片段）；
-     - 根据需要的拼接顺序（目前默认按 `segments` 列表顺序）将多张图 **竖直拼接** 成一张长图；
-     - 将拼接后的结果存到一个约定路径，例如：
-       - `pdf_images/questions_page_13/data_analysis_2_long.png`
-  4. 在对应的 `big_questions` 条目中增加一个字段，例如：
-     ```json
-     {
-       "id": "data_analysis_2",
-       "type": "data_analysis",
-       "pages": ["page_13", "page_14"],
-       "qnos": [76, 77, 78, 79, 80],
-       "segments": [ ... ],
-       "combined_image": "pdf_images/questions_page_13/data_analysis_2_long.png"
-     }
-     ```
-- 约定：
-  - 不改动已有的 `segments` 内容，只是**新增** `combined_image` 字段；
-  - 如无特殊需求，可以让“整图的逻辑归属”仍然挂在第一页（例如 `page_13`）对应的 `meta.json` 中；
-  - 单题截图和原始 `big_*.png` 依旧保留，以便对照或做更细粒度处理。
-
-实现这个脚本时，可以直接使用 Pillow (`PIL.Image`) 做简单的竖直拼接即可，无需重新跑 OCR 或结构化模型。
+```
+newvl/
+├── src/                      # 核心源代码
+│   ├── common/               # 公共模块（已模块化）
+│   │   ├── types.py          # 常量和类型定义
+│   │   ├── paths.py          # 路径工具
+│   │   ├── io.py             # 文件IO
+│   │   ├── image.py          # 图片处理
+│   │   ├── ocr_models.py     # OCR模型管理
+│   │   └── utils.py          # 工具函数
+│   ├── core/                 # 核心算法（待实现）
+│   ├── ocr/                  # OCR封装
+│   ├── postprocess/          # 后处理
+│   ├── compose/              # 长图拼接
+│   ├── analysis/             # 数据分析
+│   ├── services/             # 服务层（待实现）
+│   ├── config/               # 配置管理
+│   ├── cli/                  # CLI逻辑
+│   └── web/                  # Web后端
+├── scripts/                  # 辅助脚本
+│   ├── archived/             # 归档的实验代码
+│   └── migrate_data_v1_to_v2.py  # 数据迁移工具
+├── config/                   # 配置文件
+│   ├── global_settings.yaml  # 全局默认配置
+│   ├── exam_gd_2025.yaml     # 广东省考配置
+│   └── exam_sihai_2025.yaml  # 四海套题配置
+├── data/                     # 数据目录（不入Git）
+│   ├── input/                # 输入PDF
+│   ├── interim/              # 中间文件
+│   ├── output/               # 处理结果
+│   │   ├── gd_2025/
+│   │   │   ├── pages/        # 整页图片
+│   │   │   ├── questions/    # 切好的题目
+│   │   │   └── metadata.json
+│   │   └── ...
+│   └── cache/                # 缓存
+├── tests/                    # 测试用例
+│   └── fixtures/             # 测试数据（小样本）
+├── docs/                     # 文档
+│   ├── README.md             # 旧版详细文档
+│   └── PaddleOCR完整使用指南.md
+├── web_interface/            # Web前端
+│   ├── app.py                # FastAPI应用（5步处理流程）
+│   └── templates/            # 网页模板
+├── manage.py                 # 统一程序入口 ⭐
+├── start_web.bat             # Windows Web启动脚本
+├── common.py                 # 向后兼容模块（⚠️ 已弃用）
+├── extract_questions_ppstruct.py  # 题目提取主脚本
+├── make_data_analysis_big.py      # 资料分析处理
+├── compose_question_long_image.py # 长图拼接
+├── requirements.txt
+└── .gitignore
+```
 
 ---
 
-## 如何继续工作
+## ⚙️ 配置系统
 
-给后续的人类或 AI 的简单 checklist：
+### 配置文件层级
 
-1. **想跑一遍现有页面？**
-   - 确认已经安装 PaddlePaddle + PaddleOCR（参考 `介绍.md`）。
-   - 在仓库根目录执行：
-     ```bash
-     python extract_questions_ppstruct.py  # 或者 python extract_questions_ppstruct.py 6 7 13 14
-     ```
-   - 查看 `pdf_images/questions_page_X/` 及 `exam_questions.json`。
+```
+全局配置 (config/global_settings.yaml)
+    ↓ 被覆盖
+试卷配置 (config/exam_*.yaml)
+    ↓ 被覆盖
+命令行参数
+```
 
-2. **要扩展到新试卷？**
-   - 把新试卷的每一页导出为 `pdf_images/page_*.png`（命名尽量统一）。
-   - 再跑一遍脚本即可得到新的 `questions_page_X` 和 JSON。
+### 为新试卷创建配置
 
-3. **要改进算法？**
-   - 修改 `extract_questions_ppstruct.py` 中的：
-     - 题号正则 `QUESTION_HEAD_PATTERN`；
-     - 题目块分段逻辑 `find_question_spans`；
-     - 裁剪策略和 margin。
-   - 如果要调整资料分析大题（尤其是跨页大题）的截图方式，先看 `make_data_analysis_big.py` 里对 `big_questions` 的处理，再决定是改坐标、改命名，还是新增“整合长图”的生成步骤。
-   - 注意保留对 `questions_page6` 的保护约定。
+1. 复制 `config/exam_gd_2025.yaml` 作为模板
+2. 修改 `exam_info` 部分：
+   ```yaml
+   exam_info:
+     id: my_exam_2025          # 唯一标识
+     name: "我的试卷名称"
+     description: "简要描述"
+   ```
+3. 调整特定参数（可选）：
+   ```yaml
+   extraction:
+     margin_ratio: 0.010  # 如果需要更大的裁剪边距
+   ```
 
-做到这些，新的开发者或 AI 就可以在现有基础上**无缝接力**，继续提高切题效果和结构化质量。  
+---
+
+## 🔄 数据迁移（v1 → v2）
+
+如果你之前使用过旧版本，需要迁移 `pdf_images/` 数据：
+
+```bash
+# 先模拟运行，查看迁移计划
+python scripts/migrate_data_v1_to_v2.py --dry-run
+
+# 确认无误后执行迁移
+python scripts/migrate_data_v1_to_v2.py
+
+# 迁移后验证
+python manage.py cli
+# 在菜单中选择"查看已处理试卷列表"
+```
+
+**迁移后数据位置**: `data/output/{exam_id}/`
+
+---
+
+## 📝 工作流程
+
+```
+1. PDF → images      (pdf_to_images.py)
+    ↓
+2. 版面分析         (extract_questions_ppstruct.py)
+    ↓
+3. 题目提取         自动识别题号、裁剪
+    ↓
+4. 资料分析处理     (make_data_analysis_big.py)
+    ↓
+5. 长图拼接         (compose_question_long_image.py)
+    ↓
+6. Web展示          (manage.py web)
+```
+
+---
+
+## 🛠️ 故障排除
+
+### 1. 模型下载失败
+
+**问题**: 首次运行时 PaddleOCR 尝试下载模型但失败
+
+**解决方案**:
+- 离线模型路径: `~/.paddlex/official_models`
+- 手动下载模型并放置到该目录
+- 或使用代理: `export https_proxy=http://127.0.0.1:7890`
+
+### 2. 中文路径问题
+
+**问题**: Windows 上中文路径导致编码错误
+
+**解决方案**:
+- 将项目放在英文路径下
+- 或在脚本开头添加:
+  ```python
+  import sys
+  sys.stdout.reconfigure(encoding='utf-8')
+  ```
+
+### 3. GPU 相关错误
+
+**问题**: 提示 CUDA 相关错误
+
+**解决方案**:
+- 安装 CPU 版本: `pip install paddlepaddle`
+- 或在配置文件中禁用 GPU:
+  ```yaml
+  ocr:
+    gpu_enable: false
+  ```
+
+### 4. Web界面"结果汇总"步骤无法复制题目图片
+
+**问题**: 步骤4完成后 `all_questions` 目录为空或缺少题目
+
+**原因**: meta.json 中的路径包含旧目录名（如 `_v2` 后缀），但实际目录已重命名
+
+**解决方案**:
+- ✅ **已在 v2.0.1 修复**: `src/common/paths.py` 的 `resolve_image_path` 函数现在支持目录重命名后的路径自动修复
+- 如仍有问题，请检查 meta.json 中的 `image` 字段格式
+
+---
+
+## ⚠️ 重要提示
+
+### 弃用警告
+
+- **`common.py`** (根目录): 该文件仅用于向后兼容，新代码请使用:
+  ```python
+  # 旧代码（不推荐）
+  from common import get_ppstructure, load_meta
+
+  # 新代码（推荐）
+  from src.common import get_ppstructure, load_meta
+  from src.common.paths import resolve_image_path  # 支持路径修复
+  ```
+
+- **`cli_menu.py`**: 已移除，请使用 `manage.py cli` 或 Web 界面
+
+### Git 管理
+
+- **不要提交**: `data/`、`pdf_images/`、`*.png`、`*.pdf`
+- **应该提交**: `tests/fixtures/` 中的小样本数据
+- **配置文件**: `config/*_local.yaml` 和 `chatocr_config_local.json` 不入库
+
+---
+
+## 🧪 开发指南
+
+### 运行测试
+
+```bash
+# 运行所有测试
+pytest tests/
+
+# 运行特定测试
+pytest tests/test_common.py
+```
+
+### 添加新功能
+
+1. 在 `src/` 对应模块下实现功能
+2. 添加配置项到 `config/global_settings.yaml`
+3. 在 `manage.py` 中添加命令（如需要）
+4. 编写测试
+5. 更新文档
+
+---
+
+## 📚 更多文档
+
+- [旧版详细文档](docs/README.md) - v1.x 的完整说明
+- [PaddleOCR使用指南](docs/PaddleOCR完整使用指南.md) - OCR引擎详解
+- [Web使用指南](WEB_使用指南.md) - Web界面操作说明（如存在）
+
+---
+
+## 📄 许可证
+
+MIT License
+
+---
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+---
+
+## 📞 联系方式
+
+如有问题，请在 GitHub Issues 中提出。
+
+---
+
+## 📝 更新日志
+
+### v2.0.1 (2025-12-12)
+
+**修复**:
+- 🐛 修复路径解析bug：meta.json 路径包含旧目录名时无法找到文件 (`src/common/paths.py`)
+- 🐛 优化资料分析大题拼接：增加材料与题目间隙至200px (`make_data_analysis_big.py`)
+- 🧹 移除独立 CLI 工具 `cli_menu.py`，统一使用 Web 界面
+
+**改进**:
+- ✨ `resolve_image_path` 支持跨平台路径分隔符和目录重命名
+- ✨ Windows 快捷启动脚本 `start_web.bat`
+
+### v2.0.0 (2025-12-11)
+
+**重构**:
+- 模块化 `src/common/` 目录
+- 配置系统 `config/*.yaml`
+- 统一入口 `manage.py`
+
+---
+
+**版本**: v2.0.1
+**最后更新**: 2025-12-12

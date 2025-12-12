@@ -1,0 +1,14 @@
+# 四海25下半年1期套题班配置
+
+# 试卷信息
+exam_info:
+  id: sihai_2025_h2_1
+  name: "1_四海_25下半年1期套题班_行测"
+  description: "四海教育25下半年第1期套题班行测试卷"
+  year: 2025
+  organization: "四海教育"
+
+# 路径配置
+paths:
+  output_dir: data/output/sihai_2025_h2_1
+  interim_dir: data/interim/sihai_2025_h2_1

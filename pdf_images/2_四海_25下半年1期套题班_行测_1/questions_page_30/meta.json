@@ -1,0 +1,163 @@
+{
+  "page_name": "page_30",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\97c07f53_2_四海_25下半年1期套题班_行测_1\\page_30.png",
+  "questions": [
+    {
+      "qno": 83,
+      "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_30\\q83.png",
+      "crop_box_image": [
+        0,
+        258,
+        2185,
+        694
+      ],
+      "crop_box_blocks": [
+        201,
+        273,
+        1736,
+        679
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            201,
+            273,
+            1414,
+            316
+          ],
+          "text": "83．以下为立方体的外表面，下列哪个立方体可以由此折成："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            454,
+            357,
+            1736,
+            679
+          ],
+          "content": "A B C D ",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 84,
+      "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_30\\q84.png",
+      "crop_box_image": [
+        0,
+        739,
+        2185,
+        1654
+      ],
+      "crop_box_blocks": [
+        200,
+        754,
+        1945,
+        1639
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            200,
+            754,
+            1945,
+            891
+          ],
+          "text": "84．下图左侧给定的是3×3×3的正方体被分解后的多面体，切去的部分可以由给定的①、②和③三个多面体组合而成。以下哪项能填入问号处："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            452,
+            934,
+            1733,
+            1639
+          ],
+          "content": "C \n8\nA B \n\n",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 85,
+      "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_30\\q85.png",
+      "crop_box_image": [
+        0,
+        1702,
+        2185,
+        2363
+      ],
+      "crop_box_blocks": [
+        201,
+        1717,
+        1803,
+        2348
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            201,
+            1717,
+            1803,
+            1761
+          ],
+          "text": "85．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            374,
+            1803,
+            1799,
+            2348
+          ],
+          "content": "比要\n\n辨\n\n",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            918,
+            2862,
+            1255,
+            2900
+          ],
+          "content": "第27页共44页",
+          "region_label": null
+        }
+      ],
+      "segments": [
+        {
+          "page": "page_30",
+          "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_30\\q85.png",
+          "box": [
+            0,
+            1702,
+            2185,
+            2363
+          ]
+        },
+        {
+          "page": "page_31",
+          "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_31\\q85_part2.png",
+          "box": [
+            0,
+            255,
+            2185,
+            333
+          ],
+          "confidence": 0.9
+        }
+      ]
+    }
+  ]
+}

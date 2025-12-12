@@ -1,0 +1,4 @@
+paddleocr[doc-parser]>=3.0.0  # use mirror if needed, e.g. -i https://pypi.tuna.tsinghua.edu.cn/simple
+pillow>=9.0.0
+pymupdf>=1.23.0
+rich>=13.0.0

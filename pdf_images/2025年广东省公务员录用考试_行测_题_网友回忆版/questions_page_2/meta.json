@@ -6,10 +6,10 @@
       "qno": 1,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q1.png",
       "crop_box_image": [
-        91,
-        325,
-        1648,
-        417
+        0,
+        315,
+        1785,
+        427
       ],
       "crop_box_blocks": [
         99,
@@ -35,10 +35,10 @@
       "qno": 2,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q2.png",
       "crop_box_image": [
-        87,
-        430,
-        1451,
-        473
+        0,
+        420,
+        1785,
+        483
       ],
       "crop_box_blocks": [
         95,
@@ -64,10 +64,10 @@
       "qno": 3,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q3.png",
       "crop_box_image": [
-        88,
-        489,
-        1044,
-        531
+        0,
+        479,
+        1785,
+        541
       ],
       "crop_box_blocks": [
         96,
@@ -93,10 +93,10 @@
       "qno": 4,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q4.png",
       "crop_box_image": [
-        87,
-        546,
-        1137,
-        588
+        0,
+        536,
+        1785,
+        598
       ],
       "crop_box_blocks": [
         95,
@@ -122,10 +122,10 @@
       "qno": 5,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q5.png",
       "crop_box_image": [
-        88,
-        602,
-        1649,
-        752
+        0,
+        592,
+        1785,
+        762
       ],
       "crop_box_blocks": [
         96,
@@ -160,10 +160,10 @@
       "qno": 6,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q6.png",
       "crop_box_image": [
-        87,
-        765,
-        1650,
-        1011
+        0,
+        755,
+        1785,
+        1021
       ],
       "crop_box_blocks": [
         95,
@@ -198,10 +198,10 @@
       "qno": 7,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q7.png",
       "crop_box_image": [
-        88,
-        1026,
-        1649,
-        1221
+        0,
+        1016,
+        1785,
+        1231
       ],
       "crop_box_blocks": [
         96,
@@ -236,10 +236,10 @@
       "qno": 8,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q8.png",
       "crop_box_image": [
-        88,
-        1236,
-        1648,
-        1577
+        0,
+        1226,
+        1785,
+        1587
       ],
       "crop_box_blocks": [
         96,
@@ -274,10 +274,10 @@
       "qno": 9,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q9.png",
       "crop_box_image": [
-        85,
-        1591,
-        1648,
-        1934
+        0,
+        1581,
+        1785,
+        1944
       ],
       "crop_box_blocks": [
         93,
@@ -312,10 +312,10 @@
       "qno": 10,
       "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q10.png",
       "crop_box_image": [
-        73,
-        1948,
-        1650,
-        2340
+        0,
+        1938,
+        1785,
+        2350
       ],
       "crop_box_blocks": [
         81,
@@ -367,30 +367,7 @@
           "content": "第2页，共18页",
           "region_label": null
         }
-      ],
-      "segments": [
-        {
-          "page": "page_2",
-          "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q10.png",
-          "box": [
-            73,
-            1948,
-            1650,
-            2340
-          ]
-        },
-        {
-          "page": "page_3",
-          "image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_3\\q10_part2.png",
-          "box": [
-            114,
-            268,
-            1083,
-            313
-          ]
-        }
-      ],
-      "long_image": "2025年广东省公务员录用考试_行测_题_网友回忆版\\questions_page_2\\q10_long.png"
+      ]
     }
   ]
 }

@@ -1,0 +1,107 @@
+{
+  "page_name": "page_26",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\1_四海_25下半年1期套题班_行测\\page_26.png",
+  "questions": [
+    {
+      "qno": 75,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_26\\q75.png",
+      "crop_box_image": [
+        0,
+        181,
+        1574,
+        880
+      ],
+      "crop_box_blocks": [
+        148,
+        196,
+        1418,
+        865
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            148,
+            196,
+            1418,
+            358
+          ],
+          "text": "75．一只蜘蛛爬到一块正方形瓷砖上，该瓷砖的花纹由8个全等的菱形和12个全等的等腰直角三角形构成（如下图所示），假设蜘蛛的停留位置是随机的，那么蜘蛛恰好停在白色区域的概率最接近下列哪个值?公考最新资料、更新进度微信SKA674"
+        },
+        {
+          "bbox": [
+            211,
+            771,
+            310,
+            799
+          ],
+          "text": "A.25%"
+        },
+        {
+          "bbox": [
+            211,
+            837,
+            310,
+            865
+          ],
+          "text": "C. 35%"
+        },
+        {
+          "bbox": [
+            780,
+            837,
+            877,
+            865
+          ],
+          "text": "D.40%"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            618,
+            384,
+            947,
+            716
+          ],
+          "content": "",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            779,
+            771,
+            878,
+            800
+          ],
+          "content": "B. 30%",
+          "region_label": null
+        },
+        {
+          "label": "footer",
+          "bbox": [
+            349,
+            1952,
+            1217,
+            1988
+          ],
+          "content": "第三部分结束，请继续做第四部分！",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            661,
+            2060,
+            905,
+            2087
+          ],
+          "content": "第22页共42页",
+          "region_label": null
+        }
+      ]
+    }
+  ]
+}

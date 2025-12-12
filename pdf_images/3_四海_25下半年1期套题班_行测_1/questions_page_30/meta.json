@@ -1,0 +1,199 @@
+{
+  "page_name": "page_30",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\3_四海_25下半年1期套题班_行测_1_v2\\page_30.png",
+  "questions": [
+    {
+      "qno": 79,
+      "image": "3_四海_25下半年1期套题班_行测_1_v2\\questions_page_30\\q79.png",
+      "crop_box_image": [
+        0,
+        258,
+        2185,
+        790
+      ],
+      "crop_box_blocks": [
+        203,
+        273,
+        1804,
+        775
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            203,
+            273,
+            1804,
+            316
+          ],
+          "text": "79．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            439,
+            336,
+            1738,
+            775
+          ],
+          "content": "□□\n\nA \n\nA B C D \n",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 80,
+      "image": "3_四海_25下半年1期套题班_行测_1_v2\\questions_page_30\\q80.png",
+      "crop_box_image": [
+        0,
+        805,
+        2185,
+        1369
+      ],
+      "crop_box_blocks": [
+        202,
+        820,
+        1804,
+        1354
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            820,
+            1804,
+            863
+          ],
+          "text": "80．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            505,
+            903,
+            1667,
+            1354
+          ],
+          "content": "2A B C D ",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 81,
+      "image": "3_四海_25下半年1期套题班_行测_1_v2\\questions_page_30\\q81.png",
+      "crop_box_image": [
+        0,
+        1417,
+        2185,
+        2094
+      ],
+      "crop_box_blocks": [
+        202,
+        1432,
+        1970,
+        2079
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            1432,
+            1970,
+            1566
+          ],
+          "text": "81．把下面的六个图形分为两类，使每一类图形都有各自的共同特征或规律，分类正确的一项是："
+        },
+        {
+          "bbox": [
+            291,
+            1936,
+            1464,
+            2079
+          ],
+          "text": "A.①②⑤，③④⑥B.①③④，②⑤⑥C. ①④⑤，②③⑥D.①⑤⑥，②③④"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            394,
+            1617,
+            1776,
+            1864
+          ],
+          "content": "①E \n\n",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 82,
+      "image": "3_四海_25下半年1期套题班_行测_1_v2\\questions_page_30\\q82.png",
+      "crop_box_image": [
+        0,
+        2108,
+        2185,
+        2787
+      ],
+      "crop_box_blocks": [
+        204,
+        2123,
+        1970,
+        2772
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            204,
+            2123,
+            1970,
+            2257
+          ],
+          "text": "82．把下面的六个图形分为两类，使每一类图形都有各自的共同特征或规律，分类正确的一项是："
+        },
+        {
+          "bbox": [
+            290,
+            2628,
+            1464,
+            2772
+          ],
+          "text": "A.①③④，②⑤⑥B.①③⑤，②④⑥C.①②⑥，③④⑤D．①⑤⑥，②③④"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            425,
+            2286,
+            1766,
+            2568
+          ],
+          "content": "①\n\n",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            920,
+            2868,
+            1258,
+            2907
+          ],
+          "content": "第27页共44页",
+          "region_label": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "page_name": "page_45",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\97c07f53_2_四海_25下半年1期套题班_行测_1\\page_45.png",
+  "questions": [
+    {
+      "qno": 125,
+      "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_45\\q125.png",
+      "crop_box_image": [
+        0,
+        257,
+        2185,
+        1062
+      ],
+      "crop_box_blocks": [
+        213,
+        272,
+        1963,
+        1047
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            213,
+            272,
+            1963,
+            408
+          ],
+          "text": "125．以下柱状图反映了2024年哪一时间段内，T市自行车出口哪一指标环比增量变化情况：（横轴位置代表增量为0）\n"
+        },
+        {
+          "bbox": [
+            314,
+            911,
+            1429,
+            1047
+          ],
+          "text": "A.$2\\sim5$ 月出口量B.3~6月出口量C.$2\\sim5$ 月出口额D．3～6月出口额"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            710,
+            447,
+            1465,
+            833
+          ],
+          "content": "",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            916,
+            2861,
+            1255,
+            2900
+          ],
+          "content": "第42页共44页",
+          "region_label": null
+        }
+      ]
+    }
+  ],
+  "big_questions": []
+}

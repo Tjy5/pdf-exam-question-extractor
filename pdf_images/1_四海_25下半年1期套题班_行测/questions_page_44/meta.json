@@ -1,0 +1,170 @@
+{
+  "page_name": "page_44",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\1_四海_25下半年1期套题班_行测\\page_44.png",
+  "questions": [
+    {
+      "qno": 121,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_44\\q121.png",
+      "crop_box_image": [
+        0,
+        1581,
+        1574,
+        1774
+      ],
+      "crop_box_blocks": [
+        148,
+        1596,
+        1384,
+        1759
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            148,
+            1596,
+            1384,
+            1627
+          ],
+          "text": "121．2015～2022年期间，我国A股市场新上市公司平均每家首次募资金额最大的年份是："
+        },
+        {
+          "bbox": [
+            230,
+            1663,
+            384,
+            1695
+          ],
+          "text": "A.2018年"
+        },
+        {
+          "bbox": [
+            779,
+            1663,
+            932,
+            1694
+          ],
+          "text": "B.2019年"
+        },
+        {
+          "bbox": [
+            229,
+            1729,
+            934,
+            1759
+          ],
+          "text": "C.2021年D.2022年"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 122,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_44\\q122.png",
+      "crop_box_image": [
+        0,
+        1779,
+        1574,
+        2039
+      ],
+      "crop_box_blocks": [
+        149,
+        1794,
+        1418,
+        2024
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            149,
+            1794,
+            1418,
+            1891
+          ],
+          "text": "122.2016～2022年期间，我国A股市场新上市公司的首次募资金额同比增长超过15%的年份有："
+        },
+        {
+          "bbox": [
+            230,
+            1927,
+            337,
+            1958
+          ],
+          "text": "A.3个"
+        },
+        {
+          "bbox": [
+            779,
+            1927,
+            884,
+            1958
+          ],
+          "text": "B.4个"
+        },
+        {
+          "bbox": [
+            229,
+            1992,
+            885,
+            2024
+          ],
+          "text": "C.5个D.6个"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "number",
+          "bbox": [
+            661,
+            2060,
+            905,
+            2087
+          ],
+          "content": "第39页共42页",
+          "region_label": null
+        }
+      ]
+    }
+  ],
+  "big_questions": [
+    {
+      "id": "data_analysis_3",
+      "type": "data_analysis",
+      "pages": [
+        "page_44",
+        "page_45"
+      ],
+      "qnos": [
+        121,
+        122,
+        123,
+        124,
+        125
+      ],
+      "segments": [
+        {
+          "page": "page_44",
+          "image": "1_四海_25下半年1期套题班_行测\\questions_page_44\\big_3_part1.png",
+          "box": [
+            0,
+            190,
+            1574,
+            2034
+          ]
+        },
+        {
+          "page": "page_45",
+          "image": "1_四海_25下半年1期套题班_行测\\questions_page_45\\big_3_part2.png",
+          "box": [
+            0,
+            192,
+            1574,
+            1692
+          ]
+        }
+      ],
+      "combined_image": "1_四海_25下半年1期套题班_行测\\questions_page_44\\data_analysis_3_long.png"
+    }
+  ]
+}

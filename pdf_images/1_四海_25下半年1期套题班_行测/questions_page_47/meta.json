@@ -1,0 +1,295 @@
+{
+  "page_name": "page_47",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\1_四海_25下半年1期套题班_行测\\page_47.png",
+  "questions": [
+    {
+      "qno": 126,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\q126.png",
+      "crop_box_image": [
+        0,
+        248,
+        1574,
+        443
+      ],
+      "crop_box_blocks": [
+        149,
+        263,
+        1093,
+        428
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            149,
+            263,
+            820,
+            293
+          ],
+          "text": "126．2022年我国软件业务收入在以下哪个范围："
+        },
+        {
+          "bbox": [
+            224,
+            329,
+            1093,
+            428
+          ],
+          "text": "A．10.7~10.9万亿元B．10.9～11.1万亿元C．11.1~11.3万亿元D．11.3〜11.5万亿元"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 127,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\q127.png",
+      "crop_box_image": [
+        0,
+        446,
+        1574,
+        708
+      ],
+      "crop_box_blocks": [
+        147,
+        461,
+        1417,
+        693
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            147,
+            461,
+            1417,
+            557
+          ],
+          "text": "127．2019～2023年，互联网业务收入同比增速高于电子信息制造业增加值同比增速的年份有："
+        },
+        {
+          "bbox": [
+            225,
+            592,
+            887,
+            693
+          ],
+          "text": "A.1个B.2个C.3个D.4个"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 128,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\q128.png",
+      "crop_box_image": [
+        0,
+        710,
+        1574,
+        905
+      ],
+      "crop_box_blocks": [
+        149,
+        725,
+        1213,
+        890
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            149,
+            725,
+            1213,
+            755
+          ],
+          "text": "128．按照2023年的同比增速，2025年互联网业务收入预计在以下哪个范围："
+        },
+        {
+          "bbox": [
+            225,
+            791,
+            1059,
+            890
+          ],
+          "text": "A．1.6〜1.8万亿元B.1.8~2.0万亿元C．2.0~2.2万亿元D．超过2.2万亿元"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": []
+    },
+    {
+      "qno": 129,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\q129.png",
+      "crop_box_image": [
+        0,
+        908,
+        1574,
+        1477
+      ],
+      "crop_box_blocks": [
+        148,
+        923,
+        1166,
+        1462
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            148,
+            923,
+            1166,
+            954
+          ],
+          "text": "129．2019～2023年数字经济指标的同比增速趋势与如下折线图相符的是："
+        },
+        {
+          "bbox": [
+            224,
+            1363,
+            1081,
+            1462
+          ],
+          "text": "A．电子信息制造业增加值B．互联网业务收入C．软件业务收入D．全国固定资产投资"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            502,
+            982,
+            1064,
+            1311
+          ],
+          "content": "",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 130,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\q130.png",
+      "crop_box_image": [
+        0,
+        1480,
+        1574,
+        2011
+      ],
+      "crop_box_blocks": [
+        148,
+        1495,
+        1217,
+        1996
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            148,
+            1495,
+            624,
+            1526
+          ],
+          "text": "130．能够从上述材料中推出的是："
+        },
+        {
+          "bbox": [
+            224,
+            1561,
+            1217,
+            1792
+          ],
+          "text": "A．2023年，高技术制造业投资低于高技术服务业投资\n\nB．2021～2023年新兴业务收入与电信业务收入的比值逐年上升\nC．2023年，电信业务收入与互联网业务收入之和高于软件业务收入\nD．2023年计算机、通信和其他电子设备制造业投资较2020年翻了一番\n"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "paragraph_title",
+          "bbox": [
+            475,
+            1961,
+            1091,
+            1996
+          ],
+          "content": "全部测验到此结束！",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            659,
+            2060,
+            906,
+            2088
+          ],
+          "content": "第42页共42页",
+          "region_label": null
+        }
+      ],
+      "segments": [
+        {
+          "page": "page_47",
+          "image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\q130.png",
+          "box": [
+            0,
+            1480,
+            1574,
+            2011
+          ]
+        },
+        {
+          "page": "page_48",
+          "image": "1_四海_25下半年1期套题班_行测\\questions_page_48\\q130_part2.png",
+          "box": [
+            0,
+            1500,
+            1574,
+            1916
+          ],
+          "confidence": 0.7
+        }
+      ],
+      "long_image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\q130_long.png"
+    }
+  ],
+  "big_questions": [
+    {
+      "id": "data_analysis_4",
+      "type": "data_analysis",
+      "pages": [
+        "page_46",
+        "page_47"
+      ],
+      "qnos": [
+        126,
+        127,
+        128,
+        129,
+        130
+      ],
+      "segments": [
+        {
+          "page": "page_46",
+          "image": "1_四海_25下半年1期套题班_行测\\questions_page_46\\big_4_part1.png",
+          "box": [
+            0,
+            192,
+            1574,
+            1163
+          ]
+        },
+        {
+          "page": "page_47",
+          "image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\big_4_part2.png",
+          "box": [
+            0,
+            192,
+            1574,
+            2006
+          ]
+        }
+      ],
+      "combined_image": "1_四海_25下半年1期套题班_行测\\questions_page_47\\data_analysis_4_long.png"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "page_name": "page_47",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\97c07f53_2_四海_25下半年1期套题班_行测_1\\page_47.png",
+  "questions": [
+    {
+      "qno": 130,
+      "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_47\\q130.png",
+      "crop_box_image": [
+        0,
+        258,
+        2185,
+        2835
+      ],
+      "crop_box_blocks": [
+        207,
+        273,
+        1714,
+        2820
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            207,
+            273,
+            1714,
+            316
+          ],
+          "text": "130．下图为2024年全国白酒或啤酒哪个季度各月当期环比增长率的变化趋势:"
+        },
+        {
+          "bbox": [
+            315,
+            910,
+            1458,
+            1047
+          ],
+          "text": "A．白酒、第二季度B．白酒、第三季度C．啤酒、第二季度D．啤酒、第三季度"
+        },
+        {
+          "bbox": [
+            661,
+            2771,
+            1516,
+            2820
+          ],
+          "text": "全部测验到此结束！"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            786,
+            404,
+            1399,
+            882
+          ],
+          "content": "",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            917,
+            2861,
+            1258,
+            2901
+          ],
+          "content": "第44页共44页",
+          "region_label": null
+        }
+      ],
+      "segments": [
+        {
+          "page": "page_47",
+          "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_47\\q130.png",
+          "box": [
+            0,
+            258,
+            2185,
+            2835
+          ]
+        },
+        {
+          "page": "page_48",
+          "image": "97c07f53_2_四海_25下半年1期套题班_行测_1\\questions_page_48\\q130_part2.png",
+          "box": [
+            0,
+            2091,
+            2185,
+            2656
+          ],
+          "confidence": 0.7
+        }
+      ]
+    }
+  ],
+  "big_questions": []
+}

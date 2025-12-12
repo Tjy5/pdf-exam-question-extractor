@@ -1,0 +1,20 @@
+Token usage: total=729,910 input=591,171 (+ 16,031,744 cached) output=138,739 (reasoning 86,861)
+To continue this session, run codex resume 019ae9ca-f9aa-7de3-960a-d8638033ae36
+
+Token usage: total=154,498 input=127,249 (+ 1,649,664 cached) output=27,249 (reasoning 15,360)
+To continue this session, run codex resume 019aef4f-8623-75f1-8c6a-ff2ff5fb135a
+
+Token usage: total=1,322,233 input=1,148,867 (+ 11,427,072 cached) output=173,366 (reasoning 125,514)
+To continue this session, run codex resume 019aef4f-8623-75f1-8c6a-ff2ff5fb135a
+
+
+run codex resume 019af64f-0cba-7651-9051-74aeded7635
+
+
+Token usage: total=112,711 input=79,010 (+ 4,677,760 cached) output=33,701 (reasoning 24,089)
+To continue this session, run codex resume 019afe9c-ac5c-7772-afd0-7675cbb64d41
+PS D:\1something\Learning_Files\newvl>
+
+Token usage: total=84,678 input=75,056 (+ 820,736 cached) output=9,622 (reasoning 6,086)
+To continue this session, run codex resume 019b08fc-1e32-7653-95a9-bec6c3de7033
+PS D:\1something\Learning_Files\newvl>

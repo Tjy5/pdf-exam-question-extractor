@@ -1,0 +1,171 @@
+{
+  "page_name": "page_27",
+  "image_path": "D:\\1something\\Learning_Files\\newvl\\pdf_images\\1_四海_25下半年1期套题班_行测\\page_27.png",
+  "questions": [
+    {
+      "qno": 76,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_27\\q76.png",
+      "crop_box_image": [
+        0,
+        477,
+        1574,
+        1002
+      ],
+      "crop_box_blocks": [
+        145,
+        492,
+        1289,
+        987
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            145,
+            492,
+            1266,
+            524
+          ],
+          "text": "76．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            279,
+            531,
+            1289,
+            944
+          ],
+          "content": "2?",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            523,
+            944,
+            1053,
+            987
+          ],
+          "content": "A B C D ",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 77,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_27\\q77.png",
+      "crop_box_image": [
+        0,
+        1011,
+        1574,
+        1508
+      ],
+      "crop_box_blocks": [
+        146,
+        1026,
+        1415,
+        1493
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            146,
+            1026,
+            1415,
+            1124
+          ],
+          "text": "77．把下面的六个图形分为两类，使每一类图形都有各自的共同特征或规律，分类正确的一项是："
+        },
+        {
+          "bbox": [
+            209,
+            1390,
+            1053,
+            1493
+          ],
+          "text": "A.①③④，②⑤⑥B.①②④，③⑤⑥C.①⑤⑥，②③④D．①②⑥，③④⑤"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            189,
+            1137,
+            1374,
+            1313
+          ],
+          "content": "",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            256,
+            1320,
+            1310,
+            1352
+          ],
+          "content": "①②③④56",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 78,
+      "image": "1_四海_25下半年1期套题班_行测\\questions_page_27\\q78.png",
+      "crop_box_image": [
+        0,
+        1510,
+        1574,
+        2036
+      ],
+      "crop_box_blocks": [
+        146,
+        1525,
+        1323,
+        2021
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            146,
+            1525,
+            1267,
+            1556
+          ],
+          "text": "78．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            313,
+            1573,
+            1323,
+            2021
+          ],
+          "content": "?\n\nA B C D \n",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            659,
+            2060,
+            906,
+            2088
+          ],
+          "content": "第23页共42页",
+          "region_label": null
+        }
+      ]
+    }
+  ]
+}
