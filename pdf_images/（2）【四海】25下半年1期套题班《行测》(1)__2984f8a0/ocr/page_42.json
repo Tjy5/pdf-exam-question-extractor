@@ -1,0 +1,247 @@
+{
+  "page_name": "page_42",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        291,
+        272,
+        1044,
+        317
+      ],
+      "content": "二、根据所给材料，回答116~120题。"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        201,
+        365,
+        1971,
+        684
+      ],
+      "content": "截至2023年底，全国现有海水淡化工程156个，同比增加了6个。其中，万吨级及以上海水淡化工程55个，工程规模2300723吨/日，千吨级及以上万吨级以下海水淡化工程51个，工程规模208266吨/日，千吨级以下海水淡化工程50个，全国海水淡化工程分布点10个省级行政区。\n"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        245,
+        717,
+        360,
+        761
+      ],
+      "content": "吨/日"
+    },
+    {
+      "index": 3,
+      "label": "chart",
+      "region_label": null,
+      "bbox": [
+        223,
+        800,
+        1824,
+        1312
+      ],
+      "content": "30000002522956235704820000001573760165108318564331000000\n2019年2020年2021年2022年2023年"
+    },
+    {
+      "index": 4,
+      "label": "figure_title",
+      "region_label": null,
+      "bbox": [
+        659,
+        1351,
+        1514,
+        1394
+      ],
+      "content": "图2019～2023全国年底海水淡化工程规模"
+    },
+    {
+      "index": 5,
+      "label": "figure_title",
+      "region_label": null,
+      "bbox": [
+        541,
+        1538,
+        1704,
+        1582
+      ],
+      "content": "表2023年底全国各省级行政区海水淡化工程规模（吨/日）"
+    },
+    {
+      "index": 6,
+      "label": "table",
+      "region_label": null,
+      "bbox": [
+        262,
+        1620,
+        1916,
+        1916
+      ],
+      "content": "<html><body><table><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>地区</td><td>辽宁</td><td>天津</td><td>河北</td><td>山东</td></tr><tr><td>规模</td><td>161384</td><td>306000</td><td>390700</td><td>713209</td></tr><tr><td>地区 规模</td><td>浙江</td><td>福建</td><td>广东 97800</td><td>广西 750</td></tr></table></body></html>"
+    },
+    {
+      "index": 7,
+      "label": "vision_footnote",
+      "region_label": null,
+      "bbox": [
+        291,
+        1955,
+        676,
+        1997
+      ],
+      "content": "请回答116~120题"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2045,
+        1793,
+        2087
+      ],
+      "content": "116.2020～2023年间，全国年底海水淡化工程规模同比增速最快的年份是哪一年："
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        2134,
+        1298,
+        2178
+      ],
+      "content": "A．2020年B.2021年"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2225,
+        1298,
+        2267
+      ],
+      "content": "C.2022年D.2023年"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        2312,
+        1577,
+        2355
+      ],
+      "content": "117．2022年底，我国平均每个海水淡化工程规模约在以下哪个范围内："
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2403,
+        1582,
+        2447
+      ],
+      "content": "A．不到1.5万吨/日B．1.5～1.6万吨/日之间"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        2493,
+        1481,
+        2537
+      ],
+      "content": "C．1.6～1.7万吨/日之间D．超过1.7万吨/日"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2581,
+        1685,
+        2624
+      ],
+      "content": "118.2023年底，我国平均每个千吨级以下海水淡化工程规模约为多少吨/日："
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2674,
+        459,
+        2715
+      ],
+      "content": "A. 279"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2674,
+        1219,
+        2715
+      ],
+      "content": "B.285"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2763,
+        458,
+        2804
+      ],
+      "content": "C.296"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2764,
+        1218,
+        2804
+      ],
+      "content": "D.324"
+    },
+    {
+      "index": 19,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        917,
+        2862,
+        1257,
+        2900
+      ],
+      "content": "第39页共44页"
+    }
+  ]
+}

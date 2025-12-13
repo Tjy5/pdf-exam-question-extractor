@@ -1,0 +1,15 @@
+电脑配置信息
+存储 (Storage):
+1.38 TB
+
+显卡 (Graphics Card):
+6 GB
+NVIDIA GeForce RTX 3060 Laptop GPU
+
+机带 RAM (System RAM):
+24.0 GB
+速度 3200 MT/秒
+
+处理器 (Processor):
+AMD Ryzen 7 5800H with Radeon Graphics
+3.20 GHz

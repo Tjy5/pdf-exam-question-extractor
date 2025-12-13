@@ -1,0 +1,295 @@
+{
+  "page_name": "page_44",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        291,
+        273,
+        1044,
+        316
+      ],
+      "content": "三、根据所给材料，回答121～125题。"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        201,
+        365,
+        1968,
+        684
+      ],
+      "content": "2024年1～6月，T市出口自行车占同期全国自行车出口比重为33.6%，位居全国首位。其中，民营企业出口414.9万辆，同比增加27.8%；国有企业出口351.8万辆，同比增加6.9%;其他企业出口11.6万辆。对东盟、日本分别出口213.4万辆、176.6万辆，同比分别增加4.9%5.3%；对美国出口115.3万辆，同比增加10.1%。\n"
+    },
+    {
+      "index": 2,
+      "label": "figure_title",
+      "region_label": null,
+      "bbox": [
+        561,
+        732,
+        1702,
+        776
+      ],
+      "content": "表2024年1～6月T市自行车出口量、出口额及同比增速"
+    },
+    {
+      "index": 3,
+      "label": "table",
+      "region_label": null,
+      "bbox": [
+        261,
+        814,
+        1917,
+        1474
+      ],
+      "content": "<html><body><table><tr><td></td><td colspan=\"2\">出口量</td><td colspan=\"2\">出口额</td></tr><tr><td></td><td>数量（万辆）</td><td>增速（%）</td><td>金额（亿元）</td><td>增速（%）</td></tr><tr><td>1月</td><td>155.8</td><td>34.7</td><td>6.7</td><td>24.9</td></tr><tr><td>2月</td><td>107.6</td><td>26.2</td><td>4.9</td><td>37.6</td></tr><tr><td>3月</td><td>126.9</td><td>-0.4</td><td>5.0</td><td>-5.5</td></tr><tr><td>4月</td><td>136.1</td><td>9.6</td><td>5.2</td><td>3.1</td></tr><tr><td>5月</td><td>117.5</td><td>9.8</td><td>4.3</td><td>-5.0</td></tr><tr><td>6月</td><td>134.4</td><td>9.5</td><td>4.7</td><td>2.9</td></tr><tr><td>合计</td><td>778.3</td><td>14.0</td><td>30.8</td><td>8.6</td></tr></table></body></html>"
+    },
+    {
+      "index": 4,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        293,
+        1514,
+        677,
+        1556
+      ],
+      "content": "请回答121~125题"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1607,
+        1381,
+        1648
+      ],
+      "content": "121．2024年1～6月，我国自行车出口量在以下哪个范围内："
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        1698,
+        1473,
+        1742
+      ],
+      "content": "A．不到0.18亿辆B.0.18〜0.20 亿辆"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        1791,
+        1429,
+        1833
+      ],
+      "content": "C.0.20〜0.22 亿辆D．0.22亿辆以上"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        1882,
+        1904,
+        1925
+      ],
+      "content": "122．2024年1～6月T市国有企业自行车出口增量约占同期T市自行车出口增量的多少："
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        321,
+        1976,
+        460,
+        2015
+      ],
+      "content": "A. 58%"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        1977,
+        1221,
+        2015
+      ],
+      "content": "B. 46%"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2067,
+        460,
+        2107
+      ],
+      "content": "C.32%"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2068,
+        1221,
+        2107
+      ],
+      "content": "D. 24%"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2157,
+        1946,
+        2199
+      ],
+      "content": "123．2024年1～6月T市民营企业自行车出口量占同期T市自行车出口总量比上年同期约："
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2247,
+        784,
+        2293
+      ],
+      "content": "A．提升了5.8个百分点"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2247,
+        1547,
+        2292
+      ],
+      "content": "B．下降了5.8个百分点"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        2339,
+        784,
+        2384
+      ],
+      "content": "C．提升了9.6个百分点"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2340,
+        1547,
+        2384
+      ],
+      "content": "D．下降了9.6个百分点"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        2432,
+        1545,
+        2474
+      ],
+      "content": "124．2024年1～6月，T市自行车出口均价同比下降的月份有多少个："
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2527,
+        415,
+        2566
+      ],
+      "content": "A.3"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2526,
+        1175,
+        2566
+      ],
+      "content": "B.4"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2616,
+        414,
+        2657
+      ],
+      "content": "C.5"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2619,
+        1174,
+        2658
+      ],
+      "content": "D.6"
+    },
+    {
+      "index": 23,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        914,
+        2862,
+        1258,
+        2901
+      ],
+      "content": "第41页共44页"
+    }
+  ]
+}

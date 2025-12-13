@@ -1,0 +1,271 @@
+{
+  "page_name": "page_13",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        273,
+        1971,
+        408
+      ],
+      "content": "30.“一个案例胜过一沓文件”，最高人民法院建设人民法院案例库，筛选具有典型意义的参考案例并收录入库。这一做法所发挥的效能是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        457,
+        609,
+        501
+      ],
+      "content": "①强化司法权威"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        547,
+        738,
+        592
+      ],
+      "content": "②提升法官的司法能力"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        639,
+        607,
+        685
+      ],
+      "content": "③优化司法公开"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        731,
+        737,
+        776
+      ],
+      "content": "④促进法律适用的统一"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        823,
+        497,
+        870
+      ],
+      "content": "A.①②③"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        822,
+        1285,
+        870
+      ],
+      "content": "B.①②④"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        915,
+        496,
+        961
+      ],
+      "content": "C.①③④"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        915,
+        1284,
+        962
+      ],
+      "content": "D.②③④"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1008,
+        1020,
+        1050
+      ],
+      "content": "31．下列有关天文现象的分析，正确的是："
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1098,
+        1677,
+        1142
+      ],
+      "content": "A．月球只有一面朝向地球是因为其自转周期与围绕地球的公转周期相同"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1191,
+        1201,
+        1234
+      ],
+      "content": "B．月食出现的时候，太阳位于地球和月亮之间"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1283,
+        1245,
+        1326
+      ],
+      "content": "C．我们看到的流星“尾巴”是太阳光反射形成的"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1374,
+        1507,
+        1417
+      ],
+      "content": "D．我们看到不同季节北斗七星斗柄指向不同，是因为地球自转"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1465,
+        1971,
+        1600
+      ],
+      "content": "32．碳水化合物是自然界存在最多、分布最广的一类重要的有机化合物。碳水化合物在营养学上一般分为单糖、双糖、寡糖和多糖4类。下列属于单糖的是："
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1648,
+        1245,
+        1786
+      ],
+      "content": "A.蔗糖B．果糖C.乳糖D．淀粉"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        1832,
+        1972,
+        2151
+      ],
+      "content": "33．秦某驾车在F市某丁字路口右转行驶30米后，道路左侧和地上出现“禁止驶入”的交通标志和标线。秦某进退两难，遂驶入了禁行路段。F市交巡警支队作出处罚决定，认定秦某驾车在该路段逆向行驶违法，予以200元罚款、记3分的处理。秦某不服，向Ｆ市公安局提起行政复议。下列关于本案的说法正确的是："
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        2199,
+        1328,
+        2242
+      ],
+      "content": "A．该交通标志标线设置符合比例原则中的适当性要求"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2291,
+        1328,
+        2334
+      ],
+      "content": "B．秦某不可以将该路段其他车辆的违章信息申请公开"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2383,
+        1319,
+        2426
+      ],
+      "content": "C．F市交巡警支队实施行政处罚遵循的是无过错原则"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2474,
+        1327,
+        2517
+      ],
+      "content": "D．秦某可举证证明自己机动车逆向行驶没有主观过错"
+    },
+    {
+      "index": 21,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        916,
+        2862,
+        1257,
+        2901
+      ],
+      "content": "第10页共44页"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "page_name": "page_45",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        213,
+        272,
+        1963,
+        408
+      ],
+      "content": "125．以下柱状图反映了2024年哪一时间段内，T市自行车出口哪一指标环比增量变化情况：（横轴位置代表增量为0）\n"
+    },
+    {
+      "index": 1,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        710,
+        447,
+        1465,
+        833
+      ],
+      "content": ""
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        314,
+        911,
+        1429,
+        1047
+      ],
+      "content": "A.2～5月出口量B.3～6月出口量C．2～5月出口额D．3～6月出口额"
+    },
+    {
+      "index": 3,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        916,
+        2861,
+        1255,
+        2900
+      ],
+      "content": "第42页共44页"
+    }
+  ]
+}

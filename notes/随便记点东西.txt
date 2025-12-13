@@ -1,0 +1,664 @@
+Token usage: total=729,910 input=591,171 (+ 16,031,744 cached) output=138,739 (reasoning 86,861)
+To continue this session, run codex resume 019ae9ca-f9aa-7de3-960a-d8638033ae36
+
+Token usage: total=154,498 input=127,249 (+ 1,649,664 cached) output=27,249 (reasoning 15,360)
+To continue this session, run codex resume 019aef4f-8623-75f1-8c6a-ff2ff5fb135a
+
+Token usage: total=1,322,233 input=1,148,867 (+ 11,427,072 cached) output=173,366 (reasoning 125,514)
+To continue this session, run codex resume 019aef4f-8623-75f1-8c6a-ff2ff5fb135a
+
+
+run codex resume 019af64f-0cba-7651-9051-74aeded7635
+
+
+Token usage: total=112,711 input=79,010 (+ 4,677,760 cached) output=33,701 (reasoning 24,089)
+To continue this session, run codex resume 019afe9c-ac5c-7772-afd0-7675cbb64d41
+PS D:\1something\Learning_Files\newvl>
+
+Token usage: total=84,678 input=75,056 (+ 820,736 cached) output=9,622 (reasoning 6,086)
+To continue this session, run codex resume 019b08fc-1e32-7653-95a9-bec6c3de7033
+PS D:\1something\Learning_Files\newvl>
+
+06:33:17
+[32mLoading configuration file C:\Users\TJY5\.paddlex\official_models\PP-Chart2Table\generation_config.json[0m
+06:33:18
+W1213 06:33:18.200685 21036 gpu_resources.cc:243] WARNING: device: 0. The installed Paddle is compiled with CUDNN 8.9, but CUDNN version in your machine is 8.9, which may cause serious incompatible bug. Please recompile or reinstall Paddle with compatible CUDNN version.
+06:46:10
+[32mCreating model: ('PP-LCNet_x1_0_doc_ori', None)[0m
+06:46:10
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.[0m
+06:46:11
+[32mCreating model: ('PP-LCNet_x1_0_textline_ori', None)[0m
+06:46:11
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.[0m
+06:46:12
+[32mCreating model: ('PP-OCRv5_server_det', None)[0m
+06:46:12
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-OCRv5_server_det`.[0m
+06:46:14
+[32mCreating model: ('PP-OCRv5_server_rec', None)[0m
+06:46:14
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-OCRv5_server_rec`.[0m
+
+10:00:52
+开始 资料分析重组 (in-proc)...
+10:00:52
+✗ 资料分析重组(in-proc) 出错: name 'logger' is not defined
+10:00:52
+✗ 资料分析重组(in-proc) 失败
+10:00:52
+in-proc 失败，回退到子进程模式重试...
+10:00:52
+开始 资料分析重组...
+10:00:52
+当前事件循环不支持子进程，尝试兼容子进程模式运行…
+10:00:54
+C:\Users\TJY5\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+10:00:54
+import pynvml # type: ignore[import]
+10:01:05
+INFO: Could not find files for the given pattern(s).
+10:01:05
+C:\Users\TJY5\AppData\Local\Programs\Python\Python311\Lib\site-packages\paddle\utils\cpp_extension\extension_utils.py:718: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+10:01:05
+warnings.warn(warning_message)
+10:01:07
+[32mCreating model: ('PP-DocBlockLayout', None)[0m
+10:01:07
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-DocBlockLayout`.[0m
+10:01:08
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+10:01:08
+W1213 10:01:08.011945 25256 gpu_resources.cc:114] Please NOTE: device: 0, GPU Compute Capability: 8.6, Driver API Version: 13.0, Runtime API Version: 11.8
+10:01:11
+[32mCreating model: ('PP-DocLayout_plus-L', None)[0m
+10:01:11
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-DocLayout_plus-L`.[0m
+10:01:15
+[32mCreating model: ('PP-LCNet_x1_0_textline_ori', None)[0m
+10:01:15
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.[0m
+10:01:16
+[32mCreating model: ('PP-OCRv5_server_det', None)[0m
+10:01:16
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-OCRv5_server_det`.[0m
+10:01:18
+[32mCreating model: ('PP-OCRv5_server_rec', None)[0m
+10:01:18
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-OCRv5_server_rec`.[0m
+10:01:21
+[32mCreating model: ('PP-LCNet_x1_0_table_cls', None)[0m
+10:01:21
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-LCNet_x1_0_table_cls`.[0m
+10:01:22
+[32mCreating model: ('SLANeXt_wired', None)[0m
+10:01:22
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\SLANeXt_wired`.[0m
+10:01:24
+[32mCreating model: ('SLANet_plus', None)[0m
+10:01:24
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\SLANet_plus`.[0m
+10:01:26
+[32mCreating model: ('RT-DETR-L_wired_table_cell_det', None)[0m
+10:01:26
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\RT-DETR-L_wired_table_cell_det`.[0m
+10:01:30
+[32mCreating model: ('RT-DETR-L_wireless_table_cell_det', None)[0m
+10:01:30
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\RT-DETR-L_wireless_table_cell_det`.[0m
+10:01:34
+[32mCreating model: ('PP-Chart2Table', None)[0m
+10:01:34
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-Chart2Table`.[0m
+10:01:34
+[32mSpecial tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.[0m
+10:01:34
+[32mLoading configuration file C:\Users\TJY5\.paddlex\official_models\PP-Chart2Table\config.json[0m
+10:01:34
+[32mLoading weights file C:\Users\TJY5\.paddlex\official_models\PP-Chart2Table\model_state.pdparams[0m
+10:01:37
+[32mLoaded weights file from disk, setting weights to model.[0m
+10:01:37
+[32mAll model checkpoint weights were used when initializing PPChart2TableInference.
+10:01:37
+[0m
+10:01:37
+[32mAll the weights of PPChart2TableInference were initialized from the model checkpoint at C:\Users\TJY5\.paddlex\official_models\PP-Chart2Table.
+10:01:37
+If your task is similar to the task the model of the checkpoint was trained on, you can already use PPChart2TableInference for predictions without further training.[0m
+10:01:37
+[32mLoading configuration file C:\Users\TJY5\.paddlex\official_models\PP-Chart2Table\generation_config.json[0m
+10:01:38
+W1213 10:01:38.139268 25256 gpu_resources.cc:243] WARNING: device: 0. The installed Paddle is compiled with CUDNN 8.9, but CUDNN version in your machine is 8.9, which may cause serious incompatible bug. Please recompile or reinstall Paddle with compatible CUDNN version.
+10:09:37
+[32mCreating model: ('PP-LCNet_x1_0_doc_ori', None)[0m
+10:09:37
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-LCNet_x1_0_doc_ori`.[0m
+10:09:38
+[32mCreating model: ('PP-LCNet_x1_0_textline_ori', None)[0m
+10:09:38
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-LCNet_x1_0_textline_ori`.[0m
+10:09:39
+[32mCreating model: ('PP-OCRv5_server_det', None)[0m
+10:09:39
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-OCRv5_server_det`.[0m
+10:09:42
+[32mCreating model: ('PP-OCRv5_server_rec', None)[0m
+10:09:42
+[32mModel files already exist. Using cached files. To redownload, please delete the directory manually: `C:\Users\TJY5\.paddlex\official_models\PP-OCRv5_server_rec`.[0m
+
+修改总结
+
+  1. LogTerminal.vue - 系统日志优化
+
+  修改内容：
+  - 日志顺序改为时间正序（最新在底部），更符合阅读习惯
+  - 每条日志增加类型图标：✓ 成功、✗ 错误、ℹ 信息、• 默认
+  - 错误日志增加红色边框高亮 (ring-1 ring-rose-500/30)
+  - 不同类型日志有不同背景色，便于区分
+
+  2. useAutoScroll.ts - 自动滚动修复
+
+  修改内容：
+  - 滚动目标从顶部改为底部 (scrollTop = scrollHeight - clientHeight)
+  - 检测用户是否手动滚动的逻辑改为检测距离底部的距离
+
+  3. StepItem.vue - 步骤进度条优化
+
+  修改内容：
+  - 每个步骤始终显示进度条（不再是 v-if="step.progress !== null"）
+  - 进度条宽度逻辑：
+    - completed/failed: 100%
+    - running 有进度数据: 实际进度
+    - running 无进度数据: 30% + 脉冲动画
+    - pending: 0%
+  - 进度条颜色：绿色(完成)、红色(失败)、蓝色(运行中)、灰色(待执行)
+  - 显示百分比数字
+  - 错误信息展示更完整，带标题和换行支持
+
+  4. useTaskStore.ts - 整体进度计算优化
+
+  修改内容：
+  - 进度计算考虑运行中步骤的内部进度
+  - completed/skipped: +1
+  - running 有进度: +实际进度值
+  - running 无进度: +0.1（给予视觉反馈）
+  - failed: +0.5
+
+  ---
+  注意： 要让进度条真正"走起来"，后端需要在步骤执行过程中更新 progress 字段并通过 SSE/轮询返回给前端。目前后端的 StepState 没有 progress 字段，需要你确认是否需要我同时修改后端代码来支持实时进度报告。
+
+PDF 上传
+    ↓
+Step 0: PDF → 图片 (300 DPI)
+    ↓
+Step 1: 题目提取 (PP-StructureV3)
+    ↓
+Step 2: 资料分析重组
+    ↓
+Step 3: 跨页长图拼接
+    ↓
+Step 4: 结果汇总
+    ↓
+下载 / 预览
+现在这个流程我觉得是有点问题的，pdf_images\3_四海_25下半年1期套题班_行测_1\all_questions这是个例子，我想要的结果只是这个all_questions文件夹下面的产物而已。但是我感觉现在有很多重复或者不需要的工作，整个处理流程不顺畅，不自然。
+就比如pdf_images\2_四海_25下半年1期套题班_行测_1__2984f8a0\all_questions底下我在web页面全部跑完了整个流程，但是all_questions文件夹下面却没有data_analysis_1.png到data_analysis_4.png的资料分析大题图片。而且我是用PS D:\1something\Learning_Files\newvl> python manage.py web --port 9000 --workers 8启动的，整个流程下来要40分钟，太慢
+
+
+ℹ
+20:53:32
+正在上传文件: （2）【四海】25下半年1期套题班《行测》(1).pdf
+✓
+20:53:32
+文件上传成功
+ℹ
+20:53:32
+开始处理流程...
+✓
+20:53:32
+文件上传成功: （2）【四海】25下半年1期套题班《行测》(1).pdf (模式: auto, hash: 2984f8a0)
+ℹ
+20:53:32
+工作目录: （2）【四海】25下半年1期套题班《行测》(1)__2984f8a0
+ℹ
+20:53:32
+任务开始执行
+ℹ
+20:53:39
+开始转换 PDF，共 48 页
+ℹ
+20:53:39
+转换第 1/48 页
+ℹ
+20:53:39
+转换第 2/48 页
+ℹ
+20:53:39
+转换第 3/48 页
+ℹ
+20:53:39
+转换第 4/48 页
+ℹ
+20:53:39
+转换第 5/48 页
+ℹ
+20:53:39
+转换第 6/48 页
+ℹ
+20:53:39
+转换第 7/48 页
+ℹ
+20:53:39
+转换第 8/48 页
+ℹ
+20:53:39
+转换第 9/48 页
+ℹ
+20:53:39
+转换第 10/48 页
+ℹ
+20:53:39
+转换第 11/48 页
+ℹ
+20:53:39
+转换第 12/48 页
+ℹ
+20:53:39
+转换第 13/48 页
+ℹ
+20:53:39
+转换第 14/48 页
+ℹ
+20:53:39
+转换第 15/48 页
+ℹ
+20:53:39
+转换第 16/48 页
+ℹ
+20:53:39
+转换第 17/48 页
+ℹ
+20:53:39
+转换第 18/48 页
+ℹ
+20:53:39
+转换第 19/48 页
+ℹ
+20:53:39
+转换第 20/48 页
+ℹ
+20:53:39
+转换第 21/48 页
+ℹ
+20:53:39
+转换第 22/48 页
+ℹ
+20:53:39
+转换第 23/48 页
+ℹ
+20:53:39
+转换第 24/48 页
+ℹ
+20:53:39
+转换第 25/48 页
+ℹ
+20:53:39
+转换第 26/48 页
+ℹ
+20:53:39
+转换第 27/48 页
+ℹ
+20:53:39
+转换第 28/48 页
+ℹ
+20:53:39
+转换第 29/48 页
+ℹ
+20:53:39
+转换第 30/48 页
+ℹ
+20:53:39
+转换第 31/48 页
+ℹ
+20:53:39
+转换第 32/48 页
+ℹ
+20:53:39
+转换第 33/48 页
+ℹ
+20:53:39
+转换第 34/48 页
+ℹ
+20:53:39
+转换第 35/48 页
+ℹ
+20:53:39
+转换第 36/48 页
+ℹ
+20:53:39
+转换第 37/48 页
+ℹ
+20:53:39
+转换第 38/48 页
+ℹ
+20:53:39
+转换第 39/48 页
+ℹ
+20:53:39
+转换第 40/48 页
+ℹ
+20:53:39
+转换第 41/48 页
+ℹ
+20:53:39
+转换第 42/48 页
+ℹ
+20:53:39
+转换第 43/48 页
+ℹ
+20:53:39
+转换第 44/48 页
+ℹ
+20:53:39
+转换第 45/48 页
+ℹ
+20:53:39
+转换第 46/48 页
+ℹ
+20:53:39
+转换第 47/48 页
+ℹ
+20:53:39
+转换第 48/48 页
+ℹ
+20:53:39
+PDF 转图片完成: 共 48 页
+ℹ
+20:54:33
+[并发] 启动 6 个worker处理 48 页
+ℹ
+20:54:33
+[OCR] page_1 (GPU推理中...)
+ℹ
+20:54:53
+[空页] page_1 (未检测到题目)
+ℹ
+20:54:53
+[OCR] page_10 (GPU推理中...)
+ℹ
+20:54:53
+success: page_1
+ℹ
+20:55:21
+[OCR] page_11 (GPU推理中...)
+ℹ
+20:55:21
+success: page_10
+ℹ
+20:55:39
+[OCR] page_12 (GPU推理中...)
+ℹ
+20:55:40
+success: page_11
+ℹ
+20:55:57
+[OCR] page_13 (GPU推理中...)
+ℹ
+20:56:11
+success: page_12
+ℹ
+20:56:12
+[OCR] page_14 (GPU推理中...)
+ℹ
+20:56:12
+success: page_13
+ℹ
+20:56:28
+[OCR] page_15 (GPU推理中...)
+ℹ
+20:56:28
+success: page_14
+ℹ
+20:56:47
+[OCR] page_16 (GPU推理中...)
+ℹ
+20:56:48
+success: page_15
+ℹ
+20:57:08
+[OCR] page_17 (GPU推理中...)
+ℹ
+20:57:09
+success: page_16
+ℹ
+20:57:29
+[OCR] page_18 (GPU推理中...)
+ℹ
+20:57:29
+success: page_17
+ℹ
+20:57:49
+[OCR] page_19 (GPU推理中...)
+ℹ
+20:57:50
+success: page_18
+ℹ
+20:58:09
+[OCR] page_2 (GPU推理中...)
+ℹ
+20:58:09
+success: page_19
+ℹ
+20:58:28
+[空页] page_2 (未检测到题目)
+ℹ
+20:58:28
+[OCR] page_20 (GPU推理中...)
+ℹ
+20:58:28
+success: page_2
+ℹ
+20:58:48
+[OCR] page_21 (GPU推理中...)
+ℹ
+20:59:07
+success: page_20
+ℹ
+20:59:08
+[OCR] page_22 (GPU推理中...)
+ℹ
+20:59:09
+success: page_21
+ℹ
+20:59:28
+[OCR] page_23 (GPU推理中...)
+ℹ
+20:59:48
+success: page_22
+ℹ
+20:59:49
+[OCR] page_24 (GPU推理中...)
+ℹ
+20:59:49
+success: page_23
+ℹ
+21:00:10
+[OCR] page_25 (GPU推理中...)
+ℹ
+21:00:10
+success: page_24
+ℹ
+21:00:30
+[OCR] page_26 (GPU推理中...)
+ℹ
+21:00:30
+success: page_25
+ℹ
+21:00:50
+[OCR] page_27 (GPU推理中...)
+ℹ
+21:00:50
+success: page_26
+ℹ
+21:01:10
+[OCR] page_28 (GPU推理中...)
+ℹ
+21:01:11
+success: page_27
+ℹ
+21:01:31
+[OCR] page_29 (GPU推理中...)
+ℹ
+21:01:32
+success: page_28
+ℹ
+21:01:50
+[OCR] page_3 (GPU推理中...)
+ℹ
+21:02:10
+success: page_29
+ℹ
+21:02:11
+[空页] page_3 (未检测到题目)
+ℹ
+21:02:11
+[OCR] page_30 (GPU推理中...)
+ℹ
+21:02:12
+success: page_3
+ℹ
+21:02:32
+[OCR] page_31 (GPU推理中...)
+ℹ
+21:02:33
+success: page_30
+ℹ
+21:02:53
+[OCR] page_32 (GPU推理中...)
+ℹ
+21:02:54
+success: page_31
+ℹ
+21:03:14
+[OCR] page_33 (GPU推理中...)
+ℹ
+21:03:15
+success: page_32
+ℹ
+21:03:35
+[OCR] page_34 (GPU推理中...)
+ℹ
+21:03:36
+success: page_33
+ℹ
+21:03:55
+[OCR] page_35 (GPU推理中...)
+ℹ
+21:03:56
+success: page_34
+ℹ
+21:04:17
+[OCR] page_36 (GPU推理中...)
+ℹ
+21:04:17
+success: page_35
+ℹ
+21:04:38
+[OCR] page_37 (GPU推理中...)
+ℹ
+21:04:55
+success: page_36
+ℹ
+21:04:56
+[OCR] page_38 (GPU推理中...)
+ℹ
+21:04:56
+success: page_37
+ℹ
+21:05:14
+[OCR] page_39 (GPU推理中...)
+ℹ
+21:05:15
+success: page_38
+ℹ
+21:05:32
+[OCR] page_4 (GPU推理中...)
+ℹ
+21:05:33
+success: page_39
+ℹ
+21:05:51
+[OCR] page_40 (GPU推理中...)
+ℹ
+21:05:51
+success: page_4
+ℹ
+21:06:10
+[OCR] page_41 (GPU推理中...)
+ℹ
+21:06:10
+success: page_40
+ℹ
+21:06:28
+[OCR] page_42 (GPU推理中...)
+ℹ
+21:06:29
+success: page_41
+ℹ
+21:06:47
+[OCR] page_43 (GPU推理中...)
+ℹ
+21:06:48
+success: page_42
+ℹ
+21:07:06
+[OCR] page_44 (GPU推理中...)
+ℹ
+21:07:07
+success: page_43
+ℹ
+21:07:24
+[OCR] page_45 (GPU推理中...)
+ℹ
+21:07:24
+success: page_44
+ℹ
+21:07:42
+[OCR] page_46 (GPU推理中...)
+ℹ
+21:07:42
+success: page_45
+ℹ
+21:08:01
+[OCR] page_47 (GPU推理中...)
+ℹ
+21:08:02
+success: page_46
+ℹ
+21:08:30
+[OCR] page_48 (GPU推理中...)
+ℹ
+21:08:30
+success: page_47
+ℹ
+21:08:49
+[空页] page_48 (未检测到题目)
+ℹ
+21:08:49
+[OCR] page_5 (GPU推理中...)
+ℹ
+21:08:50
+success: page_48
+ℹ
+21:09:09
+[OCR] page_6 (GPU推理中...)
+ℹ
+21:09:09
+success: page_5
+ℹ
+21:09:28
+[OCR] page_7 (GPU推理中...)
+ℹ
+21:09:28
+success: page_6
+

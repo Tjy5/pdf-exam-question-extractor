@@ -1,0 +1,55 @@
+{
+  "page_name": "page_48",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        505,
+        2106,
+        703,
+        2302
+      ],
+      "content": ""
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        743,
+        2130,
+        1670,
+        2277
+      ],
+      "content": "考试后扫码对答案扫描左侧二维码查看行测（2）答案"
+    },
+    {
+      "index": 2,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        501,
+        2465,
+        681,
+        2641
+      ],
+      "content": "歪，同学们！花生十三四海公考SINAIGONGKAO "
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        703,
+        2469,
+        1679,
+        2634
+      ],
+      "content": "听行测（2）直播讲解请在四海公考APP中学习－找到以下对应的课程，直播时间请进群即可听讲解课程名称：【一期行测套题】25下行测套题班花生十三"
+    }
+  ]
+}

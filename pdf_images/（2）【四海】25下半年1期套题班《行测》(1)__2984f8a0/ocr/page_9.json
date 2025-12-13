@@ -1,0 +1,319 @@
+{
+  "page_name": "page_9",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        273,
+        496,
+        318
+      ],
+      "content": "A.①②③"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        273,
+        1284,
+        319
+      ],
+      "content": "B.①②④"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        365,
+        496,
+        410
+      ],
+      "content": "C.①③④"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        366,
+        1284,
+        410
+      ],
+      "content": "D.②③④"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        208,
+        457,
+        1970,
+        777
+      ],
+      "content": "16．农业农村部近日印发《落实中共中央国务院关于进一步深化农村改革扎实推进乡村全面振兴工作部署的实施意见》（以下简称《实施意见》），部署8方面40项具体工作举措，千方百计促进农业增效益、农村增活力、农民增收入，扎实推进农业农村高质量发展。文件提出2025年重点抓好八个方面工作，以下正确的有几项:"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        822,
+        1571,
+        867
+      ],
+      "content": "①全方位夯实国家粮食安全根基，抓好粮食等重要农产品稳产保供"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        914,
+        1441,
+        959
+      ],
+      "content": "②巩固拓展脱贫攻坚成果，守住不发生规模性返贫致贫底线"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1006,
+        1308,
+        1052
+      ],
+      "content": "③推进农业发展全面绿色转型，促进农业高质量发展"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1098,
+        1569,
+        1142
+      ],
+      "content": "④持续提升乡村建设和乡村治理水平，扎实建设宜居宜业和美乡村"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1194,
+        385,
+        1235
+      ],
+      "content": "A.1"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1193,
+        1175,
+        1234
+      ],
+      "content": "B.2"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1285,
+        387,
+        1325
+      ],
+      "content": "C.3"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1287,
+        1175,
+        1325
+      ],
+      "content": "D. 4"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1373,
+        1973,
+        1509
+      ],
+      "content": "17．随着我国支付环境的持续改善，使用银行卡在线支付正被越来越多的消费者接受。这不仅方便了用户在国内的日常消费，也满足了境外消费的支付需求。这种银行卡在线支付："
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1555,
+        1766,
+        1694
+      ],
+      "content": "A．体现了货币价值尺度职能B．避免了汇率波动的风险C．体现了货币流通手段职能D．增强了中国银行业的国际竞争力"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        209,
+        1739,
+        1971,
+        1967
+      ],
+      "content": "18．国家主席习近平通过中央广播电视总台和互联网，发表了二O二五年新年贺词。贺词中提到“就业增收、一老一小’、教育医疗等问题”，以下关于教育相关说法不正确的有："
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        2015,
+        1655,
+        2059
+      ],
+      "content": "①培养什么人、怎样培养人、为谁培养人的问题，这是教育的根本任务"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2107,
+        1136,
+        2151
+      ],
+      "content": "②提高教师政治地位、社会地位、职业地位"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        2197,
+        1742,
+        2243
+      ],
+      "content": "③要以科技发展、市场需求为牵引，着眼提高创新能力，优化高等教育布局"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2289,
+        828,
+        2334
+      ],
+      "content": "④本世纪中叶建成教育强国"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        2381,
+        1947,
+        2516
+      ],
+      "content": "⑤建成教育强国是实现以中国式现代化全面推进强国建设、民族复兴伟业的先导任务、坚实基础、战略支撑\n"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2567,
+        443,
+        2610
+      ],
+      "content": "A.1项"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2566,
+        1229,
+        2610
+      ],
+      "content": "B.2项"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        2658,
+        442,
+        2702
+      ],
+      "content": "C.3项"
+    },
+    {
+      "index": 24,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2659,
+        1229,
+        2702
+      ],
+      "content": "D.4项"
+    },
+    {
+      "index": 25,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        929,
+        2861,
+        1245,
+        2901
+      ],
+      "content": "第6页共44页"
+    }
+  ]
+}

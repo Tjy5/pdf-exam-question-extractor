@@ -1,0 +1,307 @@
+{
+  "page_name": "page_26",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        785,
+        330,
+        1390,
+        393
+      ],
+      "content": "第三部分数量关系"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        784,
+        470,
+        1394,
+        511
+      ],
+      "content": "（共10题，参考时间：10分钟）"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        592,
+        1973,
+        820
+      ],
+      "content": "66．在北京工作的小王被单位派遣去法国出差，已知法国（夏令时期间）比北京的时间晚6个小时。若某天公司要在北京时间晚上7时35分开一个线上会议，他从工作地点回到酒店参会要42分钟，若他在当地时间12时30分出发，则他会?"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        868,
+        604,
+        913
+      ],
+      "content": "A．迟到20分钟"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        868,
+        1393,
+        912
+      ],
+      "content": "B．迟到23分钟"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        961,
+        604,
+        1005
+      ],
+      "content": "C．早到23分钟"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        961,
+        1394,
+        1004
+      ],
+      "content": "D．早到20分钟"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1052,
+        1974,
+        1185
+      ],
+      "content": "67．某购物平台推出每消费600元立减50元的活动，钟先生在该平台准备购买单价为500元的某款商品不超过10件，问他购买多少件时平均每件的购买成本最低?"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1238,
+        1178,
+        1370
+      ],
+      "content": "A.5B. 6C. 8D. 9"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1417,
+        1972,
+        1735
+      ],
+      "content": "68．某单位优化办事流程，每个窗口总服务时间不变，但个人服务和企业服务的单次用时分别下降了50%和20%。原来每个窗口每天可以服务80名个人和30家企业，现在每个窗口可以服务54名个人和42家企业。问现在每次企业服务的用时是个人服务的多少倍（服务衔接时间忽略不计）?\n"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1786,
+        563,
+        1829
+      ],
+      "content": "A．不到11倍"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1786,
+        1425,
+        1828
+      ],
+      "content": "B．11〜13 倍之间"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1878,
+        638,
+        1921
+      ],
+      "content": "C.13~15 倍之间"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1878,
+        1351,
+        1921
+      ],
+      "content": "D．超过15倍"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1967,
+        1970,
+        2102
+      ],
+      "content": "69.5年后小田父亲的年龄将是小田年龄的2倍，10年前小田祖父的年龄是小田年龄的6倍。已知小田祖父比小田父亲大25岁，问小田今年多少岁?\n"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        2154,
+        410,
+        2194
+      ],
+      "content": "A.20"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2154,
+        1197,
+        2194
+      ],
+      "content": "B. 22"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2245,
+        410,
+        2285
+      ],
+      "content": "C.25"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2246,
+        1197,
+        2285
+      ],
+      "content": "D. 26"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2335,
+        1972,
+        2560
+      ],
+      "content": "70．小王、小李参加某项知识竞赛答题，小王每题答对的概率相等，且均为小李的1.5倍。已知小王连续答对2题的概率比小李高0.2，问小王前2题全对且小李前2题全错的概率在以下哪个范围内?\n"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2611,
+        553,
+        2653
+      ],
+      "content": "A．不到0.05"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2612,
+        1372,
+        2652
+      ],
+      "content": "B. 0.05~0.08"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2704,
+        581,
+        2744
+      ],
+      "content": "C. 0.08~0.11"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2703,
+        1338,
+        2745
+      ],
+      "content": "D.0.11以上"
+    },
+    {
+      "index": 24,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        918,
+        2862,
+        1256,
+        2901
+      ],
+      "content": "第23页共44页"
+    }
+  ]
+}

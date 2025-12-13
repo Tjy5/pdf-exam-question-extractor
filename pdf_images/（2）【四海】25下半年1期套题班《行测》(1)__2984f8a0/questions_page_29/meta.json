@@ -1,0 +1,212 @@
+{
+  "page_name": "page_29",
+  "image_path": "pdf_images\\（2）【四海】25下半年1期套题班《行测》(1)__2984f8a0\\page_29.png",
+  "questions": [
+    {
+      "qno": 79,
+      "image": "（2）【四海】25下半年1期套题班《行测》(1)__2984f8a0\\questions_page_29\\q79.png",
+      "crop_box_image": [
+        0,
+        256,
+        2185,
+        899
+      ],
+      "crop_box_blocks": [
+        203,
+        271,
+        1803,
+        884
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            203,
+            271,
+            1803,
+            314
+          ],
+          "text": "79．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            502,
+            349,
+            1673,
+            826
+          ],
+          "content": "√\n\n",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            778,
+            832,
+            1405,
+            884
+          ],
+          "content": "A B C D ",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 80,
+      "image": "（2）【四海】25下半年1期套题班《行测》(1)__2984f8a0\\questions_page_29\\q80.png",
+      "crop_box_image": [
+        0,
+        930,
+        2185,
+        1575
+      ],
+      "crop_box_blocks": [
+        202,
+        945,
+        1804,
+        1560
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            945,
+            1804,
+            989
+          ],
+          "text": "80．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            501,
+            1017,
+            1677,
+            1499
+          ],
+          "content": "",
+          "region_label": null
+        },
+        {
+          "label": "vision_footnote",
+          "bbox": [
+            776,
+            1507,
+            1409,
+            1560
+          ],
+          "content": "B D ",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 81,
+      "image": "（2）【四海】25下半年1期套题班《行测》(1)__2984f8a0\\questions_page_29\\q81.png",
+      "crop_box_image": [
+        0,
+        1605,
+        2185,
+        2212
+      ],
+      "crop_box_blocks": [
+        202,
+        1620,
+        1970,
+        2197
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            1620,
+            1970,
+            1752
+          ],
+          "text": "81．把下面的六个图形分为两类，使每一类图形都有各自的共同特征或规律，分类正确的一项是："
+        },
+        {
+          "bbox": [
+            290,
+            2056,
+            1464,
+            2197
+          ],
+          "text": "A.①②③，④⑤⑥B.①②⑤，③④⑥C.①③⑥，②④⑤D．①④⑥，②③⑤"
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            447,
+            1770,
+            1731,
+            2004
+          ],
+          "content": "①3④5?",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 82,
+      "image": "（2）【四海】25下半年1期套题班《行测》(1)__2984f8a0\\questions_page_29\\q82.png",
+      "crop_box_image": [
+        0,
+        2223,
+        2185,
+        2825
+      ],
+      "crop_box_blocks": [
+        202,
+        2238,
+        1804,
+        2810
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            2238,
+            1804,
+            2282
+          ],
+          "text": "82．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            508,
+            2303,
+            1669,
+            2810
+          ],
+          "content": "?\n\nA B C \n",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            917,
+            2862,
+            1257,
+            2900
+          ],
+          "content": "第26页共44页",
+          "region_label": null
+        }
+      ]
+    }
+  ]
+}

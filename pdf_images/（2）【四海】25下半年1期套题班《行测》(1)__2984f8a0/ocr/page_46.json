@@ -1,0 +1,283 @@
+{
+  "page_name": "page_46",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        293,
+        273,
+        1043,
+        316
+      ],
+      "content": "四、根据所给材料，回答126～130题。"
+    },
+    {
+      "index": 1,
+      "label": "figure_title",
+      "region_label": null,
+      "bbox": [
+        611,
+        365,
+        1652,
+        408
+      ],
+      "content": "表2024年2月～11月全国白酒和啤酒累计产量情况"
+    },
+    {
+      "index": 2,
+      "label": "table",
+      "region_label": null,
+      "bbox": [
+        262,
+        449,
+        1918,
+        1325
+      ],
+      "content": "<html><body><table><tr><td rowspan=\"2\">时间</td><td colspan=\"2\">白酒</td><td colspan=\"2\">啤酒</td></tr><tr><td>累计产量 量（千万升）</td><td>同比增速(%)</td><td>累计产量（千万升）</td><td>同比增速（%)</td></tr><tr><td>2月</td><td>83</td><td>-26.6</td><td>567</td><td>8</td></tr><tr><td>3月</td><td>126</td><td>-15.3</td><td>872</td><td>2.3</td></tr><tr><td>4月</td><td>156</td><td>-1.6</td><td>1150</td><td>0.8</td></tr><tr><td>5月</td><td>190</td><td>2.3</td><td>1505</td><td>-0.5</td></tr><tr><td>6月</td><td>215</td><td>2.4</td><td>1909</td><td>-1</td></tr><tr><td>7月</td><td>235</td><td>-0.9</td><td>2267</td><td>-2.7</td></tr><tr><td>8月</td><td>262</td><td>0.0</td><td>2638</td><td>-2.3</td></tr><tr><td>9月</td><td>298</td><td>-2.8</td><td>2930</td><td>-2.1</td></tr><tr><td>10月</td><td>332</td><td>-4.5</td><td>3108</td><td>-2.3</td></tr><tr><td>11月</td><td>373</td><td>-5.9</td><td>3277</td><td>-1.9</td></tr></table></body></html>"
+    },
+    {
+      "index": 3,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        290,
+        1367,
+        677,
+        1409
+      ],
+      "content": "请回答126~130题"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1460,
+        1008,
+        1500
+      ],
+      "content": "126．2023上半年，全国白酒产量为多少："
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        1549,
+        1473,
+        1592
+      ],
+      "content": "A．不到150千万升B.180~200千万升"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        1642,
+        708,
+        1685
+      ],
+      "content": "C．200～220 千万升"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        1641,
+        1448,
+        1685
+      ],
+      "content": "D．220 千万升以上"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1733,
+        1706,
+        1775
+      ],
+      "content": "127．2024年3～11月，全国啤酒当期产量增长率高于累计增长率的有多少个："
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        1828,
+        415,
+        1867
+      ],
+      "content": "A.3"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1828,
+        1176,
+        1867
+      ],
+      "content": "B.4"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        1919,
+        1176,
+        1959
+      ],
+      "content": "C.5D. 6"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        208,
+        2009,
+        1356,
+        2051
+      ],
+      "content": "128．2023年一季度全国啤酒累计产量是白酒产量的多少倍："
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2100,
+        568,
+        2144
+      ],
+      "content": "A．不到5倍"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2102,
+        1296,
+        2144
+      ],
+      "content": "B.5~6倍"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        2193,
+        535,
+        2236
+      ],
+      "content": "C.6~7倍"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        2193,
+        1317,
+        2236
+      ],
+      "content": "D．７倍以上"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2284,
+        1272,
+        2326
+      ],
+      "content": "129．2023年三季度全国白酒当季度产量为多少千万升："
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2374,
+        677,
+        2418
+      ],
+      "content": "A．不到80千万升"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2374,
+        1470,
+        2418
+      ],
+      "content": "B.80到120 千万升"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2467,
+        731,
+        2510
+      ],
+      "content": "C．120到160千万升"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        2467,
+        1491,
+        2510
+      ],
+      "content": "D．160到180千万升"
+    },
+    {
+      "index": 22,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        917,
+        2862,
+        1256,
+        2901
+      ],
+      "content": "第43页共44页"
+    }
+  ]
+}

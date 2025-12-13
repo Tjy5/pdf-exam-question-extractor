@@ -1,0 +1,67 @@
+{
+  "page_name": "page_43",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        212,
+        272,
+        1969,
+        409
+      ],
+      "content": "119．以下饼图中，最能准确反映2023年底浙江（黑色），山东（灰色）和其他省级行政区（白色）海水淡化工程规模占全国比重的是："
+    },
+    {
+      "index": 1,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        289,
+        427,
+        1507,
+        1174
+      ],
+      "content": "A.B.\n\nC.D.\n\n"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        213,
+        1235,
+        1969,
+        1372
+      ],
+      "content": "120．以下柱状图中，最能准确反映2020～2023年间，全国年底海水淡化工程规模同比增量变化趋势的是（横轴位置代表增量为0）："
+    },
+    {
+      "index": 3,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        288,
+        1496,
+        1777,
+        2768
+      ],
+      "content": "A．2020年2021年2022年2023年B.2020年2021年2022年2023年C.2020年2021年2022年2023年D.2020年2021年2022年2023年"
+    },
+    {
+      "index": 4,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        915,
+        2862,
+        1256,
+        2900
+      ],
+      "content": "第40页共44页"
+    }
+  ]
+}

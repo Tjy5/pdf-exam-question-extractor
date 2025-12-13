@@ -1,0 +1,91 @@
+{
+  "page_name": "page_30",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        201,
+        273,
+        1414,
+        316
+      ],
+      "content": "83．以下为立方体的外表面，下列哪个立方体可以由此折成："
+    },
+    {
+      "index": 1,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        454,
+        357,
+        1736,
+        679
+      ],
+      "content": "A B C D "
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        200,
+        754,
+        1945,
+        891
+      ],
+      "content": "84．下图左侧给定的是3×3×3的正方体被分解后的多面体，切去的部分可以由给定的①、②和③三个多面体组合而成。以下哪项能填入问号处："
+    },
+    {
+      "index": 3,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        452,
+        934,
+        1733,
+        1639
+      ],
+      "content": "C \n8\nA B \n\n"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        201,
+        1717,
+        1803,
+        1761
+      ],
+      "content": "85．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 5,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        374,
+        1803,
+        1799,
+        2348
+      ],
+      "content": "比要\n\n辨\n\n"
+    },
+    {
+      "index": 6,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        918,
+        2862,
+        1255,
+        2900
+      ],
+      "content": "第27页共44页"
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "page_name": "page_12",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        273,
+        1971,
+        501
+      ],
+      "content": "26．M公司在网络购物平台销售一款智能门锁，宣称该门锁具有“生成临时密码”功能，韩某购买安装该款门锁后，发现并不具备所宣称的功能，该公司回复说需要额外付费升级系统后才能安装该功能。对此，下列说法不正确的是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        549,
+        1018,
+        592
+      ],
+      "content": "A．M公司对产品的不实宣传构成欺诈"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        641,
+        1017,
+        685
+      ],
+      "content": "B．M公司与韩某之间的买卖合同无效"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        732,
+        1026,
+        777
+      ],
+      "content": "C．韩某有权向M公司主张惩罚性赔偿"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        296,
+        823,
+        1028,
+        867
+      ],
+      "content": "D．韩某有权请求M公司承担违约责任"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        915,
+        1237,
+        958
+      ],
+      "content": "27．关于炎黄子孙中“炎”“黄”的表述，错误的是："
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1007,
+        1093,
+        1050
+      ],
+      "content": "A.“炎”“黄”分别指“炎帝”“黄帝”"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1099,
+        893,
+        1142
+      ],
+      "content": "B．炎帝号烈山氏，一说神农氏"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1190,
+        833,
+        1234
+      ],
+      "content": "C．炎帝被尊为“人文初祖”"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1283,
+        850,
+        1327
+      ],
+      "content": "D．黄帝又号轩辕氏、有熊氏"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        1374,
+        1974,
+        1692
+      ],
+      "content": "28．林某在某楼盘看中了一套总价500万元的房子，为表示购房诚意向开发商交付了50万元定金。双方在购房合同中约定一旦出现违约情形，违约方须赔偿对方100万元违约金。后来，开发商将原先约定卖给林某的房子卖给了出价更高的王某，该房产已过户登记至王某名下。关于该案，下列说法正确的是："
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        1741,
+        1202,
+        1783
+      ],
+      "content": "A．林某有权要求开发商一并赔偿违约金和定金"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        1833,
+        1040,
+        1876
+      ],
+      "content": "B．50万元超过了定金的法定最高限额"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        1924,
+        940,
+        1967
+      ],
+      "content": "C．林某只能向开发商主张违约金"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        2017,
+        897,
+        2059
+      ],
+      "content": "D．王某获得了该房子的所有权"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        2107,
+        1972,
+        2242
+      ],
+      "content": "29．“科学”流言是一种不负责任、未经证实的传闻或谣言，通常以科学为名，但实际缺乏科学依据和实证支持。以下言论中，具有科学依据、不属于“科学”流言的是："
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2288,
+        1598,
+        2612
+      ],
+      "content": "A．长期只吃白青菜，肝脏会成“油犀”，纯素饮食易致脂肪性肝炎B．航天员不能有近视眼，因为在太空中戴眼镜可能会带来意外伤害C．孕妇应尽量穿防辐射服，以有效保护胎儿免受日常电磁辐射影响D．中国古代木结构建筑不使用一颗钉子，全靠榫卯结构搭建"
+    },
+    {
+      "index": 17,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        928,
+        2862,
+        1246,
+        2901
+      ],
+      "content": "第9页共44页"
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "page_name": "page_14",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        273,
+        1498,
+        316
+      ],
+      "content": "34．小王进行了一次环球旅行。下列选项中，不可能出现的场景是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        365,
+        716,
+        409
+      ],
+      "content": "A．在摩洛哥欣赏雪景"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        457,
+        1199,
+        501
+      ],
+      "content": "B．在土耳其探索幼发拉底、底格里斯河发源地"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        548,
+        1154,
+        592
+      ],
+      "content": "C．在英国脚跨“本初子午线”两侧拍照留念"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        641,
+        1243,
+        683
+      ],
+      "content": "D．在俄罗斯攀登高加索山脉从而跨越亚欧两大洲"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        732,
+        1973,
+        1050
+      ],
+      "content": "35．加快构建以国内大循环为主体，国内国际双循环相互促进的新发展格局，要紧紧抓住供给侧结构性改革这条主线，注重需求侧管理，打通堵点，补齐短板，贯穿生产、分配、流通、消费各环节，形成需求牵引供给、供给创造需求的更高水平动态平衡，提升国民经济体系整体效能。下列属于扩大需求牵引作用的是："
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1099,
+        1024,
+        1142
+      ],
+      "content": "A．适度扩大财政赤字，发行特别国债"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1190,
+        1021,
+        1234
+      ],
+      "content": "B．扩大高端芯片进口，保障智能制造"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1282,
+        1108,
+        1326
+      ],
+      "content": "C．降低社保资金支出，维持财政收支平衡"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1374,
+        1109,
+        1417
+      ],
+      "content": "D．调低所得税起征点，提高居民消费能力"
+    },
+    {
+      "index": 10,
+      "label": "footer",
+      "region_label": null,
+      "bbox": [
+        485,
+        2747,
+        1692,
+        2797
+      ],
+      "content": "第一部分结束，请继续做第二部分！"
+    },
+    {
+      "index": 11,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        911,
+        2861,
+        1261,
+        2901
+      ],
+      "content": "第11页共44页"
+    }
+  ]
+}

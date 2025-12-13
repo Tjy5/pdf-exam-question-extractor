@@ -1,0 +1,151 @@
+{
+  "page_name": "page_29",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        271,
+        1803,
+        314
+      ],
+      "content": "79．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 1,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        502,
+        349,
+        1673,
+        826
+      ],
+      "content": "√\n\n"
+    },
+    {
+      "index": 2,
+      "label": "vision_footnote",
+      "region_label": null,
+      "bbox": [
+        778,
+        832,
+        1405,
+        884
+      ],
+      "content": "A B C D "
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        945,
+        1804,
+        989
+      ],
+      "content": "80．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 4,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        501,
+        1017,
+        1677,
+        1499
+      ],
+      "content": ""
+    },
+    {
+      "index": 5,
+      "label": "vision_footnote",
+      "region_label": null,
+      "bbox": [
+        776,
+        1507,
+        1409,
+        1560
+      ],
+      "content": "B D "
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        1620,
+        1970,
+        1752
+      ],
+      "content": "81．把下面的六个图形分为两类，使每一类图形都有各自的共同特征或规律，分类正确的一项是："
+    },
+    {
+      "index": 7,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        447,
+        1770,
+        1731,
+        2004
+      ],
+      "content": "①3④5?"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2056,
+        1464,
+        2197
+      ],
+      "content": "A.①②③，④⑤⑥B.①②⑤，③④⑥C.①③⑥，②④⑤D．①④⑥，②③⑤"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        2238,
+        1804,
+        2282
+      ],
+      "content": "82．从所给的四个选项中，选择最合适的一个填入问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 10,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        508,
+        2303,
+        1669,
+        2810
+      ],
+      "content": "?\n\nA B C \n"
+    },
+    {
+      "index": 11,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        917,
+        2862,
+        1257,
+        2900
+      ],
+      "content": "第26页共44页"
+    }
+  ]
+}

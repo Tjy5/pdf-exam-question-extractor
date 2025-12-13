@@ -1,0 +1,247 @@
+{
+  "page_name": "page_10",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        273,
+        1971,
+        407
+      ],
+      "content": "19.2025年3月16日出版的第6期《求是》杂志刊发习近平总书记重要文章《坚持和落实“两个毫不动摇”》。关于文章说法正确的有："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        456,
+        1944,
+        592
+      ],
+      "content": "①把公有制经济巩固好、发展好，同鼓励、支持、引导非公有制经济发展不是对立的，而是有机统一的\n"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        640,
+        1613,
+        683
+      ],
+      "content": "②公有制经济和非公有制经济都是社会主义市场经济的重要组成部分"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        732,
+        1919,
+        776
+      ],
+      "content": "③公有制经济、非公有制经济应该相辅相成、相得益彰，而不是相互排斥、相互抵消"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        822,
+        1905,
+        866
+      ],
+      "content": "④立足社会主义初级阶段，始终坚持社会主义经济改革方向，坚持“两个毫不动摇”"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        917,
+        443,
+        958
+      ],
+      "content": "A.1项"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        916,
+        1230,
+        958
+      ],
+      "content": "B.2项"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1008,
+        442,
+        1050
+      ],
+      "content": "C.3项"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1009,
+        1231,
+        1051
+      ],
+      "content": "D.4项"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1098,
+        1971,
+        1233
+      ],
+      "content": "20．中央经济工作会议12月11日至12日在北京举行。习近平在重要讲话中总结2024年经济工作。以下关于经济工作的规律性认识说法不正确的有："
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        286,
+        1282,
+        1875,
+        1326
+      ],
+      "content": "①必须统筹好总供给和总需求的关系，形成既“放得活”又“管得住”的经济秩序"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        1373,
+        1485,
+        1417
+      ],
+      "content": "②必须统筹好有效市场和有为政府的关系，畅通国民经济循环"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        1464,
+        1701,
+        1508
+      ],
+      "content": "③必须统筹好培育新动能和更新旧动能的关系，因地制宜发展新质生产力"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        1556,
+        1571,
+        1601
+      ],
+      "content": "④必须统筹好提升质量和做大总量的关系，全面提高资源配置效率"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        1647,
+        1701,
+        1690
+      ],
+      "content": "⑤必须统筹好做优增量和盘活存量的关系，夯实中国式现代化的物质基础"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1741,
+        443,
+        1783
+      ],
+      "content": "A.2项"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1741,
+        1230,
+        1784
+      ],
+      "content": "B.3项"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1833,
+        442,
+        1875
+      ],
+      "content": "C.4项"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1833,
+        1229,
+        1875
+      ],
+      "content": "D.5项"
+    },
+    {
+      "index": 19,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        929,
+        2861,
+        1245,
+        2901
+      ],
+      "content": "第7页共44页"
+    }
+  ]
+}

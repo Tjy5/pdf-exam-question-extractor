@@ -1,0 +1,247 @@
+{
+  "page_name": "page_4",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "doc_title",
+      "region_label": null,
+      "bbox": [
+        620,
+        330,
+        1555,
+        393
+      ],
+      "content": "第一部分政治理论+常识判断"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        783,
+        469,
+        1393,
+        511
+      ],
+      "content": "(共35题，参考时间：17分钟)"
+    },
+    {
+      "index": 2,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        830,
+        587,
+        1325,
+        649
+      ],
+      "content": "政治理论 (共20题）"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        229,
+        722,
+        1969,
+        857
+      ],
+      "content": "1．习近平总书记在重要文章《深入推进党的自我革命》中对怎样推进党的自我革命提出“九个以”的实践要求。对于“九个以”，下列表述不正确的是："
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        907,
+        938,
+        950
+      ],
+      "content": "A．以跳出历史周期率为战略目标"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        998,
+        980,
+        1041
+      ],
+      "content": "B．以解决大党独有难题为主攻方向"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1090,
+        1153,
+        1133
+      ],
+      "content": "C．以自我监督和人民监督相结合为强大动力"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1181,
+        893,
+        1225
+      ],
+      "content": "D．以培养年轻干部为长远之策"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        226,
+        1271,
+        1970,
+        1500
+      ],
+      "content": "2．习近平总书记指出，中华民族有着五千多年的悠久历史和灿烂文化，而且中华文化从远古一直延续发展到今天，是世界上唯一绵延不断，且以国家形态发展至今的伟大文明，具有突出的连续性。关于中华文化为何具有突出的连续性，下列说法正确的是："
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1548,
+        1398,
+        1592
+      ],
+      "content": "①强大的文化主体性，夯实了中华文明连续性的内在支撑"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1639,
+        1351,
+        1683
+      ],
+      "content": "②浩如烟海的文化典籍成为中华文明连续性的天然载体"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1731,
+        1485,
+        1776
+      ],
+      "content": "③独特又稳定的地理环境，筑牢了中华文明连续性的自然基础"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        1822,
+        1656,
+        1866
+      ],
+      "content": "④中华文化“中和”的文化价值诉求奠定了中华文明连续性的价值底蕴"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1912,
+        1290,
+        2053
+      ],
+      "content": "A.①②③B.①②④C.①③④D.②③④"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        226,
+        2097,
+        1924,
+        2232
+      ],
+      "content": "3．2024年和平共处五项原则发表70周年，以下关于和平共处五项原则的表述正确的有：①和平共处五项原则已载入中国宪法\n"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2281,
+        1392,
+        2326
+      ],
+      "content": "②和平共处五项原则是中国独立自主和平外交政策的基石"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2372,
+        1394,
+        2417
+      ],
+      "content": "③构建人类命运共同体理念与和平共处五项原则一脉相承"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2464,
+        1568,
+        2508
+      ],
+      "content": "④中国倡导将和平共处五项原则确立为指导国家间关系的基本准则"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2557,
+        1233,
+        2692
+      ],
+      "content": "A.1项B.2项C.3项D.4项"
+    },
+    {
+      "index": 19,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        927,
+        2862,
+        1249,
+        2901
+      ],
+      "content": "第1页共44页"
+    }
+  ]
+}

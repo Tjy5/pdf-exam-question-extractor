@@ -1,0 +1,259 @@
+{
+  "page_name": "page_11",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        831,
+        267,
+        1324,
+        327
+      ],
+      "content": "常识判断(共15题）"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        401,
+        1971,
+        621
+      ],
+      "content": "21．西柏坡是革命圣地，党中央和毛泽东同志在这里指挥了三大战役，指导革命取得全国胜利，进而建立了新中国。毛泽东同志在这里提出了“两个务必”的重要思想。关于上述历史，下列说法错误的是：公考最新资料、更新进度微信SKA674"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        670,
+        1118,
+        713
+      ],
+      "content": "A．西柏坡是中国革命最后一个农村指挥所"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        759,
+        1597,
+        804
+      ],
+      "content": "B．三大战役按时间先后排序依次是淮海战役、辽沈战役、平津战役"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        849,
+        1642,
+        893
+      ],
+      "content": "C．毛泽东同志在党的七届二中全会上提出了“两个务必”的重要思想"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        939,
+        1971,
+        1072
+      ],
+      "content": "D．“两个务必”具体指务必使同志们继续地保持谦虚、谨慎、不骄、不躁的作风，务必使同志们继续地保持艰苦奋斗的作风\n"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1118,
+        1971,
+        1249
+      ],
+      "content": "22．如果中国古代举办一场医学交流大会，医学名家介绍自己的经验和观点，下列对应错误的是："
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1298,
+        1053,
+        1340
+      ],
+      "content": "A．宋慈——《自杀与他杀的伤痕检验》"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1387,
+        1228,
+        1430
+      ],
+      "content": "B．华佗——《虏疮（天花）传染性的临床分析》"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1476,
+        1271,
+        1519
+      ],
+      "content": "C．扁鹊——《“望闻问切”四诊法的实用性研究》"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        1566,
+        1272,
+        1610
+      ],
+      "content": "D．孙思邈——《“治未病”：常见病的早期预防》"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1655,
+        1973,
+        1788
+      ],
+      "content": "23．某地检测到环境水体中氰化物含量显著增高，现要调查污染排放源头，应首先对以下4家企业中的哪一家开展调查："
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1834,
+        1285,
+        1970
+      ],
+      "content": "A．造纸厂B．炼焦厂C．水泥厂D．电镀厂"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        2014,
+        975,
+        2057
+      ],
+      "content": "24．关于人的大脑，下列说法错误的是："
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        2103,
+        1719,
+        2239
+      ],
+      "content": "A．大脑右半球言语功能占优势B．下丘脑与睡眠调控关系密切C．大脑是中枢神经系统的一部分D．听觉形成的部位位于大脑皮层"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        2282,
+        1500,
+        2325
+      ],
+      "content": "25．根据《中华人民共和国乡村振兴促进法》，下列说法正确的是："
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2373,
+        1857,
+        2417
+      ],
+      "content": "A．全面实施乡村振兴战略，应当坚持乡村城镇融合、城镇优先发展带动乡村原则"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2462,
+        1509,
+        2506
+      ],
+      "content": "B．国家构建以高质量绿色发展为导向的新型农业补贴政策体系"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        2551,
+        1642,
+        2595
+      ],
+      "content": "C．省、自治区、直辖市人民政府应当采取措施确保耕地总量稳步增加"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2641,
+        1970,
+        2773
+      ],
+      "content": "D．乡镇人民政府应设立法律顾问和公职律师，根据需要在村民委员会建立公共法律服务工作室\n"
+    },
+    {
+      "index": 20,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        928,
+        2862,
+        1246,
+        2901
+      ],
+      "content": "第8页共44页"
+    }
+  ]
+}

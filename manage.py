@@ -2,77 +2,219 @@
 """
 manage.py - 项目统一管理入口
 
-提供以下功能：
-- Web服务器启动（推荐）
-- 单文件快速处理（开发中）
-- 批量处理（开发中）
-
 使用方法：
-    python manage.py                    # 启动Web服务器（默认）
+    python manage.py                    # 启动Web服务器（默认，GPU优化已内置）
     python manage.py web                # 启动Web服务器
     python manage.py web --port 9000    # 在指定端口启动Web服务器
-    python manage.py process <file>     # 快速处理单个PDF（开发中）
-    python manage.py batch <dir>        # 批量处理目录下的所有PDF（开发中）
-
-注意：v2.0.1已统一使用Web界面，CLI模式已移除
+    python manage.py web --no-gpu       # 禁用GPU加速
+    python manage.py web --workers 8    # 设置并行工作线程数
 """
 
+import os
 import sys
+import socket
 import argparse
+import subprocess
 from pathlib import Path
 
 
-def run_web_server(host: str = "127.0.0.1", port: int = 8000, debug: bool = False):
-    """启动Web服务器"""
+# =============================================================================
+# Environment Configuration (from start_web_production.bat)
+# =============================================================================
+
+DEFAULT_ENV_CONFIG = {
+    # GPU Acceleration
+    "EXAMPAPER_USE_GPU": "1",
+    # GPU Memory Limit (80% to prevent OOM on 6GB cards)
+    "FLAGS_fraction_of_gpu_memory_to_use": "0.8",
+    # PaddlePaddle GPU Performance Optimization
+    "FLAGS_allocator_strategy": "auto_growth",
+    "FLAGS_cudnn_deterministic": "0",
+    "FLAGS_cudnn_batchnorm_spatial_persistent": "1",
+    "FLAGS_conv_workspace_size_limit": "4096",
+    # In-process execution (avoid reloading models)
+    "EXAMPAPER_STEP1_INPROC": "1",
+    "EXAMPAPER_STEP2_INPROC": "1",
+    # Model warmup (preload on startup)
+    "EXAMPAPER_PPSTRUCTURE_WARMUP": "1",
+    # Async warmup (server starts immediately, model loads in background)
+    "EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC": "1",
+    # Fallback to subprocess if in-proc fails
+    "EXAMPAPER_STEP1_FALLBACK_SUBPROCESS": "1",
+    "EXAMPAPER_STEP2_FALLBACK_SUBPROCESS": "1",
+    # Table recognition (keep enabled for data analysis)
+    "EXAMPAPER_LIGHT_TABLE": "0",
+    # Parallel extraction
+    "EXAMPAPER_PARALLEL_EXTRACTION": "1",
+    "EXAMPAPER_MAX_WORKERS": "4",
+}
+
+
+def detect_gpu_available() -> bool:
+    """Check if NVIDIA GPU is available via nvidia-smi"""
     try:
-        from web_interface.app import app
+        result = subprocess.run(
+            ["nvidia-smi"], capture_output=True, timeout=5
+        )
+        return result.returncode == 0
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return False
 
-        print(f"\n🌐 启动Web服务器...")
-        print(f"   地址: http://{host}:{port}")
-        print(f"   调试模式: {'开启' if debug else '关闭'}")
-        print(f"\n按 Ctrl+C 停止服务器\n")
 
-        app.run(host=host, port=port, debug=debug)
+def setup_environment(use_gpu: bool = True, workers: int = 4, warmup: bool = True):
+    """Setup environment variables for optimal performance"""
+    for key, value in DEFAULT_ENV_CONFIG.items():
+        os.environ.setdefault(key, value)
+
+    # Override based on CLI arguments
+    if not use_gpu:
+        os.environ["EXAMPAPER_USE_GPU"] = "0"
+    if workers != 4:
+        os.environ["EXAMPAPER_MAX_WORKERS"] = str(workers)
+    if not warmup:
+        os.environ["EXAMPAPER_PPSTRUCTURE_WARMUP"] = "0"
+        os.environ["EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC"] = "0"
+
+
+def is_port_in_use(port: int) -> int | None:
+    """Check if port is in use, return PID if found (Windows only)"""
+    if sys.platform != "win32":
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            return None if s.connect_ex(("127.0.0.1", port)) != 0 else -1
+
+    try:
+        result = subprocess.run(
+            ["netstat", "-ano"],
+            capture_output=True, text=True, timeout=10
+        )
+        for line in result.stdout.splitlines():
+            parts = line.split()
+            # netstat output: Proto LocalAddress ForeignAddress State PID
+            if len(parts) >= 5 and parts[3].upper() == "LISTENING":
+                try:
+                    local_port = int(parts[1].rsplit(":", 1)[-1])
+                except ValueError:
+                    continue
+                if local_port == port:
+                    return int(parts[-1])
+    except (subprocess.TimeoutExpired, ValueError):
+        pass
+    return None
+
+
+def kill_process(pid: int) -> bool:
+    """Kill process by PID"""
+    try:
+        cmd = (
+            ["taskkill", "/F", "/PID", str(pid)]
+            if sys.platform == "win32"
+            else ["kill", "-9", str(pid)]
+        )
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+        if result.returncode != 0:
+            error_msg = (result.stderr or result.stdout or "").strip()
+            if error_msg:
+                print(f"  [ERROR] Failed to kill PID {pid}: {error_msg}")
+            return False
+        return True
+    except subprocess.TimeoutExpired:
+        print(f"  [ERROR] Killing PID {pid} timed out")
+        return False
+
+
+def cleanup_port(port: int) -> bool:
+    """Clean up processes using the specified port"""
+    pid = is_port_in_use(port)
+    if pid is None:
+        return True
+    if pid == -1:
+        print(f"  [WARN] Port {port} is in use (non-Windows, cannot auto-kill)")
+        return False
+
+    print(f"  [WARN] Port {port} is used by PID {pid}")
+    print(f"  [Cleanup] Killing old process...")
+    if kill_process(pid):
+        print(f"  [OK] Old process terminated")
+        import time
+        time.sleep(1)
+        return True
+    else:
+        print(f"  [ERROR] Failed to kill process (admin rights may be required)")
+        return False
+
+
+def print_config_summary(use_gpu: bool, workers: int, warmup: bool, gpu_detected: bool = True):
+    """Print configuration summary"""
+    print("=" * 50)
+    print("  Configuration")
+    print("=" * 50)
+    if use_gpu:
+        gpu_status = "ENABLED"
+    elif not gpu_detected:
+        gpu_status = "DISABLED (GPU not detected)"
+    else:
+        gpu_status = "DISABLED"
+    print(f"  GPU Acceleration: {gpu_status}")
+    print(f"  Parallel Workers: {workers}")
+    print(f"  Model Warmup: {'ASYNC' if warmup else 'DISABLED'}")
+    print(f"  In-process Execution: ENABLED")
+    print(f"  Subprocess Fallback: ENABLED")
+    print("=" * 50)
+
+
+def run_web_server(
+    host: str = "127.0.0.1",
+    port: int = 8000,
+    debug: bool = False,
+    use_gpu: bool = True,
+    workers: int = 4,
+    warmup: bool = True,
+):
+    """启动Web服务器"""
+    # Validate workers
+    if workers < 1:
+        print("[ERROR] workers must be >= 1")
+        sys.exit(1)
+
+    # Auto-detect GPU and fallback to CPU if not available
+    gpu_detected = detect_gpu_available()
+    effective_use_gpu = use_gpu and gpu_detected
+    if use_gpu and not gpu_detected:
+        print("\n[WARN] GPU requested but not detected; falling back to CPU.")
+
+    # Setup environment before importing app
+    setup_environment(use_gpu=effective_use_gpu, workers=workers, warmup=warmup)
+
+    print("\n" + "=" * 50)
+    print("  ExamPaper AI Web Server")
+    print("=" * 50)
+
+    # Cleanup port
+    print(f"\n[Cleanup] Checking port {port}...")
+    if not cleanup_port(port):
+        print("[WARN] Could not free port, server may fail to start")
+
+    # Print config
+    print_config_summary(effective_use_gpu, workers, warmup, gpu_detected)
+
+    try:
+        import uvicorn
+        from backend.src.web.main import app
+
+        print(f"\n[Starting] Launching server...")
+        print(f"  URL: http://{host}:{port}")
+        print(f"  Debug: {'ON' if debug else 'OFF'}")
+        if warmup:
+            print(f"  Model warmup: ~15-30s (background, non-blocking)")
+        print(f"\nPress Ctrl+C to stop.\n")
+
+        uvicorn.run(app, host=host, port=port, reload=debug)
     except ImportError as e:
-        print(f"错误: 无法加载Web模块: {e}")
-        print("请确保web_interface/app.py文件存在且可访问。")
+        print(f"[ERROR] Cannot load Web module: {e}")
+        print("Please ensure backend/src/web/main.py exists.")
         sys.exit(1)
     except KeyboardInterrupt:
-        print("\n\n👋 Web服务器已停止")
-
-
-def process_single_file(pdf_path: str, config_path: str | None = None):
-    """处理单个PDF文件"""
-    pdf_file = Path(pdf_path)
-    if not pdf_file.exists():
-        print(f"错误: 文件不存在: {pdf_path}")
-        sys.exit(1)
-
-    print(f"\n📄 处理文件: {pdf_file.name}")
-
-    # TODO: 实现单文件处理逻辑
-    print("⚠️  单文件处理功能正在开发中...")
-    print("   请使用Web界面进行处理：python manage.py web")
-
-
-def process_batch(directory: str, config_path: str | None = None):
-    """批量处理目录下的PDF文件"""
-    dir_path = Path(directory)
-    if not dir_path.exists() or not dir_path.is_dir():
-        print(f"错误: 目录不存在: {directory}")
-        sys.exit(1)
-
-    pdf_files = list(dir_path.glob("*.pdf"))
-    if not pdf_files:
-        print(f"错误: 目录中没有找到PDF文件: {directory}")
-        sys.exit(1)
-
-    print(f"\n📦 批量处理目录: {dir_path}")
-    print(f"   找到 {len(pdf_files)} 个PDF文件")
-
-    # TODO: 实现批量处理逻辑
-    print("⚠️  批量处理功能正在开发中...")
-    print("   请使用Web界面进行处理：python manage.py web")
+        print("\n\n[INFO] Web server stopped")
 
 
 def main():
@@ -82,15 +224,14 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
-  python manage.py                           # 启动Web服务器（默认）
+  python manage.py                           # 启动Web服务器（默认，GPU优化已内置）
   python manage.py web                       # 启动Web服务器
   python manage.py web --port 9000          # 在9000端口启动Web服务器
-  python manage.py web --debug              # 开启调试模式启动Web服务器
-  python manage.py process input.pdf        # 处理单个PDF（开发中）
-  python manage.py batch ./pdfs/            # 批量处理目录（开发中）
+  python manage.py web --no-gpu             # 禁用GPU加速
+  python manage.py web --workers 8          # 设置并行工作线程数
+  python manage.py web --no-warmup          # 禁用模型预热
 
-注意：v2.0.1已统一使用Web界面，访问 http://localhost:8000 使用完整功能
-更多信息请访问: docs/README.md
+访问 http://localhost:8000 使用完整功能
         """,
     )
 
@@ -102,18 +243,9 @@ def main():
     parser_web.add_argument("--host", default="127.0.0.1", help="服务器地址")
     parser_web.add_argument("--port", type=int, default=8000, help="服务器端口")
     parser_web.add_argument("--debug", action="store_true", help="开启调试模式")
-
-    # Process命令
-    parser_process = subparsers.add_parser("process", help="处理单个PDF文件")
-    parser_process.add_argument("file", help="PDF文件路径")
-    parser_process.add_argument(
-        "--config", help="配置文件路径（可选）", default=None
-    )
-
-    # Batch命令
-    parser_batch = subparsers.add_parser("batch", help="批量处理目录下的PDF")
-    parser_batch.add_argument("directory", help="包含PDF文件的目录路径")
-    parser_batch.add_argument("--config", help="配置文件路径（可选）", default=None)
+    parser_web.add_argument("--no-gpu", action="store_true", help="禁用GPU加速")
+    parser_web.add_argument("--workers", type=int, default=4, help="并行工作线程数 (默认: 4)")
+    parser_web.add_argument("--no-warmup", action="store_true", help="禁用模型预热")
 
     args = parser.parse_args()
 
@@ -124,11 +256,14 @@ def main():
 
     # 根据命令执行相应操作
     if args.command == "web":
-        run_web_server(host=args.host, port=args.port, debug=args.debug)
-    elif args.command == "process":
-        process_single_file(args.file, args.config)
-    elif args.command == "batch":
-        process_batch(args.directory, args.config)
+        run_web_server(
+            host=args.host,
+            port=args.port,
+            debug=args.debug,
+            use_gpu=not args.no_gpu,
+            workers=args.workers,
+            warmup=not args.no_warmup,
+        )
     else:
         parser.print_help()
 

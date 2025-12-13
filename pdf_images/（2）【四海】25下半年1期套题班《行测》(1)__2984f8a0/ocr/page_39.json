@@ -1,0 +1,103 @@
+{
+  "page_name": "page_39",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        208,
+        273,
+        1970,
+        499
+      ],
+      "content": "110．有研究人员针对素食对心血管疾病高危人群的影响进行数据分析发现，素食与低密度脂蛋白胆固醇、葡萄糖水平和体重的显著改善有关，因此，研究人员提出素食可有效降低胆固醇、血糖和体重。\n"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        313,
+        549,
+        1085,
+        590
+      ],
+      "content": "以下哪项如果为真，不能削弱上述结论："
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        640,
+        1705,
+        684
+      ],
+      "content": "A．快餐店素食套餐含有精制碳水化合物、蔗糖、玉米糖浆等，热量更高"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        732,
+        1705,
+        775
+      ],
+      "content": "B．部分素食含有大量反式脂肪酸，反式脂肪酸的摄入会引起胆固醇升高"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        314,
+        822,
+        1616,
+        866
+      ],
+      "content": "C．广义上的素食不仅包括蔬菜等纯素食，还包括鸡蛋、奶和乳制品"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        915,
+        1444,
+        957
+      ],
+      "content": "D．素食中的蔬菜多是油炸的，这使素食者变胖的风险更大"
+    },
+    {
+      "index": 6,
+      "label": "footer",
+      "region_label": null,
+      "bbox": [
+        485,
+        2743,
+        1691,
+        2792
+      ],
+      "content": "第四部分结束，请继续做第五部分！"
+    },
+    {
+      "index": 7,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        917,
+        2862,
+        1256,
+        2900
+      ],
+      "content": "第36页共44页"
+    }
+  ]
+}

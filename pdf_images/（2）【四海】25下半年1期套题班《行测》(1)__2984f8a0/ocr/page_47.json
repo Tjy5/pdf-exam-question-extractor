@@ -1,0 +1,67 @@
+{
+  "page_name": "page_47",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        273,
+        1714,
+        316
+      ],
+      "content": "130．下图为2024年全国白酒或啤酒哪个季度各月当期环比增长率的变化趋势:"
+    },
+    {
+      "index": 1,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        786,
+        404,
+        1399,
+        882
+      ],
+      "content": ""
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        910,
+        1458,
+        1047
+      ],
+      "content": "A．白酒、第二季度B．白酒、第三季度C．啤酒、第二季度D．啤酒、第三季度"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        661,
+        2771,
+        1516,
+        2820
+      ],
+      "content": "全部测验到此结束！"
+    },
+    {
+      "index": 4,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        917,
+        2861,
+        1258,
+        2901
+      ],
+      "content": "第44页共44页"
+    }
+  ]
+}

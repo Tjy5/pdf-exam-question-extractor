@@ -1,0 +1,271 @@
+{
+  "page_name": "page_35",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        273,
+        563,
+        318
+      ],
+      "content": "98.覆：盖：覆盖"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        364,
+        1418,
+        504
+      ],
+      "content": "A.寒：酸：寒酸B．厚：重：厚重C．喉：舌：喉舌D．抚：摸：抚摸"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        549,
+        649,
+        593
+      ],
+      "content": "99．公文：公告：通告"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        642,
+        713,
+        687
+      ],
+      "content": "A．湿地：水松：水杉"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        640,
+        1504,
+        687
+      ],
+      "content": "B．信息：图像：文字"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        732,
+        1766,
+        777
+      ],
+      "content": "C．卷纸：卫生纸：餐巾纸D．运动器材：动感单车：引体向上"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        823,
+        760,
+        867
+      ],
+      "content": "100．刑罚：改造罪犯：处罚"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        913,
+        1591,
+        1053
+      ],
+      "content": "A．格言：指导言行：语句B．审计：收入分配：监督C．比喻：生动描写：借喻D．科研：本质规律：活动"
+    },
+    {
+      "index": 8,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        291,
+        1190,
+        565,
+        1233
+      ],
+      "content": "四、逻辑判断"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        208,
+        1282,
+        1971,
+        1601
+      ],
+      "content": "101．某研究团队发布了一项关于睡眠习惯、时间与癌症风险的研究。研究分析了近1.５万人，发现睡眠时间短导致癌症风险升高。和睡眠时间为6～8小时的参与者相比，夜间睡眠时间少于6小时的人，患癌风险升高41%，和午睡时间多于60分钟的参与者相比，从不午睡的参与者患癌风险升高60%。\n"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        1648,
+        1090,
+        1691
+      ],
+      "content": "以下哪项如果为真，最能加强上述观点："
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        316,
+        1740,
+        1708,
+        1784
+      ],
+      "content": "A．睡眠时间短会损害免疫功能、降低人体对肿瘤细胞的识别和消灭能力"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        1832,
+        1752,
+        1876
+      ],
+      "content": "B．人类环境、卫生资源和睡眠习惯的变化，导致癌症发病原因发生了变化"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        1923,
+        1880,
+        1967
+      ],
+      "content": "C．夜间睡眠时间短或不午睡的参与者，大多年龄较大且缺少锻炼，健康状况不佳"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        2015,
+        1972,
+        2151
+      ],
+      "content": "D．和总睡眠时间为7～8小时的参与者相比，总睡眠时间少于7小时的男性，患癌风险升高69%\n"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2198,
+        1971,
+        2332
+      ],
+      "content": "102．某大型学术会议参与者中，有知名教授是大会主题报告人。因此，有文科生是大会主题报告人。\n"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        2382,
+        1177,
+        2425
+      ],
+      "content": "上述论证若要成立，需要补充哪项作为前提："
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2473,
+        921,
+        2517
+      ],
+      "content": "A．没有知名教授不是学文科的"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        2565,
+        877,
+        2609
+      ],
+      "content": "B．没有知名教授是学文科的"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        2657,
+        919,
+        2701
+      ],
+      "content": "C．有些知名教授不是学文科的"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2749,
+        876,
+        2792
+      ],
+      "content": "D．有些知名教授是学文科的"
+    },
+    {
+      "index": 21,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        918,
+        2862,
+        1255,
+        2901
+      ],
+      "content": "第32页共44页"
+    }
+  ]
+}

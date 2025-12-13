@@ -1,0 +1,223 @@
+{
+  "page_name": "page_23",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        273,
+        929,
+        316
+      ],
+      "content": "这段文字意在说明，文博展陈应："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        365,
+        845,
+        410
+      ],
+      "content": "A．拓展多空间，善用新技术"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        366,
+        1634,
+        410
+      ],
+      "content": "B．活化老文物，挖掘新共鸣"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        458,
+        845,
+        502
+      ],
+      "content": "C．传承古智慧，融合新媒体"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        458,
+        1634,
+        503
+      ],
+      "content": "D．展现历史美，利用新视角"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        548,
+        1973,
+        959
+      ],
+      "content": "61．我国农业中最富特色的资源，是基于特定区域生态与文化内涵的地理标志农产品。围绕地理标志专用标志、区域公用品牌创建与管理的理论研究成果数量日增，例如，以农业品牌、农产品区域公用品牌为关键词的论文数量不断增多，农业品牌建设的理论支撑体系不断构建。各高校相关团队的理论研究推动了我国农业品牌发展，特别是优质土特产的品牌化进程，也推动了相关支持政策的出台。\n"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1007,
+        844,
+        1049
+      ],
+      "content": "最适合做这段文字标题的是:"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1099,
+        935,
+        1141
+      ],
+      "content": "A．理论研究助力农业品牌化发展"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1191,
+        935,
+        1233
+      ],
+      "content": "B．农业品牌理论研究迈上新台阶"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1283,
+        978,
+        1326
+      ],
+      "content": "C．高校研究驱动农业产业提档升级"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1374,
+        981,
+        1416
+      ],
+      "content": "D．加强地理标志农产品建设与保护"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1465,
+        1973,
+        1967
+      ],
+      "content": "62．与工业经济、数字经济相比，生物经济最大的特点是打破了数字经济“赢者通吃”的商业模式，具有资源依赖性强、技术多样性高、市场垄断程度低等特点，为生物资源丰富、生物技术相对落后的国家提供了一次难得的、可能实现跨越式发展的机遇。我国生物资源丰富、市场潜力大，生物技术已有良好基础，做强做大生物经济，不仅能有效缓解甚至最终解决粮食安全、能源安全、环境安全、生物安全等问题，而且能够大幅度提高人民健康水平，推进新一轮经济增长。\n"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2016,
+        668,
+        2058
+      ],
+      "content": "这段文字旨在说明："
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2108,
+        1066,
+        2151
+      ],
+      "content": "A．我国生物经济的发展现状与前景研判"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2199,
+        1064,
+        2241
+      ],
+      "content": "B．全球生物经济演进的规律和发展布局"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2290,
+        1066,
+        2333
+      ],
+      "content": "C．中国面临生物经济的巨大机遇和挑战"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        2382,
+        1066,
+        2425
+      ],
+      "content": "D．生物经济对构建新发展格局意义重大"
+    },
+    {
+      "index": 17,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        920,
+        2862,
+        1255,
+        2900
+      ],
+      "content": "第20页共44页"
+    }
+  ]
+}

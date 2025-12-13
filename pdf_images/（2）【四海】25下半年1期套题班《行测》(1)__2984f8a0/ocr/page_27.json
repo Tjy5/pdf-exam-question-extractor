@@ -1,0 +1,319 @@
+{
+  "page_name": "page_27",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        273,
+        1972,
+        499
+      ],
+      "content": "71．一场大学生机器人预选赛中，某高校A专业有5名学生备赛，B专业有７名学生备赛，C 专业有8名学生备赛。问至少派出多少名备赛学生，才能保证一定有3名学生的专业相同？\n"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        553,
+        388,
+        593
+      ],
+      "content": "A.5"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        553,
+        1175,
+        592
+      ],
+      "content": "B. 6"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        644,
+        1177,
+        685
+      ],
+      "content": "C.7D. 8"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        732,
+        1972,
+        865
+      ],
+      "content": "72．现要在一块长25公里、宽8公里的长方形区域内设置哨塔，每个哨塔的监视半径为5公里。如果要求整个区域内的每个角落都能被监视到，则至少需要设置多少个哨塔?"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        919,
+        387,
+        958
+      ],
+      "content": "A.7"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        919,
+        1175,
+        958
+      ],
+      "content": "B. 6"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1010,
+        388,
+        1050
+      ],
+      "content": "C.5"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1011,
+        1174,
+        1050
+      ],
+      "content": "D. 4"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        1099,
+        1973,
+        1327
+      ],
+      "content": "73．甲和乙两条生产线的效率比为1：x，现共同生产一批设备12天后正好完成一半。此时甲的效率提升为原来的2x倍，乙的效率提升为原来的ｙ倍后，又用了6天正好完成生产任务。问x和y的关系为?\n"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        1378,
+        451,
+        1420
+      ],
+      "content": "A.xy=1"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        1378,
+        1242,
+        1419
+      ],
+      "content": "B.$xy=2"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1469,
+        454,
+        1512
+      ],
+      "content": "C.x=2y "
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        1471,
+        1242,
+        1512
+      ],
+      "content": "D.$x=3y "
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1557,
+        1971,
+        1783
+      ],
+      "content": "74．甲、乙、丙3名研究生本学期已阅读了159篇本专业的学术论文。已知甲的阅读量比乙的一半多28篇，丙的阅读量比甲和乙的平均阅读量多18篇。问乙本学期至少还要再阅读多少篇，阅读量才能比丙多 50%以上?\n"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        1836,
+        410,
+        1875
+      ],
+      "content": "A. 42"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1835,
+        1197,
+        1875
+      ],
+      "content": "B. 48"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1927,
+        409,
+        1967
+      ],
+      "content": "C. 54"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1927,
+        1197,
+        1967
+      ],
+      "content": "D. 60"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2016,
+        1972,
+        2333
+      ],
+      "content": "75．小张、小王、小李练习乒乓球，第一局小张对小王，往后每一局都由上一局轮空的人对上一局的胜者。已知一共打了6局比赛，其中小张打了3局，且第3局的参赛人组合与第一局不同。问各局比赛可能的不同组合一共有多少种（任一局参赛人不同或胜负关系不同，都算不同的组合）?\n"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2387,
+        389,
+        2425
+      ],
+      "content": "A.2"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2387,
+        1175,
+        2425
+      ],
+      "content": "B.4"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        2477,
+        388,
+        2516
+      ],
+      "content": "C.6"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2477,
+        1196,
+        2516
+      ],
+      "content": "D.12"
+    },
+    {
+      "index": 24,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        485,
+        2743,
+        1691,
+        2792
+      ],
+      "content": "第三部分结束，请继续做第四部分！"
+    },
+    {
+      "index": 25,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        916,
+        2862,
+        1257,
+        2901
+      ],
+      "content": "第24页共44页"
+    }
+  ]
+}

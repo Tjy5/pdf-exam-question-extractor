@@ -1,0 +1,247 @@
+{
+  "page_name": "page_41",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        212,
+        273,
+        1969,
+        407
+      ],
+      "content": "112．2017～2023年间，数字经济核心产业全球发明专利授权量同比增速不到5%的年份有多少个："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        460,
+        1176,
+        501
+      ],
+      "content": "A. 0B.1"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        551,
+        1176,
+        592
+      ],
+      "content": "C.2D. 3"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        640,
+        1969,
+        775
+      ],
+      "content": "113.2023年数字产品制造业全球发明专利授权量占该年全球发明专利授权量的比重约为多少："
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        321,
+        826,
+        504,
+        865
+      ],
+      "content": "A. 51.2%"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        826,
+        1264,
+        865
+      ],
+      "content": "B.44.4%"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        918,
+        503,
+        957
+      ],
+      "content": "C. 31.6%"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        917,
+        1264,
+        957
+      ],
+      "content": "D.22.7%"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        1006,
+        1971,
+        1141
+      ],
+      "content": "114.2022年，数字要素驱动业全球发明专利授权量约比数字技术应用业全球发明专利授权量多多少万件："
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        1193,
+        481,
+        1233
+      ],
+      "content": "A. 21.7"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1192,
+        1241,
+        1233
+      ],
+      "content": "B.19.5"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        1284,
+        459,
+        1325
+      ],
+      "content": "C. 8.4"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1285,
+        1216,
+        1325
+      ],
+      "content": "D. 6.1"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        212,
+        1373,
+        1971,
+        1508
+      ],
+      "content": "115.以下折线图反映了哪一时间段内，数字经济核心产业全球发明专利授权量同比增速的变化趋势："
+    },
+    {
+      "index": 14,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        832,
+        1505,
+        1346,
+        1786
+      ],
+      "content": ""
+    },
+    {
+      "index": 15,
+      "label": "vision_footnote",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1818,
+        1425,
+        1860
+      ],
+      "content": "B.2017〜2019年"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        1819,
+        665,
+        1859
+      ],
+      "content": "A．2016〜2018年"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        1910,
+        666,
+        1951
+      ],
+      "content": "C.2018~2020年"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1911,
+        1424,
+        1951
+      ],
+      "content": "D.2020〜2022年"
+    },
+    {
+      "index": 19,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        917,
+        2862,
+        1255,
+        2901
+      ],
+      "content": "第38页共44页"
+    }
+  ]
+}
