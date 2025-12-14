@@ -1,0 +1,72 @@
+# ===================================
+# Python
+# ===================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ===================================
+# Virtual Environment
+# ===================================
+venv/
+env/
+ENV/
+.venv/
+
+# ===================================
+# IDE & Editors
+# ===================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===================================
+# OS
+# ===================================
+Thumbs.db
+desktop.ini
+
+# ===================================
+# Project Specific - Runtime Artifacts
+# ===================================
+# 数据库文件
+data/tasks.db
+data/*.db
+data/*.db-journal
+
+# 处理输出
+pdf_images/
+test_output/
+
+# 上传文件（关键：避免误提交用户数据）
+uploads/
+
+# 临时文件
+*.tmp
+*.log
+
+# ===================================
+# Frontend
+# ===================================
+frontend/node_modules/
+frontend/dist/
+
+# ===================================
+# Serena MCP相关
+# ===================================
+.serena/
