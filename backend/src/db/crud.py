@@ -23,6 +23,33 @@ from .schema import (
     LogType,
     now_iso8601,
 )
+from ..services.pipeline.contracts import StepName
+
+
+# Legacy database compatibility: map old step names to canonical StepName values
+# This ensures backward compatibility when reading from databases created before v2.2.0
+_LEGACY_STEP_NAMES: Dict[str, str] = {
+    "data_analysis": StepName.analyze_data.value,
+    "compose_long_images": StepName.compose_long_image.value,
+}
+
+
+def _normalize_step_name(name: Optional[str]) -> Optional[str]:
+    """
+    Normalize step name for backward compatibility.
+
+    Maps legacy step names to their canonical StepName enum values.
+    Used when reading from database to ensure consistency with pipeline code.
+
+    Args:
+        name: Raw step name from database
+
+    Returns:
+        Canonical step name or original if no mapping exists
+    """
+    if not name:
+        return name
+    return _LEGACY_STEP_NAMES.get(name, name)
 
 
 class TaskRepository:
@@ -80,13 +107,14 @@ class TaskRepository:
                 (task_id, mode, pdf_name, file_hash, exam_dir_name, "pending", expected_pages, now, now),
             )
 
-            # Initialize 5 steps (matching Task.__init__ in app.py)
+            # Initialize 5 steps using canonical StepName enum values
+            # This ensures consistency with pipeline contracts
             steps = [
-                (task_id, 0, "pdf_to_images", "PDF 转图片"),
-                (task_id, 1, "extract_questions", "题目提取"),
-                (task_id, 2, "data_analysis", "资料分析重组"),
-                (task_id, 3, "compose_long_images", "长图拼接"),
-                (task_id, 4, "collect_results", "结果汇总"),
+                (task_id, 0, StepName.pdf_to_images.value, "PDF 转图片"),
+                (task_id, 1, StepName.extract_questions.value, "题目提取"),
+                (task_id, 2, StepName.analyze_data.value, "资料分析重组"),
+                (task_id, 3, StepName.compose_long_image.value, "长图拼接"),
+                (task_id, 4, StepName.collect_results.value, "结果汇总"),
             ]
 
             await self.db.execute_many(
@@ -140,9 +168,16 @@ class TaskRepository:
                 (task_id,),
             )
 
+            # Normalize step names for backward compatibility
+            normalized_steps: List[Dict[str, Any]] = []
+            for row in step_rows:
+                step_dict = dict(row)
+                step_dict["name"] = _normalize_step_name(step_dict.get("name"))
+                normalized_steps.append(step_dict)
+
             return {
                 "task": dict(task_row),
-                "steps": [dict(row) for row in step_rows],
+                "steps": normalized_steps,
                 "logs": [dict(row) for row in reversed(log_rows)],  # Chronological order
             }
 
@@ -329,7 +364,7 @@ class TaskRepository:
             step_index: Step index (0-4)
 
         Returns:
-            Step dict or None
+            Step dict or None (step names are normalized for compatibility)
         """
         async with self.db.transaction():
             row = await self.db.fetch_one(
@@ -339,7 +374,13 @@ class TaskRepository:
                 """,
                 (task_id, step_index),
             )
-            return dict(row) if row else None
+            if not row:
+                return None
+
+            # Normalize step name for backward compatibility
+            step_dict = dict(row)
+            step_dict["name"] = _normalize_step_name(step_dict.get("name"))
+            return step_dict
 
     # ==================== Log Operations ====================
 
