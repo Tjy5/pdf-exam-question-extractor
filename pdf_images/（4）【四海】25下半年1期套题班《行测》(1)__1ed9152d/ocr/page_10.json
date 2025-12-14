@@ -1,0 +1,331 @@
+{
+  "page_name": "page_10",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        273,
+        1971,
+        409
+      ],
+      "content": "17．2025年3月5日，李强总理向十四届全国人大三次会议作政府工作报告。报告中提出要深入实施科教兴国战略，提升国家创新体系整体效能，以下相关说法错误的有几项："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        457,
+        1445,
+        502
+      ],
+      "content": "①推动义务教育优质均衡发展，扩大义务教育阶段学位供给"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        548,
+        1616,
+        594
+      ],
+      "content": "②分类推进高校改革，扎实推进本科学校扩容，加快“双一流”建设"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        639,
+        1617,
+        685
+      ],
+      "content": "③推动科技支出向基础研究倾斜，完善以竞争性支持为主的投入机制"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        732,
+        1443,
+        777
+      ],
+      "content": "④深化人才管理和使用制度改革，合理控制用人单位自主权"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        823,
+        1485,
+        867
+      ],
+      "content": "⑤建立以创新能力、质量、实效、贡献为导向的人才评价体系"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        918,
+        397,
+        958
+      ],
+      "content": "A.2"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        917,
+        1179,
+        958
+      ],
+      "content": "B.3"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        1009,
+        395,
+        1050
+      ],
+      "content": "C.4"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1009,
+        1179,
+        1050
+      ],
+      "content": "D.5"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        208,
+        1098,
+        1972,
+        1235
+      ],
+      "content": "18.2025年3月5日，李强总理向十四届全国人大三次会议作政府工作报告。报告中提出加大保障和改善民生力度，提升社会治理效能，以下相关说法不正确的有几项："
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1282,
+        1533,
+        1327
+      ],
+      "content": "①实施重点领域、重点行业、城乡基层和重点企业就业支持计划"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1373,
+        1489,
+        1418
+      ],
+      "content": "②加快构建知识导向的薪酬分配制度，提高技能人才待遇水平"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1464,
+        1970,
+        1602
+      ],
+      "content": "③深化以营利性为导向的公立医院改革，推进编制动态调整，建立以医院等级为主导的收费机制\n"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1647,
+        1357,
+        1692
+      ],
+      "content": "④加快发展第一支柱养老保险，实施好个人养老金制度"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1740,
+        1356,
+        1784
+      ],
+      "content": "⑤完善公共文化服务体系，推动优质文化资源直达基层"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1832,
+        1618,
+        1875
+      ],
+      "content": "⑥建设更高水平的法治中国，保障人民群众安居乐业、社会安定有序"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        297,
+        1926,
+        397,
+        1968
+      ],
+      "content": "A.2"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1926,
+        1179,
+        1967
+      ],
+      "content": "B.3"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        2016,
+        1181,
+        2058
+      ],
+      "content": "C.4D. 5"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2107,
+        1967,
+        2242
+      ],
+      "content": "19.中共中央办公厅、国务院办公厅印发了《逐步把永久基本农田建成高标准农田实施方案》，并发出通知，要求各地区各部门结合实际认真贯彻落实。以下说法错误的有几项："
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2290,
+        1612,
+        2335
+      ],
+      "content": "①深入实施藏粮于地、藏粮于技战略，以农业高质量发展为首要任务"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2382,
+        1614,
+        2427
+      ],
+      "content": "②保障国家粮食安全的根本在种子，建设高标准农田是一个重要抓手"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2473,
+        1972,
+        2609
+      ],
+      "content": "③真正把具备条件的耕地特别是永久基本农田建成适宜耕作、旱涝保收、高产稳产的现代化良田\n"
+    },
+    {
+      "index": 24,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2657,
+        1285,
+        2702
+      ],
+      "content": "④到2030年，力争累计建成高标准农田15.46亿亩"
+    },
+    {
+      "index": 25,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2748,
+        1589,
+        2793
+      ],
+      "content": "⑤到2050年，力争将具备条件的永久基本农田全部建成高标准农田"
+    },
+    {
+      "index": 26,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        927,
+        2862,
+        1245,
+        2901
+      ],
+      "content": "第6页共42页"
+    }
+  ]
+}

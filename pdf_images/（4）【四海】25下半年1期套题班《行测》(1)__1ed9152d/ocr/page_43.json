@@ -1,0 +1,103 @@
+{
+  "page_name": "page_43",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        273,
+        1973,
+        407
+      ],
+      "content": "119．将①全国医疗卫生机构入院人次、②乡镇卫生院诊疗人次、③乡镇卫生院入院人次、④村卫生室诊疗人次按2023年同比增速从高到低排序，以下顺序正确的是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        455,
+        1332,
+        594
+      ],
+      "content": "A.①②③④B.①④②③C.③①④②D.③②④①"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        640,
+        910,
+        682
+      ],
+      "content": "120．根据材料，以下说法错误的是："
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        732,
+        1457,
+        775
+      ],
+      "content": "A．2023年，全国卫生总费用中政府卫生支出超过3万亿元"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        822,
+        1672,
+        865
+      ],
+      "content": "B．2023年，村卫生室诊疗人次约是社区卫生服务站诊疗人次的6.7倍"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        314,
+        914,
+        1626,
+        957
+      ],
+      "content": "C．2023年末，全国卫生技术人员中有超过一半是医院卫生技术人员"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        1007,
+        1779,
+        1049
+      ],
+      "content": "D．2023年，乡镇卫生院入院人次比社区卫生服务中心入院人次多约3512万"
+    },
+    {
+      "index": 7,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        929,
+        2862,
+        1244,
+        2900
+      ],
+      "content": "第38页共42页"
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "page_name": "page_16",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        685,
+        330,
+        1489,
+        393
+      ],
+      "content": "第二部分言语理解与表达"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        782,
+        469,
+        1394,
+        511
+      ],
+      "content": "(共30题，参考时间：28分钟）"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        592,
+        1970,
+        729
+      ],
+      "content": "36．近年来，醒狮、武术等代表中华文化的具象元素传播到世界各地，因此不少外国人对这些具象元素，这体现了中华文明的独特魅力和强大感染力。"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        776,
+        930,
+        819
+      ],
+      "content": "填入画横线部分最恰当的一项是："
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        867,
+        1331,
+        1005
+      ],
+      "content": "A．耳熟能详B．如数家珍C．滚瓜烂熟D．娓娓而谈"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1051,
+        1971,
+        1184
+      ],
+      "content": "37．抓好改革落实，需要统筹近期目标和长远规划，既慢不得，也急不得，要以的心态，做久久为功的努力。\n"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1234,
+        930,
+        1276
+      ],
+      "content": "填入画横线部分最恰当的一项是："
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1326,
+        1330,
+        1462
+      ],
+      "content": "A．只争朝夕B．筚路蓝缕C．时不再来D．破釜沉舟"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1509,
+        1971,
+        1736
+      ],
+      "content": "38．融通中外，需要秉持理念，寻找中华文化与其他国家文化的契合点，挖掘可感知的精神标识，探索可沟通的表达方式，搭建可共享的话语空间，用国际化语言讲好中国故事，提升中国形象的亲和力。\n"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1786,
+        931,
+        1827
+      ],
+      "content": "填入画横线部分最恰当的一项是："
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1876,
+        1331,
+        2011
+      ],
+      "content": "A．互惠互利B．本同末异C．中西合璧D．求同存异"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        2059,
+        1971,
+        2285
+      ],
+      "content": "39.说我们要在问题中不断突围、让目标不断达成，说我们与未来有了一个约定，要赴一场民族复兴之约、国家治理现代化之约，就没有什么困难不能战胜，而且也必定能战胜。\n"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2335,
+        1020,
+        2377
+      ],
+      "content": "依次填入画横线部分最恰当的一项是："
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2426,
+        1376,
+        2563
+      ],
+      "content": "A．无论还是B.既然那么C.要么要么D．与其不如"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        2608,
+        1946,
+        2744
+      ],
+      "content": "40．中国“和”文化源远流长，“以和为贵”“兼爱非攻”等理念，和平、和睦、和谐的追求深深于中华民族的精神世界之中，深融于中国人民的血脉之中。"
+    },
+    {
+      "index": 15,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        916,
+        2862,
+        1257,
+        2901
+      ],
+      "content": "第12页共42页"
+    }
+  ]
+}

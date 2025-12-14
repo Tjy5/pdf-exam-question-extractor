@@ -16,6 +16,7 @@ import socket
 import argparse
 import subprocess
 from pathlib import Path
+from typing import Any, Dict, Optional
 
 
 # =============================================================================
@@ -44,6 +45,11 @@ DEFAULT_ENV_CONFIG = {
     "EXAMPAPER_STEP2_FALLBACK_SUBPROCESS": "1",
     # Table recognition (keep enabled for data analysis)
     "EXAMPAPER_LIGHT_TABLE": "0",
+    # OCR batch sizes (improve GPU utilization)
+    "EXAMPAPER_DET_BATCH_SIZE": "2",
+    "EXAMPAPER_REC_BATCH_SIZE": "16",
+    # CPU prefetch queue size
+    "EXAMPAPER_PREFETCH_SIZE": "8",
     # Parallel extraction
     "EXAMPAPER_PARALLEL_EXTRACTION": "1",
     "EXAMPAPER_MAX_WORKERS": "4",
@@ -57,13 +63,109 @@ def detect_gpu_available() -> bool:
             ["nvidia-smi"], capture_output=True, timeout=5
         )
         return result.returncode == 0
-    except (FileNotFoundError, subprocess.TimeoutExpired):
+    except (FileNotFoundError, subprocess.TimeoutExpired, PermissionError, OSError):
         return False
 
 
-def setup_environment(use_gpu: bool = True, workers: int = 4, warmup: bool = True):
+def detect_hardware() -> Dict[str, Any]:
+    """
+    Detect hardware info for auto-tuning.
+
+    Returns:
+        {"gpu_available": bool, "gpu_vram_gb": int, "gpu_name": str|None,
+         "ram_gb": int|None, "cpu_cores": int|None}
+    """
+    hw: Dict[str, Any] = {
+        "gpu_available": False,
+        "gpu_vram_gb": 0,
+        "gpu_name": None,
+        "ram_gb": None,
+        "cpu_cores": os.cpu_count(),
+    }
+
+    # GPU VRAM (first GPU)
+    try:
+        result = subprocess.run(
+            ["nvidia-smi", "--query-gpu=memory.total,name", "--format=csv,noheader,nounits"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if result.returncode == 0 and result.stdout:
+            first_line = result.stdout.splitlines()[0]
+            mem_str, *name_parts = first_line.split(",")
+            hw["gpu_vram_gb"] = int(mem_str.strip()) // 1024
+            hw["gpu_name"] = ",".join(name_parts).strip() or None
+            hw["gpu_available"] = hw["gpu_vram_gb"] > 0
+    except (FileNotFoundError, subprocess.TimeoutExpired, ValueError, PermissionError, OSError):
+        hw["gpu_available"] = False
+
+    # RAM
+    try:
+        import psutil
+        hw["ram_gb"] = int(psutil.virtual_memory().total / (1024**3))
+    except Exception:
+        hw["ram_gb"] = None
+
+    return hw
+
+
+def calculate_optimal_params(hw: Dict[str, Any]) -> Dict[str, str]:
+    """Derive env defaults based on detected hardware."""
+    vram = hw.get("gpu_vram_gb") or 0
+    ram = hw.get("ram_gb") or 0
+    cores = hw.get("cpu_cores") or 4
+
+    # Batch sizes by VRAM tiers
+    if vram >= 12:
+        det_bs, rec_bs = 4, 32
+    elif vram >= 8:
+        det_bs, rec_bs = 3, 24
+    elif vram >= 6:
+        det_bs, rec_bs = 2, 16
+    elif vram >= 4:
+        det_bs, rec_bs = 1, 12
+    else:
+        det_bs, rec_bs = 1, 8
+
+    # Prefetch by RAM
+    if ram >= 32:
+        prefetch = 12
+    elif ram >= 24:
+        prefetch = 10
+    elif ram >= 16:
+        prefetch = 8
+    elif ram >= 12:
+        prefetch = 6
+    else:
+        prefetch = 4
+
+    # Workers by CPU cores
+    workers = max(2, min(8, cores // 2))
+
+    return {
+        "EXAMPAPER_DET_BATCH_SIZE": str(det_bs),
+        "EXAMPAPER_REC_BATCH_SIZE": str(rec_bs),
+        "EXAMPAPER_PREFETCH_SIZE": str(prefetch),
+        "EXAMPAPER_MAX_WORKERS": str(workers),
+    }
+
+
+def setup_environment(
+    use_gpu: bool = True,
+    workers: int = 4,
+    warmup: bool = True,
+    hardware: Optional[Dict[str, Any]] = None,
+):
     """Setup environment variables for optimal performance"""
     for key, value in DEFAULT_ENV_CONFIG.items():
+        os.environ.setdefault(key, value)
+
+    # Auto-detect hardware and apply calculated defaults (env/CLI still override)
+    if hardware is None:
+        hardware = detect_hardware()
+    auto_env = calculate_optimal_params(hardware)
+    for key, value in auto_env.items():
         os.environ.setdefault(key, value)
 
     # Override based on CLI arguments
@@ -97,7 +199,7 @@ def is_port_in_use(port: int) -> int | None:
                     continue
                 if local_port == port:
                     return int(parts[-1])
-    except (subprocess.TimeoutExpired, ValueError):
+    except (subprocess.TimeoutExpired, ValueError, PermissionError, OSError):
         pass
     return None
 
@@ -143,7 +245,13 @@ def cleanup_port(port: int) -> bool:
         return False
 
 
-def print_config_summary(use_gpu: bool, workers: int, warmup: bool, gpu_detected: bool = True):
+def print_config_summary(
+    use_gpu: bool,
+    workers: int,
+    warmup: bool,
+    gpu_detected: bool = True,
+    hardware: Optional[Dict[str, Any]] = None,
+):
     """Print configuration summary"""
     print("=" * 50)
     print("  Configuration")
@@ -155,10 +263,28 @@ def print_config_summary(use_gpu: bool, workers: int, warmup: bool, gpu_detected
     else:
         gpu_status = "DISABLED"
     print(f"  GPU Acceleration: {gpu_status}")
-    print(f"  Parallel Workers: {workers}")
+    if hardware:
+        gpu_name = hardware.get("gpu_name")
+        vram = hardware.get("gpu_vram_gb", 0)
+        if gpu_name:
+            print(f"  GPU: {gpu_name} ({vram} GB)")
+        elif vram:
+            print(f"  GPU VRAM: {vram} GB")
+        ram = hardware.get("ram_gb")
+        if ram:
+            print(f"  RAM: {ram} GB")
+        cores = hardware.get("cpu_cores")
+        if cores:
+            print(f"  CPU Cores: {cores}")
+    print(f"  Parallel Workers: {os.getenv('EXAMPAPER_MAX_WORKERS', workers)}")
     print(f"  Model Warmup: {'ASYNC' if warmup else 'DISABLED'}")
     print(f"  In-process Execution: ENABLED")
     print(f"  Subprocess Fallback: ENABLED")
+    print(
+        f"  Auto Params: det_batch={os.getenv('EXAMPAPER_DET_BATCH_SIZE')}, "
+        f"rec_batch={os.getenv('EXAMPAPER_REC_BATCH_SIZE')}, "
+        f"prefetch={os.getenv('EXAMPAPER_PREFETCH_SIZE')}"
+    )
     print("=" * 50)
 
 
@@ -176,14 +302,15 @@ def run_web_server(
         print("[ERROR] workers must be >= 1")
         sys.exit(1)
 
-    # Auto-detect GPU and fallback to CPU if not available
-    gpu_detected = detect_gpu_available()
+    # Auto-detect hardware and GPU availability
+    hardware = detect_hardware()
+    gpu_detected = hardware.get("gpu_available", False)
     effective_use_gpu = use_gpu and gpu_detected
     if use_gpu and not gpu_detected:
         print("\n[WARN] GPU requested but not detected; falling back to CPU.")
 
-    # Setup environment before importing app
-    setup_environment(use_gpu=effective_use_gpu, workers=workers, warmup=warmup)
+    # Setup environment before importing app (pass hardware to avoid double detection)
+    setup_environment(use_gpu=effective_use_gpu, workers=workers, warmup=warmup, hardware=hardware)
 
     print("\n" + "=" * 50)
     print("  ExamPaper AI Web Server")
@@ -195,7 +322,7 @@ def run_web_server(
         print("[WARN] Could not free port, server may fail to start")
 
     # Print config
-    print_config_summary(effective_use_gpu, workers, warmup, gpu_detected)
+    print_config_summary(effective_use_gpu, workers, warmup, gpu_detected, hardware)
 
     try:
         import uvicorn
@@ -211,7 +338,9 @@ def run_web_server(
         uvicorn.run(app, host=host, port=port, reload=debug)
     except ImportError as e:
         print(f"[ERROR] Cannot load Web module: {e}")
-        print("Please ensure backend/src/web/main.py exists.")
+        print("Likely missing a dependency for the web server.")
+        print("Try: pip install -r web_requirements.txt")
+        print("If you want API rate limiting: pip install slowapi")
         sys.exit(1)
     except KeyboardInterrupt:
         print("\n\n[INFO] Web server stopped")
@@ -272,10 +401,10 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n👋 程序已退出")
+        print("\n\n程序已退出")
         sys.exit(0)
     except Exception as e:
-        print(f"\n❌ 发生错误: {e}")
+        print(f"\n发生错误: {e}")
         import traceback
 
         traceback.print_exc()

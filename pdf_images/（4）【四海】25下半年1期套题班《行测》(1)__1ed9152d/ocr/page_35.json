@@ -1,0 +1,199 @@
+{
+  "page_name": "page_35",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        294,
+        271,
+        563,
+        317
+      ],
+      "content": "三、类比推理"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        365,
+        521,
+        409
+      ],
+      "content": "96．月亮：盈缺"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        456,
+        1374,
+        596
+      ],
+      "content": "A．声音：抑扬B．品格：是非C．情绪：喜乐D．信念：荣辱"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        639,
+        608,
+        686
+      ],
+      "content": "97．拦路虎：绊脚石"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        731,
+        1461,
+        870
+      ],
+      "content": "A．应声虫：墙头草B．三脚猫：老狐狸C．领头羊：火车头D．黑天鹅：灰犀牛"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        915,
+        695,
+        959
+      ],
+      "content": "98．曲高和寡：下里巴人"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1005,
+        1546,
+        1146
+      ],
+      "content": "A．今非昔比：日新月异B．安如磐石：摇摇欲坠C．差强人意：心满意足D．南辕北辙：朝秦暮楚"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1190,
+        653,
+        1234
+      ],
+      "content": "99．选择：抽签：随机"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1281,
+        1505,
+        1419
+      ],
+      "content": "A．阅历：旅行：轻松B．演奏：音乐：艺术C．专利：发明：产权D．表达：写作：主观"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        1465,
+        807,
+        1509
+      ],
+      "content": "100．欲穷千里目：更上一层楼"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        310,
+        1557,
+        1044,
+        1878
+      ],
+      "content": "A．为唤春来争艳朵：甘将香化育花泥B．不经一番寒彻骨：怎得梅花扑鼻香C．欲上高楼去避愁：愁还随我上高楼D．抛开俗事陪山坐：才得闲心听水歌"
+    },
+    {
+      "index": 11,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        292,
+        2016,
+        564,
+        2058
+      ],
+      "content": "四、逻辑判断"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2107,
+        1970,
+        2241
+      ],
+      "content": "101．如果学生没参加过自然科学竞赛，或者对自然科学没有浓厚的兴趣，那么就不能成为科普志愿者。\n"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        312,
+        2290,
+        734,
+        2332
+      ],
+      "content": "据此，可以推出的是："
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        315,
+        2382,
+        1793,
+        2705
+      ],
+      "content": "A．成为科普志愿者既要对自然科学有浓厚的兴趣，也要参加过自然科学竞赛\nB．如果对自然科学有浓厚的兴趣，就能成为科普志愿者\nC．如果参加过自然科学竞赛，就能成为科普志愿者\n\nD．学生小杨没有参加过自然科学竞赛，仍然能成为科普志愿者\n"
+    },
+    {
+      "index": 15,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        916,
+        2861,
+        1257,
+        2901
+      ],
+      "content": "第31页共42页"
+    }
+  ]
+}

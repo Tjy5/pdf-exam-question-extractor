@@ -4,6 +4,7 @@ ocr_models.py - OCR模型管理
 提供PaddleOCR和PP-StructureV3的单例管理
 """
 
+import inspect
 import os
 import threading
 from pathlib import Path
@@ -42,6 +43,19 @@ def reset_ppstructure_cache() -> None:
     with _pipeline_lock:
         _pipeline_cache = None
         _pipeline_init_error = None
+
+
+def _parse_batch_env(env_name: str, default: int) -> int:
+    """解析批量大小环境变量，无效值时返回默认值。"""
+    raw = os.getenv(env_name, "").strip()
+    if not raw:
+        return default
+    try:
+        val = int(raw)
+        return val if val > 0 else default
+    except ValueError:
+        print(f"[WARNING] Invalid {env_name}={raw!r}; using {default}")
+        return default
 
 
 def _create_ppstructure() -> Any:
@@ -124,17 +138,40 @@ def _create_ppstructure() -> Any:
     else:
         device = "cpu"
 
-    return PPStructureV3(
-        device=device,  # GPU 加速（PaddleOCR 3.x）
-        use_doc_orientation_classify=False,
-        use_doc_unwarping=False,
-        use_formula_recognition=False,
-        use_chart_recognition=False,
-        use_seal_recognition=False,
-        # 表格检测对资料分析/裁剪仍有帮助，默认保留；
-        # 若内存仍吃紧，可设置环境变量 EXAMPAPER_LIGHT_TABLE=1 关闭表格分支。
-        use_table_recognition=not light_table,
-    )
+    # 批量推理参数（提升GPU利用率）
+    det_batch_size = _parse_batch_env("EXAMPAPER_DET_BATCH_SIZE", default=2)
+    rec_batch_size = _parse_batch_env("EXAMPAPER_REC_BATCH_SIZE", default=16)
+
+    pp_kwargs: dict[str, Any] = {
+        "device": device,
+        "use_doc_orientation_classify": False,
+        "use_doc_unwarping": False,
+        "use_formula_recognition": False,
+        "use_chart_recognition": False,
+        "use_seal_recognition": False,
+        "use_table_recognition": not light_table,
+    }
+
+    # 兼容旧版 PPStructureV3：仅在构造函数支持时传入批大小
+    try:
+        sig = inspect.signature(PPStructureV3)
+        if "det_batch_size" in sig.parameters:
+            pp_kwargs["det_batch_size"] = det_batch_size
+        if "rec_batch_size" in sig.parameters:
+            pp_kwargs["rec_batch_size"] = rec_batch_size
+    except Exception:
+        pass
+
+    try:
+        return PPStructureV3(**pp_kwargs)
+    except TypeError as e:
+        # 双重保险：签名检测失败时回退
+        if "det_batch_size" in pp_kwargs or "rec_batch_size" in pp_kwargs:
+            pp_kwargs.pop("det_batch_size", None)
+            pp_kwargs.pop("rec_batch_size", None)
+            print(f"[WARNING] PPStructureV3 不支持 batch size 参数 ({e})，使用默认值")
+            return PPStructureV3(**pp_kwargs)
+        raise
 
 
 def get_ppstructure() -> Any:

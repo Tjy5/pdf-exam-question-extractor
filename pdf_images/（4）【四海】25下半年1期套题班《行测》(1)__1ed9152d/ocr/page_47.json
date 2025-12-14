@@ -1,0 +1,55 @@
+{
+  "page_name": "page_47",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        274,
+        864,
+        315
+      ],
+      "content": "130．能够从上述材料中推出的是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        311,
+        364,
+        1522,
+        686
+      ],
+      "content": "A．2017年6月份，S市手机出口量低于1～5月的平均值B．2016年上半年，S市民营企业出口手机超过2亿台C．2017年上半年，S市出口手机中，超过八成出口到香港地区D．2016年上半年，S市月均出口CDMA数字式手机不到60万台"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        661,
+        2767,
+        1518,
+        2816
+      ],
+      "content": "全部测验到此结束！"
+    },
+    {
+      "index": 3,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        928,
+        2862,
+        1247,
+        2901
+      ],
+      "content": "第42页共42页"
+    }
+  ]
+}

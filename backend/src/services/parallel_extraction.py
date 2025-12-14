@@ -9,19 +9,47 @@ parallel_extraction.py - 页面级并发OCR处理模块
 - GPU推理串行化（Semaphore(1)）
 - CPU预处理/后处理可并发执行
 - 实时进度回调
+- 使用上下文管理器确保资源及时释放
 """
 from __future__ import annotations
 
-import gc
 import json
 import logging
 import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from queue import Queue
 from threading import Semaphore
 from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
+
+
+class _GpuLockedPipeline:
+    """包装 pipeline，仅在 predict 调用时获取 GPU 锁。"""
+
+    __slots__ = ("_pipeline", "_sem", "_log", "_page")
+
+    def __init__(
+        self,
+        pipeline: Any,
+        sem: Semaphore,
+        log_fn: Callable[[str], None],
+        page_name: str,
+    ) -> None:
+        self._pipeline = pipeline
+        self._sem = sem
+        self._log = log_fn
+        self._page = page_name
+
+    def predict(self, *args: Any, **kwargs: Any) -> Any:
+        with self._sem:
+            self._log(f"  [OCR] {self._page} (GPU推理中...)")
+            return self._pipeline.predict(*args, **kwargs)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._pipeline, name)
 
 
 class ParallelPageProcessor:
@@ -44,6 +72,7 @@ class ParallelPageProcessor:
         self.max_workers = max_workers
         self.pipeline = pipeline
         self._gpu_semaphore = gpu_semaphore or Semaphore(1)
+        self._prefetch_size = get_prefetch_size()
         self._extract_fn: Optional[Callable] = None
         self._save_fn: Optional[Callable] = None
         self._is_valid_meta_fn: Optional[Callable] = None
@@ -104,48 +133,74 @@ class ParallelPageProcessor:
         results: List[Optional[Dict[str, Any]]] = [None] * total_pages
         completed = 0
 
-        logger_fn(f"[并发] 启动 {self.max_workers} 个worker处理 {total_pages} 页")
+        logger_fn(f"[并发] 启动 {self.max_workers} 个worker处理 {total_pages} 页 (预取队列: {self._prefetch_size})")
+
+        # 预取队列与生产者线程
+        queue: Queue[Any] = Queue(maxsize=self._prefetch_size)
+        stop_event = threading.Event()
+        sentinel = object()
+
+        producer = threading.Thread(
+            target=self._prefetch_producer,
+            args=(img_paths, queue, stop_event, logger_fn, sentinel),
+            name="prefetch-producer",
+            daemon=True,
+        )
+        producer.start()
+
+        results_lock = threading.Lock()
+
+        def worker() -> None:
+            nonlocal completed
+            while True:
+                item = queue.get()
+                try:
+                    if item is sentinel:
+                        return
+
+                    idx, img_path = item
+                    page_name = img_path.stem
+
+                    try:
+                        result = self._process_single_page(
+                            idx,
+                            img_path,
+                            base_output_dir,
+                            skip_existing,
+                            logger_fn,
+                            base_output_dir,
+                        )
+                        status = result.get("status", "unknown")
+                    except Exception as exc:
+                        logger.exception("页面 %s 处理异常: %s", page_name, exc)
+                        result = {
+                            "page_index": idx,
+                            "page_name": page_name,
+                            "status": "error",
+                            "error": str(exc),
+                        }
+                        status = "error"
+
+                    with results_lock:
+                        results[idx] = result
+                        completed += 1
+                        done = completed
+
+                    if progress_callback:
+                        try:
+                            progress_callback(done, total_pages, status, page_name)
+                        except Exception as cb_exc:
+                            logger.warning("进度回调异常: %s", cb_exc)
+                finally:
+                    queue.task_done()
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-            # 提交所有页面任务
-            future_to_index = {
-                executor.submit(
-                    self._process_single_page,
-                    idx,
-                    img_path,
-                    base_output_dir,
-                    skip_existing,
-                    logger_fn,
-                    base_output_dir,  # workdir for OCR cache
-                ): idx
-                for idx, img_path in enumerate(img_paths)
-            }
+            for _ in range(self.max_workers):
+                executor.submit(worker)
 
-            # 收集结果（按完成顺序）
-            for future in as_completed(future_to_index):
-                idx = future_to_index[future]
-                page_name = img_paths[idx].stem
-
-                try:
-                    result = future.result()
-                    results[idx] = result
-                    status = result.get("status", "unknown")
-                except Exception as exc:
-                    logger.exception("页面 %s 处理异常: %s", page_name, exc)
-                    results[idx] = {
-                        "page_index": idx,
-                        "page_name": page_name,
-                        "status": "error",
-                        "error": str(exc),
-                    }
-                    status = "error"
-
-                completed += 1
-                if progress_callback:
-                    try:
-                        progress_callback(completed, total_pages, status, page_name)
-                    except Exception as cb_exc:
-                        logger.warning("进度回调异常: %s", cb_exc)
+            queue.join()
+            stop_event.set()
+            producer.join(timeout=5)
 
         logger_fn(f"[并发] 完成 {completed}/{total_pages} 页处理")
 
@@ -194,10 +249,12 @@ class ParallelPageProcessor:
 
         questions: Optional[List[Dict[str, Any]]] = None
         try:
-            # GPU推理串行化（避免显存溢出）
-            with self._gpu_semaphore:
-                log(f"  [OCR] {page_name} (GPU推理中...)")
-                questions = self._extract_fn(img_path, self.pipeline, workdir=workdir)
+            # 使用包装器将 GPU 临界区缩小到 predict 调用
+            # 图片加载/预处理可在等待 GPU 锁时并行执行
+            wrapped_pipeline = _GpuLockedPipeline(
+                self.pipeline, self._gpu_semaphore, log, page_name
+            )
+            questions = self._extract_fn(img_path, wrapped_pipeline, workdir=workdir)
 
             # CPU后处理（可并发）
             if not questions:
@@ -225,10 +282,36 @@ class ParallelPageProcessor:
                 "status": "error",
                 "error": str(exc),
             }
+
+    def _prefetch_producer(
+        self,
+        img_paths: List[Path],
+        queue: Queue[Any],
+        stop_event: threading.Event,
+        log: Callable[[str], None],
+        sentinel: Any,
+    ) -> None:
+        """
+        生产者：预取图片触发文件系统缓存，减少 GPU 等待时间。
+
+        将 (idx, img_path) 放入有界队列，末尾发送 sentinel 终止信号。
+        """
+        try:
+            for idx, img_path in enumerate(img_paths):
+                if stop_event.is_set():
+                    break
+                try:
+                    # 轻量读取触发文件系统缓存
+                    with img_path.open("rb") as f:
+                        f.read(4096)
+                except Exception as exc:
+                    log(f"[WARN] 预取 {img_path.name} 时出错: {exc}")
+
+                queue.put((idx, img_path))
         finally:
-            # 及时释放内存
-            questions = None
-            gc.collect()
+            # 发送终止信号，数量=worker数
+            for _ in range(self.max_workers):
+                queue.put(sentinel)
 
 
 def get_default_max_workers() -> int:
@@ -248,6 +331,14 @@ def get_default_max_workers() -> int:
         return max(2, min(cpu_count // 2, 6))
     except Exception:
         return 4
+
+
+def get_prefetch_size() -> int:
+    """获取预取队列大小（默认8，受环境变量 EXAMPAPER_PREFETCH_SIZE 控制）。"""
+    raw = os.getenv("EXAMPAPER_PREFETCH_SIZE", "").strip()
+    if raw.isdigit():
+        return max(1, min(int(raw), 64))
+    return 8
 
 
 def is_parallel_extraction_enabled() -> bool:

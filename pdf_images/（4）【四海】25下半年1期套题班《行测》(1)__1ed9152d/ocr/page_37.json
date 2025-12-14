@@ -1,0 +1,223 @@
+{
+  "page_name": "page_37",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        322,
+        273,
+        776,
+        316
+      ],
+      "content": "上述推论暗含的前提是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        313,
+        365,
+        1176,
+        409
+      ],
+      "content": "A．拓展绿色空间能够有效改善城市生态环境"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        312,
+        457,
+        1176,
+        501
+      ],
+      "content": "B．居民幸福感的提升是城市建设的核心目标"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        312,
+        548,
+        1176,
+        592
+      ],
+      "content": "C．居民幸福感只受城市绿色空间规模的影响"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        313,
+        641,
+        1178,
+        684
+      ],
+      "content": "D．参加休闲活动和运动能够提升居民幸福感"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        731,
+        1966,
+        958
+      ],
+      "content": "106．在我国历史上，北魏时期的佛教造像艺术风格中，“秀骨清像”与“褒衣博带”并存，佛教造像的艺术特点一定程度反映了这一时期人们的审美偏好，由此可以推测，北魏时期人们的审美偏好是不一样的。\n"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        314,
+        1007,
+        910,
+        1049
+      ],
+      "content": "以下最能够支持上述推论的是："
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        311,
+        1099,
+        1399,
+        1141
+      ],
+      "content": "A．北魏时期大众审美偏好受到佛教造像艺术特点的影响"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        310,
+        1190,
+        1572,
+        1234
+      ],
+      "content": "B．某一佛教造像不可能兼具“秀骨清像”和“褒衣博带”的风格"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        311,
+        1282,
+        1658,
+        1326
+      ],
+      "content": "C.“秀骨清像”与“褒衣博带”是两种迥然不同的佛教造像艺术风格"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        311,
+        1373,
+        1702,
+        1416
+      ],
+      "content": "D．北魏时期，“秀骨清像”与“褒衣博带”的造像常共存于同一石窟中"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        1464,
+        1971,
+        1783
+      ],
+      "content": "107．近年来，我国企业在设计产品时，注重融入中国元素，例如，在Τ恤上印上京剧脸谱等图案，推出中国航天系列文创产品……这些产品一上市，就受到消费者的热捧，“国货即潮流”的新消费观念正逐渐形成。有专家就此认为，正是这些中国元素的融入让国潮商品获得了国内消费者的青睐。\n"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        314,
+        1832,
+        1219,
+        1874
+      ],
+      "content": "以下哪项如果为真，最能支持上述专家的观点："
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        311,
+        1924,
+        1395,
+        1967
+      ],
+      "content": "A．消费者渐趋理性，对明显溢价的洋品牌不再盲目追捧"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        311,
+        2015,
+        1178,
+        2059
+      ],
+      "content": "B．中国传统文化已深深刻在中国人的骨子里"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        310,
+        2107,
+        1697,
+        2152
+      ],
+      "content": "C．“中国制造”的高品质、高性能提升了消费者对其的认可度和忠诚度"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        311,
+        2198,
+        1699,
+        2241
+      ],
+      "content": "D．中国文化的软实力已经在我国民众日常生活的方方面面产生深远影响"
+    },
+    {
+      "index": 17,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        919,
+        2861,
+        1254,
+        2901
+      ],
+      "content": "第33页共42页"
+    }
+  ]
+}

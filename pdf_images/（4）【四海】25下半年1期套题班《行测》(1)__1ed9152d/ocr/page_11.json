@@ -1,0 +1,163 @@
+{
+  "page_name": "page_11",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        297,
+        277,
+        392,
+        316
+      ],
+      "content": "A.1"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        276,
+        1179,
+        316
+      ],
+      "content": "B.2"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        365,
+        396,
+        406
+      ],
+      "content": "C.3"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        367,
+        1179,
+        407
+      ],
+      "content": "D.4"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        457,
+        1971,
+        591
+      ],
+      "content": "20．中共中央总书记、国家主席、中央军委主席习近平2月17日上午在京出席民营企业座谈会并发表重要讲话。以下关于讲话内容说法正确的有几项："
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        640,
+        1794,
+        683
+      ],
+      "content": "①党和国家对民营经济发展的基本方针政策，已经纳入社会主义基本经济制度"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        732,
+        1879,
+        775
+      ],
+      "content": "②毫不动摇巩固和发展公有制经济，毫不动摇鼓励、支持、引导非公有制经济发展"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        822,
+        1971,
+        957
+      ],
+      "content": "③党和国家保证各种所有制经济依法平等使用生产要素、公平参与市场竞争、同等受到法律保护\n"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1006,
+        1969,
+        1140
+      ],
+      "content": "④当前民营经济发展面临的一些困难和挑战，是整体的而不是局部的，是长期的而不是暂时的\n"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        297,
+        1191,
+        393,
+        1231
+      ],
+      "content": "A.1"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1191,
+        1178,
+        1232
+      ],
+      "content": "B. 2"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1282,
+        1180,
+        1323
+      ],
+      "content": "C.3D.4"
+    },
+    {
+      "index": 12,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        928,
+        2862,
+        1244,
+        2900
+      ],
+      "content": "第7页共42页"
+    }
+  ]
+}

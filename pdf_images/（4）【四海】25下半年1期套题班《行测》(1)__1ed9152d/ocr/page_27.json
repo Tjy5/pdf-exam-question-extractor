@@ -1,0 +1,343 @@
+{
+  "page_name": "page_27",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        273,
+        1972,
+        500
+      ],
+      "content": "71．某部门组织全体员工参与甲乙两项考核，其中有9人未通过甲考核，有12人通过了乙考核。如果只通过了其中一项考核的员工有10人，通过了两项考核的员工有5人，则该部门员工总人数为多少?\n"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        552,
+        409,
+        593
+      ],
+      "content": "A.17"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        552,
+        1197,
+        592
+      ],
+      "content": "B. 20"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        643,
+        409,
+        683
+      ],
+      "content": "C.23"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        644,
+        1197,
+        684
+      ],
+      "content": "D.26"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        732,
+        1402,
+        1050
+      ],
+      "content": "72．如图所示，AOB为一块直角三角形的花坛，C为AB的中点，在OC的中点安装有一台洒水器，其圆形洒水区域的直径即为0C，已知OA、OB的长度分别为6米、8米，则洒水器的洒水面积约多少平方米？（π按3．14计算）?"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1101,
+        455,
+        1142
+      ],
+      "content": "A. 7.85"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1100,
+        1262,
+        1142
+      ],
+      "content": "B.15.72"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1193,
+        475,
+        1233
+      ],
+      "content": "C.19.63"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1193,
+        1259,
+        1234
+      ],
+      "content": "D. 21.51"
+    },
+    {
+      "index": 10,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        1441,
+        742,
+        1956,
+        1159
+      ],
+      "content": "C \nB "
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1282,
+        1971,
+        1417
+      ],
+      "content": "73．单位食堂供应6道菜品，甲、乙、丙去食堂用餐，每人随机选择2道菜品，则他们选择的菜品完全不同的概率是多少?\n"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1467,
+        510,
+        1509
+      ],
+      "content": "A．不到2%"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        1466,
+        1436,
+        1509
+      ],
+      "content": "B．在2%到3%之间"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1558,
+        648,
+        1601
+      ],
+      "content": "C.在3%到4%之间"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        1559,
+        1297,
+        1601
+      ],
+      "content": "D．超过4%"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1648,
+        1971,
+        1875
+      ],
+      "content": "74．甲地到乙地的路由一段下坡和一段上坡组成，张某从甲地出发，步行前往乙地，其下坡速度是上坡的2倍，如果40分钟后，他走完了60%的路程，又过了40分钟，他到达了乙地，则这段路中，下坡与上坡的路程之比可能为多少?\n"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1926,
+        454,
+        1968
+      ],
+      "content": "A.1:2"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1926,
+        1241,
+        1967
+      ],
+      "content": "B.2:3"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        2018,
+        451,
+        2059
+      ],
+      "content": "C.2:1"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2018,
+        1241,
+        2058
+      ],
+      "content": "D.3:2"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2107,
+        1972,
+        2333
+      ],
+      "content": "75．工艺品厂从周一开始制作某种手工艺品，每个星期工作5天，每个工作日的产量都比前一个工作日多1件，第四周工厂生产了180件这种手工艺品，则在第几个工作日，手工艺品的累计产量将首次达到1000件?\n"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2387,
+        411,
+        2425
+      ],
+      "content": "A.28"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2387,
+        1197,
+        2426
+      ],
+      "content": "B.29"
+    },
+    {
+      "index": 24,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        2476,
+        409,
+        2517
+      ],
+      "content": "C.30"
+    },
+    {
+      "index": 25,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2477,
+        1192,
+        2517
+      ],
+      "content": "D. 31"
+    },
+    {
+      "index": 26,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        485,
+        2743,
+        1691,
+        2791
+      ],
+      "content": "第三部分结束，请继续做第四部分！"
+    },
+    {
+      "index": 27,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        920,
+        2862,
+        1255,
+        2901
+      ],
+      "content": "第23页共42页"
+    }
+  ]
+}

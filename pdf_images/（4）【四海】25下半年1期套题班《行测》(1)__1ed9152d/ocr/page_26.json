@@ -1,0 +1,343 @@
+{
+  "page_name": "page_26",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        785,
+        330,
+        1390,
+        393
+      ],
+      "content": "第三部分数量关系"
+    },
+    {
+      "index": 1,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        783,
+        470,
+        1394,
+        511
+      ],
+      "content": "（共10题，参考时间：10分钟）"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        592,
+        1972,
+        820
+      ],
+      "content": "66．某单位采购了大、中、小3种不同尺寸的文件袋，大号文件袋和中号文件袋共145个，小号文件袋的数量比大号文件袋多26%，且比中号文件袋的数量多，则大号文件袋的数量比中号文件袋多多少个?\n"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        871,
+        411,
+        912
+      ],
+      "content": "A. 45"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        870,
+        1197,
+        911
+      ],
+      "content": "B. 55"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        962,
+        411,
+        1003
+      ],
+      "content": "C. 65"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        963,
+        1197,
+        1003
+      ],
+      "content": "D.75"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1052,
+        1973,
+        1277
+      ],
+      "content": "67．某单位原有几十名职员，其中有14名女性。当两名女职员调出该单位后，女职员比重下降了3个百分点。现在该单位需要随机选派两名职员参加培训，问选派的两人都是女职员的概率在以下哪个范围内?\n"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1329,
+        511,
+        1369
+      ],
+      "content": "A．小于1%"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1330,
+        1288,
+        1368
+      ],
+      "content": "B.1%〜4%"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1421,
+        499,
+        1461
+      ],
+      "content": "C. 4%~7%"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1421,
+        1308,
+        1460
+      ],
+      "content": "D. 7%～10%"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1509,
+        1971,
+        1736
+      ],
+      "content": "68．水果零售商采购了一批苹果，包括特级果和一级果两种规格。原计划特级果比一级果多采购200公斤，但在清点分拣后发现，特级果中有10%是一级果，一级果中有20%是特级果，这批水果中实际有60%的特级果，则该零售商共采购苹果多少公斤?"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1788,
+        433,
+        1828
+      ],
+      "content": "A. 600"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1788,
+        1220,
+        1827
+      ],
+      "content": "B. 800"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1879,
+        454,
+        1919
+      ],
+      "content": "C.1200"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1880,
+        1241,
+        1919
+      ],
+      "content": "D. 1400"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1967,
+        1972,
+        2103
+      ],
+      "content": "69．超市将99个苹果装进两种包装盒，大包装盒每个装12个苹果，小包装盒每个装5个苹果，共用了十多个盒子刚好装完。问两种包装盒相差多少个?"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        296,
+        2154,
+        389,
+        2194
+      ],
+      "content": "A.3"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2154,
+        1175,
+        2194
+      ],
+      "content": "B.4"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2245,
+        388,
+        2286
+      ],
+      "content": "C.7"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2246,
+        1197,
+        2285
+      ],
+      "content": "D.13"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2316,
+        1971,
+        2471
+      ],
+      "content": "而原材料成本在总成本中的比重\n15\n提高了2.5个百分点。问原材料的价格上涨了多少?\n\n"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        2520,
+        391,
+        2602
+      ],
+      "content": "A.1-9"
+    },
+    {
+      "index": 24,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2644,
+        408,
+        2731
+      ],
+      "content": "1C.\n11"
+    },
+    {
+      "index": 25,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        2520,
+        1196,
+        2605
+      ],
+      "content": "1B.\n10"
+    },
+    {
+      "index": 26,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1083,
+        2645,
+        1194,
+        2731
+      ],
+      "content": "1D.\n12"
+    },
+    {
+      "index": 27,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        921,
+        2861,
+        1254,
+        2901
+      ],
+      "content": "第22页共42页"
+    }
+  ]
+}

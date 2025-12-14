@@ -1,0 +1,223 @@
+{
+  "page_name": "page_15",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        273,
+        1410,
+        317
+      ],
+      "content": "33．下列《三国演义》中的回目，按照先后顺序排列正确的是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        364,
+        1007,
+        409
+      ],
+      "content": "①宴长江曹操赋诗，锁战船北军用武"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        456,
+        1005,
+        501
+      ],
+      "content": "②战官渡本初败绩，劫乌巢孟德烧粮"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        547,
+        1092,
+        593
+      ],
+      "content": "③刘先主遗诏托孤儿，诸葛亮安居平五路"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        639,
+        1093,
+        684
+      ],
+      "content": "④王司徒巧使连环计，董太师大闹凤仪亭"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        727,
+        1342,
+        870
+      ],
+      "content": "A.①③④②B.③②④①C.②①④③D.④②①③"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        915,
+        1107,
+        958
+      ],
+      "content": "34．关于奥林匹克运动会，下列说法正确的是："
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1007,
+        980,
+        1050
+      ],
+      "content": "A．国际奥委会的总部设在美国纽约"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1098,
+        1196,
+        1142
+      ],
+      "content": "B．首位夺得奥运会柔道女子冠军的是中国选手"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1191,
+        947,
+        1234
+      ],
+      "content": "C．2016年奥运会在日本东京举办"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1282,
+        1112,
+        1326
+      ],
+      "content": "D．第一届现代奥运会是在英国伦敦举行的"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1373,
+        1151,
+        1416
+      ],
+      "content": "35．关于诗句中的物候现象，下列说法错误的是："
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        295,
+        1465,
+        1334,
+        1509
+      ],
+      "content": "A．“春江水暖鸭先知”反映了动物对早春温度的感知"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1556,
+        1594,
+        1600
+      ],
+      "content": "B．“杨梅堕地连日雨，江上唤舟舟不来”中的“雨”指的是锋面雨"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1647,
+        1596,
+        1691
+      ],
+      "content": "C．“罗浮山下四时春，卢橘杨梅次第新”说明了海拔不同气候不同"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1739,
+        1969,
+        1874
+      ],
+      "content": "D．“五原春色旧来迟，二月垂杨未挂丝。即今河畔冰开日，正是长安花落时”体现了纬度不同造成了气候差异\n"
+    },
+    {
+      "index": 16,
+      "label": "footer",
+      "region_label": null,
+      "bbox": [
+        485,
+        2742,
+        1690,
+        2793
+      ],
+      "content": "第一部分结束，请继续做第二部分！"
+    },
+    {
+      "index": 17,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        912,
+        2861,
+        1261,
+        2901
+      ],
+      "content": "第11页共42页"
+    }
+  ]
+}

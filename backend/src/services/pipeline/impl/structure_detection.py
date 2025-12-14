@@ -238,14 +238,33 @@ def is_noise_block(block: Dict[str, Any]) -> bool:
 
 
 def is_exam_end_block(block: Dict[str, Any]) -> bool:
-    """判断是否是试卷结束标识块。"""
+    """判断是否是试卷结束标识块。
+
+    注意：需要避免误判，如注意事项中的"宣布考试结束时，应立即停止答题"
+    不应被识别为试卷结束标识。真正的结束标识通常是独立的短文本。
+    """
     text = block.get("content", "")
     if not isinstance(text, str):
         text = str(text)
 
+    # 去除空白后检查
+    normalized = text.strip()
+    if not normalized:
+        return False
+
+    # 结束标识通常是独立短句，长文本（如说明段落）不视为结束标识
+    if len(normalized) > 50:
+        return False
+
     for keyword in EXAM_END_KEYWORDS:
-        if keyword in text:
-            return True
+        if keyword in normalized:
+            # 关键词应在文本开头或结尾附近，而非嵌入长句中间
+            # 例如 "考试结束" 或 "全部测验到此结束！" 是有效的
+            # 但 "宣布考试结束时，应立即停止" 不是
+            idx = normalized.find(keyword)
+            # 关键词前面最多允许少量装饰字符
+            if idx <= 10:
+                return True
 
     return False
 

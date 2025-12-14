@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { useTaskStore } from '@/stores/useTaskStore'
+import ErrorBoundary from '@/components/common/ErrorBoundary.vue'
 import UploadZone from '@/components/dashboard/UploadZone.vue'
 import LogTerminal from '@/components/dashboard/LogTerminal.vue'
 import PipelineView from '@/components/dashboard/PipelineView.vue'
 import ResultGallery from '@/components/dashboard/ResultGallery.vue'
-
-const store = useTaskStore()
 </script>
 
 <template>
@@ -34,19 +32,21 @@ const store = useTaskStore()
       </header>
 
       <!-- Main Content Area -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <!-- Left Column: Controls & Upload -->
-        <div class="lg:col-span-4 space-y-6">
-          <UploadZone />
-          <LogTerminal />
-        </div>
+      <ErrorBoundary>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Left Column: Controls & Upload -->
+          <div class="lg:col-span-4 space-y-6">
+            <UploadZone />
+            <LogTerminal />
+          </div>
 
-        <!-- Right Column: Workflow & Results -->
-        <div class="lg:col-span-8 space-y-6">
-          <PipelineView />
-          <ResultGallery />
+          <!-- Right Column: Workflow & Results -->
+          <div class="lg:col-span-8 space-y-6">
+            <PipelineView />
+            <ResultGallery />
+          </div>
         </div>
-      </div>
+      </ErrorBoundary>
     </div>
   </div>
 </template>

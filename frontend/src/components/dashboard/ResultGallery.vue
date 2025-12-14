@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/useTaskStore'
+import { computed } from 'vue'
+import SkeletonCard from '@/components/common/SkeletonCard.vue'
 
 const store = useTaskStore()
+
+const showSkeleton = computed(() =>
+  store.status === 'processing' && store.results.length === 0
+)
 
 function previewImage(src: string) {
   window.open(src, '_blank')
@@ -31,9 +37,17 @@ function previewImage(src: string) {
       </div>
     </div>
 
+    <!-- Skeleton Loading -->
+    <div
+      v-if="showSkeleton"
+      class="grid grid-cols-2 md:grid-cols-3 gap-4"
+    >
+      <SkeletonCard v-for="i in 6" :key="i" />
+    </div>
+
     <!-- Empty State -->
     <div
-      v-if="store.results.length === 0"
+      v-else-if="store.results.length === 0"
       class="flex flex-col items-center justify-center py-12 text-slate-400 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50/50"
     >
       <span class="text-6xl mb-4 opacity-50">🖼️</span>
@@ -47,13 +61,15 @@ function previewImage(src: string) {
       class="grid grid-cols-2 md:grid-cols-3 gap-4"
     >
       <div
-        v-for="(img, idx) in store.results"
-        :key="idx"
+        v-for="img in store.results"
+        :key="img.src"
         @click="previewImage(img.src)"
         class="group relative aspect-[3/4] bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden cursor-zoom-in hover:shadow-md transition-all"
       >
         <img
           :src="img.src"
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-contain p-2"
           alt="Question"
         >

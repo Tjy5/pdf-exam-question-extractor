@@ -3,14 +3,16 @@ Pipeline Runner - Orchestrates step execution with retry logic.
 
 This module provides the PipelineRunner class that:
 - Executes steps in sequence
-- Handles retries with exponential backoff
+- Handles retries with exponential backoff + jitter
 - Supports task cancellation
-- Emits progress events
+- Emits progress events with structured logging
 """
 
 from __future__ import annotations
 
 import asyncio
+import logging
+import random
 from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional
 
@@ -26,6 +28,8 @@ from .contracts import (
 )
 from .steps.base import StepExecutor
 
+
+logger = logging.getLogger(__name__)
 
 # Type alias for event callback
 EventCallback = Callable[[str, Dict[str, Any]], None]
@@ -75,6 +79,48 @@ class PipelineRunner:
 
         # Cancellation tokens per task
         self._cancellation_tokens: Dict[str, asyncio.Event] = {}
+
+    def _backoff_delay(self, attempt: int) -> float:
+        """
+        Calculate exponential backoff delay with jitter.
+
+        Args:
+            attempt: 1-based attempt number
+
+        Returns:
+            Delay in seconds with jitter to avoid thundering herd
+        """
+        base = self._retry_delay * (2 ** (attempt - 1))
+        jitter = random.uniform(0, self._retry_delay * 0.5)
+        return base + jitter
+
+    async def _schedule_retry(
+        self,
+        *,
+        task_id: str,
+        step: StepExecutor,
+        attempt: int,
+        error: str,
+    ) -> None:
+        """Schedule retry with exponential backoff and emit events."""
+        delay = self._backoff_delay(attempt)
+        payload = {
+            "task_id": task_id,
+            "step": step.name.value,
+            "attempt": attempt,
+            "delay": round(delay, 2),
+        }
+        self._emit("step_retrying", payload)
+        logger.warning(
+            "Retrying step %s (attempt %d/%d) after %.2fs: %s",
+            step.name.value,
+            attempt,
+            self._max_retries,
+            delay,
+            error,
+            extra=payload,
+        )
+        await asyncio.sleep(delay)
 
     def _emit(self, event: str, data: Dict[str, Any]) -> None:
         """Emit an event to the callback."""
@@ -235,27 +281,24 @@ class PipelineRunner:
         """
         Execute a step with retry logic.
 
-        Uses exponential backoff for retryable errors.
+        Uses exponential backoff with jitter for retryable errors.
+        FatalError is never retried.
         """
-        step_state = None
+        for attempt in range(1, self._max_retries + 1):
+            log_ctx = {"task_id": task_id, "step": step.name.value, "attempt": attempt}
 
-        for attempt in range(self._max_retries):
             try:
-                # Emit step started event
                 self._emit(
                     "step_started",
                     {
                         "task_id": task_id,
                         "step": step.name.value,
                         "step_index": step_index,
-                        "attempt": attempt + 1,
+                        "attempt": attempt,
                     },
                 )
 
-                # Prepare step
                 await step.prepare(ctx)
-
-                # Execute step
                 result = await step.execute(ctx)
 
                 if result.success:
@@ -267,10 +310,11 @@ class PipelineRunner:
                             "artifact_count": result.artifact_count,
                         },
                     )
+                    logger.info("Step %s completed", step.name.value, extra=log_ctx)
                     return result
 
-                # Step returned failure
-                if not result.can_retry or attempt >= self._max_retries - 1:
+                # Step returned failure - check if retryable
+                if not result.can_retry or attempt == self._max_retries:
                     self._emit(
                         "step_failed",
                         {
@@ -280,23 +324,24 @@ class PipelineRunner:
                             "can_retry": False,
                         },
                     )
+                    logger.error(
+                        "Step %s failed: %s",
+                        step.name.value,
+                        result.error,
+                        extra={**log_ctx, "error": result.error},
+                    )
                     return result
 
-                # Retry
-                delay = self._retry_delay * (2**attempt)
-                self._emit(
-                    "step_retrying",
-                    {
-                        "task_id": task_id,
-                        "step": step.name.value,
-                        "attempt": attempt + 1,
-                        "delay": delay,
-                    },
+                # Schedule retry
+                await self._schedule_retry(
+                    task_id=task_id,
+                    step=step,
+                    attempt=attempt,
+                    error=result.error or "unknown error",
                 )
-                await asyncio.sleep(delay)
 
             except FatalError as e:
-                # Non-retryable error
+                # FatalError is never retried
                 self._emit(
                     "step_failed",
                     {
@@ -306,6 +351,7 @@ class PipelineRunner:
                         "can_retry": False,
                     },
                 )
+                logger.exception("Fatal error in step %s", step.name.value, extra=log_ctx)
                 return StepResult(
                     name=step.name,
                     success=False,
@@ -313,8 +359,9 @@ class PipelineRunner:
                     can_retry=False,
                 )
 
-            except RetryableError as e:
-                if attempt >= self._max_retries - 1:
+            except (RetryableError, Exception) as e:
+                # RetryableError and unexpected exceptions are retried
+                if attempt == self._max_retries:
                     self._emit(
                         "step_failed",
                         {
@@ -324,36 +371,11 @@ class PipelineRunner:
                             "can_retry": False,
                         },
                     )
-                    return StepResult(
-                        name=step.name,
-                        success=False,
-                        error=str(e),
-                        can_retry=False,
-                    )
-
-                delay = self._retry_delay * (2**attempt)
-                self._emit(
-                    "step_retrying",
-                    {
-                        "task_id": task_id,
-                        "step": step.name.value,
-                        "attempt": attempt + 1,
-                        "delay": delay,
-                    },
-                )
-                await asyncio.sleep(delay)
-
-            except Exception as e:
-                # Unexpected error - treat as retryable
-                if attempt >= self._max_retries - 1:
-                    self._emit(
-                        "step_failed",
-                        {
-                            "task_id": task_id,
-                            "step": step.name.value,
-                            "error": str(e),
-                            "can_retry": False,
-                        },
+                    logger.exception(
+                        "Step %s failed after %d attempts",
+                        step.name.value,
+                        attempt,
+                        extra={**log_ctx, "error": str(e)},
                     )
                     return StepResult(
                         name=step.name,
@@ -362,17 +384,12 @@ class PipelineRunner:
                         can_retry=False,
                     )
 
-                delay = self._retry_delay * (2**attempt)
-                self._emit(
-                    "step_retrying",
-                    {
-                        "task_id": task_id,
-                        "step": step.name.value,
-                        "attempt": attempt + 1,
-                        "delay": delay,
-                    },
+                await self._schedule_retry(
+                    task_id=task_id,
+                    step=step,
+                    attempt=attempt,
+                    error=str(e),
                 )
-                await asyncio.sleep(delay)
 
         # Should not reach here
         return StepResult(

@@ -1,0 +1,187 @@
+{
+  "page_name": "page_13",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        201,
+        271,
+        1971,
+        493
+      ],
+      "content": "25．当人们乘坐列车进藏时，会在青藏铁路旁发现一个特别的景象，路基两旁时不时会闪过一排排金属管，这些金属管插入地底，露出地面的部分高达两米（如图所示）。关于这些金属管的作用，下列说法正确的是："
+    },
+    {
+      "index": 1,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        500,
+        524,
+        1680,
+        1251
+      ],
+      "content": ""
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        1316,
+        1525,
+        1452
+      ],
+      "content": "A．收集传导气象信息B．实时监控路基安全C．阻挡动物横穿铁路D．保护冻土层的结构"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        1497,
+        1972,
+        1808
+      ],
+      "content": "26．甲乙丙丁戊五个人共同设立一家有限合伙企业，其中甲为普通合伙人，负责日常经营管理，其余四人皆为有限合伙人，在企业成立后的一年内，乙丙丁戊各自实施了一些行为引起甲的不满，甲认为乙丙丁戊皆有执行合伙事务的行为，要求他们转为普通合伙人，与其一起对外承担无限连带责任。四人的下列行为中属于执行合伙事务的是："
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        293,
+        1855,
+        1116,
+        2168
+      ],
+      "content": "A．丙查阅企业财务会计账簿\nB．丁在交易中为合伙企业提供了担保C．乙对企业的经营管理提出过很多建议D．戊代表合伙企业与债权人沟通还款事宜"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        2210,
+        1628,
+        2255
+      ],
+      "content": "27．图为敦煌地区出土的汉代竹简残片，下列对其记载内容判断正确的是："
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        296,
+        2299,
+        1093,
+        2344
+      ],
+      "content": "①竹简上记载的内容到现在仍在广泛使用"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2388,
+        1135,
+        2434
+      ],
+      "content": "②竹简记载了当时河流水位的季节变化情况"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2476,
+        1311,
+        2522
+      ],
+      "content": "③竹简上的内容表明我国很早开始使用十进制计数法"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        2567,
+        1399,
+        2612
+      ],
+      "content": "④竹简上的内容可能在汉代通过“丝绸之路”传播到西方"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        296,
+        2653,
+        467,
+        2791
+      ],
+      "content": "A. ①③C.②③"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2653,
+        1248,
+        2702
+      ],
+      "content": "B.①④"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2743,
+        1247,
+        2789
+      ],
+      "content": "D. ②④"
+    },
+    {
+      "index": 13,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        1701,
+        2109,
+        1936,
+        2793
+      ],
+      "content": "31三九廿+0x+x 1玩二+++int+区+A+t 九11自中0X 8\"+1+1九区日风事01M 1廿+风区中M 三而"
+    },
+    {
+      "index": 14,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        928,
+        2862,
+        1245,
+        2900
+      ],
+      "content": "第9页共42页"
+    }
+  ]
+}

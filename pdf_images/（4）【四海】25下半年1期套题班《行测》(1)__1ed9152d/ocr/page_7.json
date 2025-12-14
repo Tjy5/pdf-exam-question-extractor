@@ -1,0 +1,295 @@
+{
+  "page_name": "page_7",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        227,
+        273,
+        1972,
+        408
+      ],
+      "content": "7．中央经济工作会议于2024年12月11日至12日在北京举行。会议强调协同推进降碳减污扩绿增长，加紧经济社会发展全面绿色转型。以下相关说法不正确的有几项："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        457,
+        1180,
+        501
+      ],
+      "content": "①建立产品碳足迹管理体系、碳标识认证制度"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        548,
+        1833,
+        592
+      ],
+      "content": "②推动“三北”工程标志性战役取得重要成果，加快“盐碱地”新能源基地建设"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        640,
+        1483,
+        685
+      ],
+      "content": "③营造绿色低碳产业健康发展生态，培育绿色能源等新增长点"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        732,
+        1093,
+        776
+      ],
+      "content": "④持续深入推进蓝天、碧水、净土保卫战"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        823,
+        915,
+        866
+      ],
+      "content": "⑤进一步深化生态文明体制改革"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        918,
+        393,
+        958
+      ],
+      "content": "A.1"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        916,
+        1179,
+        957
+      ],
+      "content": "B.2"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        296,
+        1009,
+        1180,
+        1050
+      ],
+      "content": "C.3D. 4"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        225,
+        1098,
+        1972,
+        1233
+      ],
+      "content": "8．民政部部长陆治原2025年3月9日在十四届全国人大三次会议民生主题记者会上说，将加快健全城乡三级养老服务网络体系。以下关于养老服务网络体系说法错误的是："
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1283,
+        1068,
+        1327
+      ],
+      "content": "A．在县（区）级健全综合养老服务平台"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1374,
+        1156,
+        1416
+      ],
+      "content": "B．在乡镇（街道）健全区域性养老服务中心"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1466,
+        982,
+        1508
+      ],
+      "content": "C．在村（社区）健全养老服务站点"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1558,
+        1506,
+        1600
+      ],
+      "content": "D．构建县、乡、村三级养老服务网络，形成一小时养老服务圈"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        227,
+        1648,
+        1972,
+        1966
+      ],
+      "content": "9．中共中央办公厅、国务院办公厅印发了《逐步把永久基本农田建成高标准农田实施方案》，并发出通知，要求各地区各部门结合实际认真贯彻落实。《方案》提出，以“一平”、“两通”、“三提升”为基本标准，合理确定不同区域、不同类型高标准农田建设标准和投入标准。以下相关说法正确的有几项："
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2015,
+        1658,
+        2059
+      ],
+      "content": "①国家标准突出旱涝保收、抗灾减灾、产能提升等基础性、通用性要求"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2107,
+        1749,
+        2152
+      ],
+      "content": "②省级层面细化制定田块整治、灌排设施、田间道路、地力提升等具体要求"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2198,
+        1483,
+        2242
+      ],
+      "content": "③市县级层面制定简便易行、通俗易懂、操作性强的实施细则"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2290,
+        1264,
+        2334
+      ],
+      "content": "④形成层次分明、上下衔接、务实管用的标准体系"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        2384,
+        392,
+        2424
+      ],
+      "content": "A.1"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2383,
+        1179,
+        2424
+      ],
+      "content": "B.2"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        297,
+        2475,
+        395,
+        2516
+      ],
+      "content": "C.3"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2476,
+        1178,
+        2516
+      ],
+      "content": "D.4"
+    },
+    {
+      "index": 23,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        929,
+        2862,
+        1245,
+        2901
+      ],
+      "content": "第3页共42页"
+    }
+  ]
+}

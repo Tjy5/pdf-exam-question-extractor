@@ -1,25 +1,44 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useTaskStore } from '@/stores/useTaskStore'
 import { useDragDrop } from '@/composables/useDragDrop'
 
 const store = useTaskStore()
 const fileInput = ref<HTMLInputElement>()
+const isUploading = ref(false)
 
-const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragDrop((file) => {
-  store.uploadFile(file, store.mode)
+const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useDragDrop(async (file) => {
+  isUploading.value = true
+  try {
+    await store.uploadFile(file, store.mode)
+  } finally {
+    isUploading.value = false
+  }
 })
 
-function handleFileSelect(e: Event) {
+async function handleFileSelect(e: Event) {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
-    store.uploadFile(target.files[0], store.mode)
+    isUploading.value = true
+    try {
+      await store.uploadFile(target.files[0], store.mode)
+    } finally {
+      isUploading.value = false
+    }
   }
 }
 
 function handleClick() {
-  fileInput.value?.click()
+  if (!isUploading.value) {
+    fileInput.value?.click()
+  }
 }
+
+const dropZoneClass = computed(() => {
+  if (isUploading.value) return 'border-amber-400 bg-amber-50 cursor-wait'
+  if (isDragging.value) return 'border-indigo-500 bg-indigo-50'
+  return 'border-indigo-200 hover:border-indigo-500 hover:bg-indigo-50/50'
+})
 </script>
 
 <template>
@@ -62,7 +81,7 @@ function handleClick() {
     <!-- Drop Zone -->
     <div
       class="border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-colors group relative overflow-hidden"
-      :class="isDragging ? 'border-indigo-500 bg-indigo-50' : 'border-indigo-200 hover:border-indigo-500 hover:bg-indigo-50/50'"
+      :class="dropZoneClass"
       @dragover="handleDragOver"
       @dragleave="handleDragLeave"
       @drop="handleDrop"
@@ -76,7 +95,18 @@ function handleClick() {
         @change="handleFileSelect"
       >
 
-      <div v-if="!store.file" class="space-y-3">
+      <!-- Uploading State -->
+      <div v-if="isUploading" class="space-y-3">
+        <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto animate-pulse">
+          <span class="text-3xl">⏳</span>
+        </div>
+        <p class="text-amber-600 font-medium">正在上传...</p>
+        <div class="w-32 mx-auto h-1.5 bg-amber-200 rounded-full overflow-hidden">
+          <div class="h-full bg-amber-500 rounded-full animate-pulse" style="width: 60%"></div>
+        </div>
+      </div>
+
+      <div v-else-if="!store.file" class="space-y-3">
         <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto transition-transform group-hover:scale-110 duration-300">
           <span class="text-3xl">☁️</span>
         </div>

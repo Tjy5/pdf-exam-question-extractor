@@ -5,10 +5,11 @@ import asyncio
 import hashlib
 import json
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import StreamingResponse
 
-from ..schemas import StepStatus
+from ..limiter import limiter
+from ..schemas import ProcessRequest, StepStatus
 from ..services.event_bus import event_bus
 from ..services.task_executor import task_executor
 from ..services.task_service import task_manager
@@ -76,7 +77,8 @@ async def stream_task(task_id: str, last_log_index: int = 0):
 
 
 @router.post("/upload")
-async def upload_pdf(file: UploadFile = File(...), mode: str = Form("auto")):
+@limiter.limit("10/minute")
+async def upload_pdf(request: Request, file: UploadFile = File(...), mode: str = Form("auto")):
     """Upload a PDF file and create a new task"""
     if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are accepted")
@@ -112,17 +114,14 @@ async def upload_pdf(file: UploadFile = File(...), mode: str = Form("auto")):
 
 
 @router.post("/process")
-async def start_processing(request_body: dict):
+@limiter.limit("20/minute")
+async def start_processing(request: Request, payload: ProcessRequest):
     """Start processing a task"""
-    task_id = request_body.get("task_id")
-    if not task_id:
-        raise HTTPException(status_code=400, detail="task_id is required")
-
-    task = task_manager.get_task(task_id)
+    task = task_manager.get_task(payload.task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    if task.status == "processing" or task_executor.is_running(task_id):
+    if task.status == "processing" or task_executor.is_running(payload.task_id):
         return {"message": "Task is already processing", "mode": task.mode}
 
     if task.mode == "auto":

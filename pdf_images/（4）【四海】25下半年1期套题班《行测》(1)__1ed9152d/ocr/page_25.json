@@ -1,0 +1,103 @@
+{
+  "page_name": "page_25",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        271,
+        1970,
+        761
+      ],
+      "content": "65．借助持续高航速，航母可以快速到达或撤出作战海域，在战场上占据更大主动权。航母以“移动的海上机场”著称，随着各种舰载机的搭配协同，防空、反舰、反潜力量的集成，以及编队舰艇的配合“联手”，以航母为中心的海上编队战斗力与控制力惊人，有时一两个航母编队就能影响战局。也正因如此，航母的一举一动备受关注。在拥有持续高航速的情况下，航母可以出其不意地快速部署到位，突如其来地发动攻击，或在对方发起攻击之前驶离对方的打击范围。\n"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        809,
+        929,
+        849
+      ],
+      "content": "这段文字主要用来解答的问题是："
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        901,
+        979,
+        942
+      ],
+      "content": "A．航母“跑得越快越好”是真的吗"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        294,
+        992,
+        1069,
+        1033
+      ],
+      "content": "B．航母因何以“移动的海上机场”著称"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1083,
+        1022,
+        1126
+      ],
+      "content": "C．航母的持续高速航行能力何以重要"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1176,
+        1063,
+        1218
+      ],
+      "content": "D．航母何以在战场上占据更大的主动权"
+    },
+    {
+      "index": 6,
+      "label": "footer",
+      "region_label": null,
+      "bbox": [
+        484,
+        2727,
+        1691,
+        2777
+      ],
+      "content": "第二部分结束，请继续做第三部分！"
+    },
+    {
+      "index": 7,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        916,
+        2862,
+        1257,
+        2901
+      ],
+      "content": "第21页共42页"
+    }
+  ]
+}

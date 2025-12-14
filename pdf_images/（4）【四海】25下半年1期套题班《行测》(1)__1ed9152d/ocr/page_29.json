@@ -1,0 +1,103 @@
+{
+  "page_name": "page_29",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        273,
+        1803,
+        316
+      ],
+      "content": "79．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 1,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        403,
+        334,
+        1773,
+        955
+      ],
+      "content": "?\n\n"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        1079,
+        1803,
+        1123
+      ],
+      "content": "80．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 3,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        401,
+        1129,
+        1769,
+        1756
+      ],
+      "content": "公司添?"
+    },
+    {
+      "index": 4,
+      "label": "vision_footnote",
+      "region_label": null,
+      "bbox": [
+        654,
+        1760,
+        1528,
+        1824
+      ],
+      "content": "A B C D "
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        1887,
+        1282,
+        1930
+      ],
+      "content": "81．下列选项经旋转组合后，不可能组成所给图形的是："
+    },
+    {
+      "index": 6,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        293,
+        1960,
+        1693,
+        2776
+      ],
+      "content": "①2E ④⑤\nA.①②③B.①②④\n\nC.①②⑤D.②③④\n\n"
+    },
+    {
+      "index": 7,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        920,
+        2862,
+        1254,
+        2901
+      ],
+      "content": "第25页共42页"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "page_name": "page_3",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        968,
+        352,
+        1208,
+        407
+      ],
+      "content": "注意事项"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        511,
+        1944,
+        666
+      ],
+      "content": "一、此项测试为五个部分，总时限120分钟，各部分不单独计时，但都给出参考时限，供答题时合理分配时间。\n"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        737,
+        1893,
+        781
+      ],
+      "content": "二、请按照要求在答题卡上填写好自己的姓名，涂写好准考证号，严禁折叠答题卡。"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        852,
+        1326,
+        895
+      ],
+      "content": "三、必须在答题卡上答题：在题本上答题，一律无效。"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        965,
+        1947,
+        1119
+      ],
+      "content": "四、监考人员宣布考试开始时，方可答题，宣布考试结束时，应立即停止答题。题本、答题卡、草稿纸一律留在桌上，待监考人员确认数量无误，允许离开后，方可离开考场。"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1192,
+        1972,
+        1347
+      ],
+      "content": "五、在这项测试中，可能有些试题较难，因此你不要在一道题上思考时间太久，遇到不会答的题目可先跳过去，如果有时间再去思考，否则，你可能没有时间完成后面的题目。"
+    },
+    {
+      "index": 6,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        865,
+        1521,
+        1304,
+        1578
+      ],
+      "content": "严禁折叠答题卡！"
+    }
+  ]
+}

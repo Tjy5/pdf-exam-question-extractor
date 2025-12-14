@@ -1,0 +1,140 @@
+{
+  "page_name": "page_28",
+  "image_path": "pdf_images\\（4）【四海】25下半年1期套题班《行测》(1)__1ed9152d\\page_28.png",
+  "questions": [
+    {
+      "qno": 76,
+      "image": "（4）【四海】25下半年1期套题班《行测》(1)__1ed9152d\\questions_page_28\\q76.png",
+      "crop_box_image": [
+        0,
+        668,
+        2185,
+        1434
+      ],
+      "crop_box_blocks": [
+        202,
+        683,
+        1803,
+        1419
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            683,
+            1803,
+            727
+          ],
+          "text": "76．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            425,
+            753,
+            1750,
+            1419
+          ],
+          "content": "?\n\nB \n\n",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 77,
+      "image": "（4）【四海】25下半年1期套题班《行测》(1)__1ed9152d\\questions_page_28\\q77.png",
+      "crop_box_image": [
+        0,
+        1475,
+        2185,
+        2132
+      ],
+      "crop_box_blocks": [
+        202,
+        1490,
+        1802,
+        2117
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            1490,
+            1802,
+            1533
+          ],
+          "text": "77．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            402,
+            1557,
+            1774,
+            2117
+          ],
+          "content": "?\n\nB \n\n",
+          "region_label": null
+        }
+      ]
+    },
+    {
+      "qno": 78,
+      "image": "（4）【四海】25下半年1期套题班《行测》(1)__1ed9152d\\questions_page_28\\q78.png",
+      "crop_box_image": [
+        0,
+        2152,
+        2185,
+        2797
+      ],
+      "crop_box_blocks": [
+        202,
+        2167,
+        1802,
+        2782
+      ],
+      "text_blocks": [
+        {
+          "bbox": [
+            202,
+            2167,
+            1802,
+            2210
+          ],
+          "text": "78．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+        }
+      ],
+      "table_blocks": [],
+      "other_blocks": [
+        {
+          "label": "image",
+          "bbox": [
+            382,
+            2242,
+            1780,
+            2782
+          ],
+          "content": "?\n\nA B C D \n",
+          "region_label": null
+        },
+        {
+          "label": "number",
+          "bbox": [
+            915,
+            2861,
+            1256,
+            2900
+          ],
+          "content": "第24页共42页",
+          "region_label": null
+        }
+      ]
+    }
+  ]
+}

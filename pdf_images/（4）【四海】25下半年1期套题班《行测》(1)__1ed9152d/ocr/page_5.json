@@ -1,0 +1,271 @@
+{
+  "page_name": "page_5",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "doc_title",
+      "region_label": null,
+      "bbox": [
+        620,
+        329,
+        1555,
+        393
+      ],
+      "content": "第一部分政治理论+常识判断"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        783,
+        469,
+        1393,
+        511
+      ],
+      "content": "(共35题，参考时间：17分钟）"
+    },
+    {
+      "index": 2,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        830,
+        587,
+        1325,
+        649
+      ],
+      "content": "政治理论 (共20题）"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        229,
+        722,
+        1970,
+        857
+      ],
+      "content": "1．2025年3月5日，李强总理向十四届全国人大三次会议作政府工作报告。以下关于报告中提到的主要目标完成情况说法错误的是："
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        907,
+        1214,
+        950
+      ],
+      "content": "A．国内生产总值达到134.9万亿元、增长5.5%"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        998,
+        1408,
+        1041
+      ],
+      "content": "B．城镇新增就业1256万人、城镇调查失业率平均为5.1%"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1090,
+        821,
+        1133
+      ],
+      "content": "C．居民消费价格上涨0.2%"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1182,
+        1038,
+        1225
+      ],
+      "content": "D．居民人均可支配收入实际增长5.1%"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        225,
+        1272,
+        1963,
+        1407
+      ],
+      "content": "2．中央经济工作会议于2024年12月11日至12日在北京举行。习近平在重要讲话中总结2024年经济工作。以下关于我国经济运行面临的困难与挑战说法正确的是："
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1455,
+        606,
+        1500
+      ],
+      "content": "①国内需求不足"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1548,
+        782,
+        1590
+      ],
+      "content": "②部分企业生产经营困难"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1639,
+        738,
+        1683
+      ],
+      "content": "③国内大循环存在堵点"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1731,
+        693,
+        1775
+      ],
+      "content": "④风险隐患仍然较多"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1821,
+        781,
+        1867
+      ],
+      "content": "⑤群众就业增收面临压力"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        1914,
+        783,
+        1958
+      ],
+      "content": "⑥科技创新能力有待提高"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        2004,
+        1332,
+        2143
+      ],
+      "content": "A. ①②③④B.①④⑤⑥C.③④⑤⑥D.①②④⑤"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        226,
+        2189,
+        1936,
+        2233
+      ],
+      "content": "3．商品是具有所有权并可以用来和别人交换的财富。下列关于商品的描述，不正确的是："
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2281,
+        1463,
+        2325
+      ],
+      "content": "A．商品是劳动产品从产生到灭亡全过程中的一段过程的称谓"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        2373,
+        1375,
+        2417
+      ],
+      "content": "B．使用价值是商品的本质属性，价值是商品的自然属性"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2465,
+        1679,
+        2509
+      ],
+      "content": "C．未经过交换的劳动产品和进入使用过程的劳动产品均排除在商品之外"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2556,
+        1970,
+        2691
+      ],
+      "content": "D．如果使用者经交换所属的产品，使用一段时间后又售出，那么该产品就经历了二次商品过程\n"
+    },
+    {
+      "index": 21,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        925,
+        2863,
+        1247,
+        2900
+      ],
+      "content": "第1页共42页"
+    }
+  ]
+}

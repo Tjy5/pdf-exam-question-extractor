@@ -1,0 +1,103 @@
+{
+  "page_name": "page_40",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        785,
+        330,
+        1390,
+        393
+      ],
+      "content": "第五部分资料分析"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        784,
+        469,
+        1391,
+        511
+      ],
+      "content": "(共20题，参考时间：27分钟)"
+    },
+    {
+      "index": 2,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        290,
+        589,
+        1043,
+        634
+      ],
+      "content": "一、根据所给材料，回答111~115题。"
+    },
+    {
+      "index": 3,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        392,
+        691,
+        1812,
+        1627
+      ],
+      "content": "按股份分红/收益，6%\n\n…*…**…*…***…**计时工资，6%\n\n固定薪资\n\n（月薪、年薪等）计件工资/按订单计算，21%\n46%\n\n按流量/收益提成，10%\n按项目提成，11%\n\n"
+    },
+    {
+      "index": 4,
+      "label": "figure_title",
+      "region_label": null,
+      "bbox": [
+        601,
+        1697,
+        1571,
+        1741
+      ],
+      "content": "图新业态劳动者中不同收入计算方式的占比情况"
+    },
+    {
+      "index": 5,
+      "label": "figure_title",
+      "region_label": null,
+      "bbox": [
+        620,
+        1882,
+        1549,
+        1924
+      ],
+      "content": "表不同就业类型劳动者的工作及社会保险状况"
+    },
+    {
+      "index": 6,
+      "label": "table",
+      "region_label": null,
+      "bbox": [
+        231,
+        1965,
+        1948,
+        2731
+      ],
+      "content": "<html><body><table><tr><td colspan=\"2\">项目</td><td>新业态劳动者</td><td>传统正规就业者</td><td>传统灵活就业者</td></tr><tr><td rowspan=\"3\">工作时间</td><td>每月工作天数</td><td>24.05</td><td>23.34</td><td>22.77</td></tr><tr><td>每天工作小时数</td><td>8.41</td><td>8.54</td><td>8.94</td></tr><tr><td>每周工作小时数</td><td>48.45</td><td>47.18</td><td>49.48</td></tr><tr><td colspan=\"2\">小时平均工资（元）</td><td>52.38</td><td>48.04</td><td>34.45</td></tr><tr><td rowspan=\"4\">拥有各类 保险的 劳动者占比 (%)</td><td>养老保险</td><td>70.72</td><td>86.17</td><td>58.93</td></tr><tr><td>医疗保险</td><td>87.84</td><td>94.99</td><td>86.20</td></tr><tr><td>失业保险</td><td>49.06</td><td>71.87</td><td>13.41</td></tr><tr><td>工伤保险</td><td>51.87</td><td>75.47</td><td>18.75</td></tr></table></body></html>"
+    },
+    {
+      "index": 7,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        928,
+        2862,
+        1244,
+        2900
+      ],
+      "content": "第35页共42页"
+    }
+  ]
+}

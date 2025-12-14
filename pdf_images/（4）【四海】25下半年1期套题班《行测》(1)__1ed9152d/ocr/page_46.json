@@ -1,0 +1,295 @@
+{
+  "page_name": "page_46",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        292,
+        274,
+        1044,
+        316
+      ],
+      "content": "四、根据所给材料，回答126～130题。"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        366,
+        1972,
+        500
+      ],
+      "content": "2017年上半年，S市出口手机1.9亿台，比去年同期减少22.7%；价值513.1亿元人民币，下降23.7%。6月份当月出口3217.5万台，减少23.7%；价值86亿元，下降27.8%。"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        549,
+        1974,
+        683
+      ],
+      "content": "上半年，S市以一般贸易方式出口手机1.8亿台，减少22.1%；以加工贸易方式出口699.9万台，减少30.7%；以海关特殊监管方式出口手机245.2万台，减少36.6%。"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        734,
+        1968,
+        865
+      ],
+      "content": "上半年，S市民营企业出口手机1.6亿台，减少20.8%；外商投资企业出口2043.9万台，减少42.9%；同期，国有企业出口1859.3万台，减少4.5%。\n"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        915,
+        1972,
+        1141
+      ],
+      "content": "上半年，S市对香港地区出口手机1.5亿台，减少28.4%；对印度、美国、阿联酋分别出□1151万台、978.2万台和511.3万台，增加94.8%、45.6%和11.4%。此外，对东盟、欧盟分别出口251.2万台、210.4万台，减少68.6%、60.6%。\n"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1191,
+        1972,
+        1325
+      ],
+      "content": "上半年，S市出口GSM数字式手机8910.5万台，减少20.5%；出口含4G手机在内的其他手机7480.6万台，减少26.1%；出口CDMA数字式手机307.3万台，减少19.2%。"
+    },
+    {
+      "index": 6,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        291,
+        1374,
+        679,
+        1416
+      ],
+      "content": "请回答126~130题"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        1466,
+        1479,
+        1507
+      ],
+      "content": "126．2017年上半年，S市平均每台出口手机的价值比去年同期约："
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        1558,
+        1344,
+        1601
+      ],
+      "content": "A．上升0.8%B．上升1.3%"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        1650,
+        581,
+        1692
+      ],
+      "content": "C．下降0.8%"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1650,
+        1342,
+        1691
+      ],
+      "content": "D．下降1.3%"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        207,
+        1740,
+        1966,
+        1783
+      ],
+      "content": "127.2016年上半年，S市以加工贸易方式出口手机数量约是以海关特殊监管方式出口的几倍："
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        321,
+        1836,
+        455,
+        1876
+      ],
+      "content": "A. 2.1"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1835,
+        1220,
+        1876
+      ],
+      "content": "B. 2.6"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        1926,
+        459,
+        1966
+      ],
+      "content": "C.2.9"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        1927,
+        1220,
+        1967
+      ],
+      "content": "D. 3.5"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2016,
+        1893,
+        2058
+      ],
+      "content": "128．将不同出口目的地按2016年上半年自S市进口手机台数从多到少排列，正确的是："
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        2107,
+        1506,
+        2244
+      ],
+      "content": "A．东盟>美国>印度B．印度>美国>东盟C．印度>东盟>美国D．美国>东盟>印度"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2290,
+        1951,
+        2425
+      ],
+      "content": "129．2017年上半年，S市出口GSM数字式手机占同期手机出口总量的比重，约比出口含4G 手机在内的其他手机占同期手机出口总量比重高几个百分点："
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        321,
+        2476,
+        460,
+        2517
+      ],
+      "content": "A.1.9"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2476,
+        1220,
+        2517
+      ],
+      "content": "B. 3.8"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        2567,
+        459,
+        2608
+      ],
+      "content": "C.7.5"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2569,
+        1240,
+        2608
+      ],
+      "content": "D.13.6"
+    },
+    {
+      "index": 23,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        927,
+        2862,
+        1248,
+        2901
+      ],
+      "content": "第41页共42页"
+    }
+  ]
+}

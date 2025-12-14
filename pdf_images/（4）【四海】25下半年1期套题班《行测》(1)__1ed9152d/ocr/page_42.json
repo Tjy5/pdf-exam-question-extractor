@@ -1,0 +1,319 @@
+{
+  "page_name": "page_42",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        204,
+        272,
+        1085,
+        314
+      ],
+      "content": "115．根据材料，以下说法无法判断正误的是："
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        361,
+        1358,
+        405
+      ],
+      "content": "A．非农业户口的劳动者中，传统正规就业者占了多数"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        450,
+        1392,
+        494
+      ],
+      "content": "B．3种就业类型劳动者中，本省跨县流动的比例均最高"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        316,
+        538,
+        1532,
+        583
+      ],
+      "content": "C．新业态劳动者跨省流动的比例高于其他两种就业类型劳动者"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        627,
+        1704,
+        671
+      ],
+      "content": "D．新业态劳动者和传统灵活就业者中，农业户口占比均超过非农业户口"
+    },
+    {
+      "index": 5,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        291,
+        804,
+        1045,
+        850
+      ],
+      "content": "二、根据所给材料，回答116～120题。"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        203,
+        895,
+        1972,
+        1205
+      ],
+      "content": "《2023年我国卫生健康事业发展统计公报》显示，我国卫生资源总量持续稳步增长。2023年末，全国医疗卫生机构总数1070785个，比上年增加37867个，其中医院38355个，比上年增加1379个。2023年末，全国卫生技术人员总数1248.8万人，比上年增加83.0万人，其中医院卫生技术人员772.3万人。\n"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        201,
+        1252,
+        1973,
+        1741
+      ],
+      "content": "根据公报，我国医疗服务提供量和效率同步提升。2023年，全国医疗卫生机构总诊疗人次95.5亿，比上年增加11.3亿人次，居民平均到医疗卫生机构就诊6.8次，入院人次30187.3万，比上年增加5501.1万人次。2023年，乡镇卫生院诊疗人次13.1亿，比上年增加1.0亿人次，入院人次3992.1万，比上年增加753.0万人次。社区卫生服务中心诊疗人次8.3亿，入院人次480.4万，社区卫生服务站诊疗人次2.1亿，村卫生室诊疗人次14.0亿，比上年增加1.2亿人次。\n"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        201,
+        1787,
+        1969,
+        1919
+      ],
+      "content": "公报还显示，2023年全国卫生总费用初步核算为90575.8亿元，其中政府卫生支出占26.7%，社会卫生支出占46.0%，个人卫生支出占27.3%。\n"
+    },
+    {
+      "index": 9,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        290,
+        1966,
+        678,
+        2008
+      ],
+      "content": "请回答116~120题"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2055,
+        1444,
+        2097
+      ],
+      "content": "116.2023年，全国医疗卫生机构总数同比增加约多少个百分点："
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        321,
+        2146,
+        455,
+        2187
+      ],
+      "content": "A. 2.1"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2145,
+        1220,
+        2187
+      ],
+      "content": "B.2.7"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2236,
+        454,
+        2275
+      ],
+      "content": "C.3.1"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2236,
+        1219,
+        2275
+      ],
+      "content": "D.3.7"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2323,
+        1356,
+        2365
+      ],
+      "content": "117．2023年，全国平均每家医院有卫生技术人员约多少人："
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        321,
+        2414,
+        456,
+        2455
+      ],
+      "content": "A. 101"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2414,
+        1216,
+        2455
+      ],
+      "content": "B. 201"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2502,
+        455,
+        2544
+      ],
+      "content": "C. 301"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2504,
+        1215,
+        2544
+      ],
+      "content": "D. 401"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        2590,
+        1400,
+        2631
+      ],
+      "content": "118．2022～2023年，平均每年全国医疗卫生机构总诊疗人次："
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        320,
+        2678,
+        590,
+        2723
+      ],
+      "content": "A．不到80亿"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2679,
+        1534,
+        2724
+      ],
+      "content": "B．在80亿~85亿之间"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2768,
+        774,
+        2813
+      ],
+      "content": "C．在85亿～90亿之间"
+    },
+    {
+      "index": 24,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2769,
+        1533,
+        2813
+      ],
+      "content": "D．在90亿～95亿之间"
+    },
+    {
+      "index": 25,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        927,
+        2862,
+        1246,
+        2900
+      ],
+      "content": "第37页共42页"
+    }
+  ]
+}

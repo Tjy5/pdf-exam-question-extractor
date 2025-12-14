@@ -1,16 +1,27 @@
 """
 Main Application - FastAPI app factory and lifespan management
 """
+import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+try:
+    from slowapi.errors import RateLimitExceeded
+    from slowapi.middleware import SlowAPIMiddleware
+except ImportError:  # pragma: no cover
+    RateLimitExceeded = None  # type: ignore[assignment]
+    SlowAPIMiddleware = None  # type: ignore[assignment]
+
+from .limiter import limiter
 from .routers import files, health, tasks
 
 
+logger = logging.getLogger(__name__)
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
 
@@ -36,6 +47,42 @@ def create_app() -> FastAPI:
         version="2.0.0",
         lifespan=lifespan,
     )
+
+    # Rate limiting
+    app.state.limiter = limiter
+    if SlowAPIMiddleware is not None and getattr(limiter, "enabled", False):
+        app.add_middleware(SlowAPIMiddleware)
+
+        @app.exception_handler(RateLimitExceeded)  # type: ignore[arg-type]
+        async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+            """Handle rate limit exceeded with JSON response."""
+            return JSONResponse(
+                status_code=429,
+                content={"detail": "Rate limit exceeded", "retry_after": exc.detail},
+            )
+
+    # Global exception handlers
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+        """Handle FastAPI request validation errors with clean response."""
+        errors = []
+        for error in exc.errors():
+            loc = " -> ".join(str(x) for x in error["loc"])
+            errors.append({"field": loc, "message": error["msg"]})
+        logger.warning("Validation error: %s", errors)
+        return JSONResponse(
+            status_code=422,
+            content={"detail": "Validation error", "errors": errors},
+        )
+
+    @app.exception_handler(Exception)
+    async def global_exception_handler(request: Request, exc: Exception):
+        """Handle unexpected exceptions with logging."""
+        logger.exception("Unexpected error: %s", exc)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal server error"},
+        )
 
     # Include routers
     app.include_router(health.router)

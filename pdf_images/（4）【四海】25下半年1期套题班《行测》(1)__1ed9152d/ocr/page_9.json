@@ -1,0 +1,355 @@
+{
+  "page_name": "page_9",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        278,
+        392,
+        317
+      ],
+      "content": "A.1"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        277,
+        1179,
+        317
+      ],
+      "content": "B.2"
+    },
+    {
+      "index": 2,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        299,
+        365,
+        396,
+        408
+      ],
+      "content": "C.3"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        367,
+        1179,
+        407
+      ],
+      "content": "D.4"
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        457,
+        1971,
+        682
+      ],
+      "content": "14.2025年2月23日，《中共中央国务院关于进一步深化农村改革扎实推进乡村全面振兴的意见》发布。以下关于“深入推进粮油作物大面积单产提升行动”说法不正确的有几项：公考最新资料、更新进度微信SKA674"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        732,
+        1398,
+        776
+      ],
+      "content": "①多措并举巩固水稻扩种成果，挖掘油菜、花生扩种潜力"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        291,
+        822,
+        1749,
+        866
+      ],
+      "content": "②进一步扩大粮食单产提升工程实施规模，加大高产高效模式集成推广力度"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        914,
+        1135,
+        959
+      ],
+      "content": "③加力落实新一轮千亿斤粮食产能提升任务"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        287,
+        1007,
+        1527,
+        1050
+      ],
+      "content": "④稳定粮食播种面积，主攻总产和品质提升，确保粮食稳产丰产"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        1098,
+        1089,
+        1142
+      ],
+      "content": "⑤推动棉花、糖料、天然橡胶等稳产提质"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        1191,
+        397,
+        1232
+      ],
+      "content": "A.2"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        1191,
+        1179,
+        1232
+      ],
+      "content": "B.3"
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        296,
+        1282,
+        1181,
+        1324
+      ],
+      "content": "C.4D.5"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1373,
+        1956,
+        1508
+      ],
+      "content": "15．近日，《中共中央办公厅国务院办公厅关于完善中国特色现代企业制度的意见》发布，以下关于《意见》内容说法正确的是："
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        1557,
+        936,
+        1600
+      ],
+      "content": "A．以坚持和加强党的领导为根本"
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1648,
+        720,
+        1691
+      ],
+      "content": "B．以改革创新为基础"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        1740,
+        1373,
+        1783
+      ],
+      "content": "C．以产权清晰、权责明确、政企分开、管理科学为重点"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        1832,
+        806,
+        1875
+      ],
+      "content": "D．以完善公司治理为动力"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        1923,
+        1971,
+        2058
+      ],
+      "content": "16.2025年2月23日，《中共中央国务院关于进一步深化农村改革扎实推进乡村全面振兴的意见》发布。以下关于“健全粮食生产支持政策体系”说法不正确的有几项:"
+    },
+    {
+      "index": 19,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2107,
+        1353,
+        2152
+      ],
+      "content": "①启动实施分省施策下的粮食产销区省际横向利益补偿"
+    },
+    {
+      "index": 20,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        288,
+        2198,
+        1570,
+        2242
+      ],
+      "content": "②落实玉米大豆最低收购价政策，完善稻谷、小麦生产者补贴政策"
+    },
+    {
+      "index": 21,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        289,
+        2290,
+        1309,
+        2334
+      ],
+      "content": "③适当提高产粮大县农业保险县级保费补贴承担比例"
+    },
+    {
+      "index": 22,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        292,
+        2382,
+        1748,
+        2426
+      ],
+      "content": "④适当降低稻谷、小麦、玉米、大豆完全成本保险和种植收入保险投保面积"
+    },
+    {
+      "index": 23,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        290,
+        2474,
+        1134,
+        2517
+      ],
+      "content": "⑤鼓励地方开展粮油种植专项贷款贴息试点"
+    },
+    {
+      "index": 24,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        297,
+        2566,
+        397,
+        2608
+      ],
+      "content": "A.2"
+    },
+    {
+      "index": 25,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1081,
+        2567,
+        1178,
+        2608
+      ],
+      "content": "B.3"
+    },
+    {
+      "index": 26,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        298,
+        2658,
+        396,
+        2699
+      ],
+      "content": "C.4"
+    },
+    {
+      "index": 27,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1082,
+        2659,
+        1178,
+        2700
+      ],
+      "content": "D.5"
+    },
+    {
+      "index": 28,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        929,
+        2862,
+        1244,
+        2900
+      ],
+      "content": "第5页共42页"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "page_name": "page_28",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        785,
+        330,
+        1390,
+        393
+      ],
+      "content": "第四部分判断推理"
+    },
+    {
+      "index": 1,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        784,
+        469,
+        1392,
+        510
+      ],
+      "content": "(共35题，参考时间：30分钟）"
+    },
+    {
+      "index": 2,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        290,
+        592,
+        562,
+        634
+      ],
+      "content": "一、图形推理"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        683,
+        1803,
+        727
+      ],
+      "content": "76．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 4,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        425,
+        753,
+        1750,
+        1419
+      ],
+      "content": "?\n\nB \n\n"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        1490,
+        1802,
+        1533
+      ],
+      "content": "77．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 6,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        402,
+        1557,
+        1774,
+        2117
+      ],
+      "content": "?\n\nB \n\n"
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        202,
+        2167,
+        1802,
+        2210
+      ],
+      "content": "78．从所给的四个选项中，选择最合适的一个填在问号处，使之呈现一定的规律性："
+    },
+    {
+      "index": 8,
+      "label": "image",
+      "region_label": null,
+      "bbox": [
+        382,
+        2242,
+        1780,
+        2782
+      ],
+      "content": "?\n\nA B C D \n"
+    },
+    {
+      "index": 9,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        915,
+        2861,
+        1256,
+        2900
+      ],
+      "content": "第24页共42页"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "page_name": "page_1",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "header",
+      "region_label": null,
+      "bbox": [
+        383,
+        225,
+        959,
+        400
+      ],
+      "content": "四海公考ＳＩHＡＩＧＯＮGKＡＯ"
+    },
+    {
+      "index": 1,
+      "label": "header",
+      "region_label": null,
+      "bbox": [
+        1625,
+        243,
+        1863,
+        384
+      ],
+      "content": "版权所有复制必究"
+    },
+    {
+      "index": 2,
+      "label": "aside_text",
+      "region_label": null,
+      "bbox": [
+        127,
+        1147,
+        191,
+        1383
+      ],
+      "content": "准考证号"
+    },
+    {
+      "index": 3,
+      "label": "aside_text",
+      "region_label": null,
+      "bbox": [
+        128,
+        2379,
+        191,
+        2495
+      ],
+      "content": "姓名"
+    },
+    {
+      "index": 4,
+      "label": "doc_title",
+      "region_label": null,
+      "bbox": [
+        495,
+        625,
+        1871,
+        718
+      ],
+      "content": "2025下半年笔试套题冲刺班·1期"
+    },
+    {
+      "index": 5,
+      "label": "doc_title",
+      "region_label": null,
+      "bbox": [
+        633,
+        888,
+        1685,
+        992
+      ],
+      "content": "行政职业能力测验（四）"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        434,
+        1710,
+        662,
+        1760
+      ],
+      "content": "重要提示："
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        432,
+        1800,
+        1941,
+        1928
+      ],
+      "content": "为维护您的个人权益，确保考试的公平公正，请您协助我们监督考试实施公正。\n"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        432,
+        1966,
+        1941,
+        2095
+      ],
+      "content": "本场考试规定：监考老师要向本场全体考生展示题本密封情况，并邀请2名考生代表验封签字后，方能开启试卷袋。\n"
+    },
+    {
+      "index": 9,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        679,
+        2390,
+        757,
+        2817
+      ],
+      "content": "条形码粘贴处"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        1127,
+        2518,
+        1684,
+        2658
+      ],
+      "content": "请将此条形码揭下，贴在答题卡指定位置"
+    }
+  ]
+}

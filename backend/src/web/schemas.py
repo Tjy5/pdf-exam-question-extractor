@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Literal, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 TaskStatus = Literal["pending", "processing", "completed", "failed"]
@@ -60,4 +60,18 @@ class UploadRequest(BaseModel):
 
 
 class ProcessRequest(BaseModel):
-    task_id: str
+    """Request to start processing a task."""
+    task_id: str = Field(..., min_length=1, description="Task ID to process")
+
+
+class StartStepRequest(BaseModel):
+    """Request to start a specific step."""
+    run_to_end: bool = Field(
+        default=False,
+        description="If True, run from this step to the end"
+    )
+
+
+class RestartFromStepRequest(BaseModel):
+    """Request to restart from a specific step."""
+    pass  # No additional fields needed, step index is in path

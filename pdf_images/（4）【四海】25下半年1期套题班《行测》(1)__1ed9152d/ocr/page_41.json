@@ -1,0 +1,247 @@
+{
+  "page_name": "page_41",
+  "image_width": 2185,
+  "image_height": 3071,
+  "blocks": [
+    {
+      "index": 0,
+      "label": "figure_title",
+      "region_label": null,
+      "bbox": [
+        455,
+        273,
+        1696,
+        317
+      ],
+      "content": "表不同就业类型劳动者的户籍比例及人口流动模式（单位：%）"
+    },
+    {
+      "index": 1,
+      "label": "table",
+      "region_label": null,
+      "bbox": [
+        232,
+        359,
+        1947,
+        869
+      ],
+      "content": "<html><body><table><tr><td colspan=\"2\">分类</td><td>新业态劳动者</td><td>传统正规就业者</td><td>传统灵活就业者</td></tr><tr><td rowspan=\"2\">户籍</td><td>农业户口</td><td>63.45</td><td>47.89</td><td>76.95</td></tr><tr><td>非农业户口</td><td>36.55</td><td>52.11</td><td>23.05</td></tr><tr><td rowspan=\"3\">人口流动</td><td>本地</td><td>66.86</td><td>70.53</td><td>81.73</td></tr><tr><td>本省跨县流动</td><td>15.07</td><td>15.67</td><td>9.96</td></tr><tr><td>跨省流动</td><td>18.07</td><td>13.79</td><td>8.31</td></tr></table></body></html>"
+    },
+    {
+      "index": 2,
+      "label": "paragraph_title",
+      "region_label": null,
+      "bbox": [
+        292,
+        908,
+        676,
+        951
+      ],
+      "content": "请回答111~115 题"
+    },
+    {
+      "index": 3,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        205,
+        1000,
+        1971,
+        1133
+      ],
+      "content": "111．新业态劳动者中，按流量/收益提成计算收入的和按项目提成计算收入的占总体的比重为："
+    },
+    {
+      "index": 4,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        1186,
+        1224,
+        1227
+      ],
+      "content": "A.10%B. 21%"
+    },
+    {
+      "index": 5,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        1278,
+        1223,
+        1318
+      ],
+      "content": "C. 27%D. 31%"
+    },
+    {
+      "index": 6,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        208,
+        1368,
+        1391,
+        1410
+      ],
+      "content": "112．关于不同就业类型劳动者工作时间，以下表述正确的是："
+    },
+    {
+      "index": 7,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        1460,
+        1489,
+        1502
+      ],
+      "content": "A．新业态劳动者每月工作天数最多，但每周工作小时数最少"
+    },
+    {
+      "index": 8,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        1551,
+        1533,
+        1594
+      ],
+      "content": "B．传统灵活就业者每月工作天数最少，但每周工作小时数最多"
+    },
+    {
+      "index": 9,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        316,
+        1643,
+        1577,
+        1686
+      ],
+      "content": "C．传统正规就业者每周工作小时数最少，每月休息的天数也最少"
+    },
+    {
+      "index": 10,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        316,
+        1733,
+        1795,
+        1776
+      ],
+      "content": "D．新业态劳动者每天工作小时数最多，传统灵活就业者每天工作小时数最少"
+    },
+    {
+      "index": 11,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        1825,
+        1971,
+        1959
+      ],
+      "content": "113．按照不同就业类型劳动者的小时平均工资计算，新业态劳动者的月收入大约比传统灵活就业者多："
+    },
+    {
+      "index": 12,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        2012,
+        1223,
+        2052
+      ],
+      "content": "A. 20%B. 30%"
+    },
+    {
+      "index": 13,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        319,
+        2103,
+        1223,
+        2143
+      ],
+      "content": "C.40%D. 50%"
+    },
+    {
+      "index": 14,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        206,
+        2193,
+        1970,
+        2325
+      ],
+      "content": "114．按拥有各类保险的劳动者占比排序。下列选项与3种就业类型劳动者的社会保险状况相符的是："
+    },
+    {
+      "index": 15,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        2376,
+        1224,
+        2419
+      ],
+      "content": "A．医疗保险>养老保险>工伤保险>失业保险"
+    },
+    {
+      "index": 16,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2467,
+        1223,
+        2511
+      ],
+      "content": "B．医疗保险>养老保险>失业保险>工伤保险"
+    },
+    {
+      "index": 17,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        317,
+        2558,
+        1223,
+        2602
+      ],
+      "content": "C．养老保险>医疗保险>工伤保险>失业保险"
+    },
+    {
+      "index": 18,
+      "label": "text",
+      "region_label": null,
+      "bbox": [
+        318,
+        2651,
+        1224,
+        2693
+      ],
+      "content": "D．养老保险>医疗保险>失业保险>工伤保险"
+    },
+    {
+      "index": 19,
+      "label": "number",
+      "region_label": null,
+      "bbox": [
+        928,
+        2862,
+        1244,
+        2900
+      ],
+      "content": "第36页共42页"
+    }
+  ]
+}
