@@ -46,7 +46,7 @@ def reset_ppstructure_cache() -> None:
 
 
 def _parse_batch_env(env_name: str, default: int) -> int:
-    """解析批量大小环境变量，无效值时返回默认值。"""
+    """解析批量大小环境变量,无效值时返回默认值。"""
     raw = os.getenv(env_name, "").strip()
     if not raw:
         return default
@@ -56,6 +56,24 @@ def _parse_batch_env(env_name: str, default: int) -> int:
     except ValueError:
         print(f"[WARNING] Invalid {env_name}={raw!r}; using {default}")
         return default
+
+
+def _clamp_batches_for_vram(det_batch: int, rec_batch: int, vram_gb: float) -> tuple[int, int]:
+    """
+    Best-effort clamp batch sizes for small VRAM GPUs to reduce hangs/OOM.
+
+    NOTE: Some GPU OOM situations may manifest as long hangs inside GPU kernels/inference runtime.
+    Clamping batches is a pragmatic mitigation for 6GB-class laptops.
+    """
+    if vram_gb <= 4.5:
+        max_det, max_rec = 1, 4
+    elif vram_gb <= 6.5:
+        max_det, max_rec = 1, 8
+    elif vram_gb <= 8.5:
+        max_det, max_rec = 2, 16
+    else:
+        max_det, max_rec = det_batch, rec_batch
+    return min(det_batch, max_det), min(rec_batch, max_rec)
 
 
 def _create_ppstructure() -> Any:
@@ -91,12 +109,13 @@ def _create_ppstructure() -> Any:
     # 如果启用 GPU，先检测是否可用
     gpu_available = False
     gpu_count = 0
+    paddle_mod: Optional[Any] = None
     if use_gpu:
         try:
-            import paddle
+            import paddle as paddle_mod
 
-            if paddle.device.is_compiled_with_cuda():
-                gpu_count = paddle.device.cuda.device_count()
+            if paddle_mod.device.is_compiled_with_cuda():
+                gpu_count = paddle_mod.device.cuda.device_count()
                 gpu_available = gpu_count > 0
 
             if gpu_available:
@@ -105,6 +124,7 @@ def _create_ppstructure() -> Any:
                 os.environ.setdefault("FLAGS_fraction_of_gpu_memory_to_use", "0.8")
         except Exception:
             gpu_available = False
+            paddle_mod = None
 
     # 如果请求 GPU 但不可用，回退到 CPU 并警告
     if use_gpu and not gpu_available:
@@ -136,11 +156,32 @@ def _create_ppstructure() -> Any:
 
         device = f"gpu:{gpu_id}"
     else:
+        gpu_id = 0
         device = "cpu"
 
     # 批量推理参数（提升GPU利用率）
     det_batch_size = _parse_batch_env("EXAMPAPER_DET_BATCH_SIZE", default=2)
     rec_batch_size = _parse_batch_env("EXAMPAPER_REC_BATCH_SIZE", default=16)
+
+    # VRAM-aware clamping (opt-out via EXAMPAPER_VRAM_AWARE_BATCH=0)
+    vram_aware = (os.getenv("EXAMPAPER_VRAM_AWARE_BATCH", "1") or "").strip() != "0"
+    if use_gpu and vram_aware and paddle_mod is not None:
+        try:
+            props = paddle_mod.device.cuda.get_device_properties(int(gpu_id))
+            vram_gb = float(props.total_memory) / (1024**3)
+            det0, rec0 = det_batch_size, rec_batch_size
+            det_batch_size, rec_batch_size = _clamp_batches_for_vram(det_batch_size, rec_batch_size, vram_gb)
+            if (det_batch_size, rec_batch_size) != (det0, rec0):
+                # Update environment variables so PPStructureV3 uses clamped values
+                os.environ["EXAMPAPER_DET_BATCH_SIZE"] = str(det_batch_size)
+                os.environ["EXAMPAPER_REC_BATCH_SIZE"] = str(rec_batch_size)
+                print(
+                    f"[INFO] VRAM={vram_gb:.2f}GB，自动限制 batch 以提升稳定性: "
+                    f"det {det0}->{det_batch_size}, rec {rec0}->{rec_batch_size} "
+                    f"(可设 EXAMPAPER_VRAM_AWARE_BATCH=0 关闭)"
+                )
+        except Exception:
+            pass
 
     pp_kwargs: dict[str, Any] = {
         "device": device,

@@ -26,8 +26,8 @@ from typing import Any, Dict, Optional
 DEFAULT_ENV_CONFIG = {
     # GPU Acceleration
     "EXAMPAPER_USE_GPU": "1",
-    # GPU Memory Limit (80% to prevent OOM on 6GB cards)
-    "FLAGS_fraction_of_gpu_memory_to_use": "0.8",
+    # GPU Memory Limit (60% for stability, prevents hang/OOM on small GPUs)
+    "FLAGS_fraction_of_gpu_memory_to_use": "0.6",
     # PaddlePaddle GPU Performance Optimization
     "FLAGS_allocator_strategy": "auto_growth",
     "FLAGS_cudnn_deterministic": "0",
@@ -38,21 +38,25 @@ DEFAULT_ENV_CONFIG = {
     "EXAMPAPER_STEP2_INPROC": "1",
     # Model warmup (preload on startup)
     "EXAMPAPER_PPSTRUCTURE_WARMUP": "1",
+    # Web stability: bind PPStructure predict() to a dedicated OS thread.
+    # Helps avoid rare Paddle/CUDA thread-affinity hangs in async + high-worker setups.
+    "EXAMPAPER_PPSTRUCTURE_THREAD_BOUND_PREDICT": "1",
     # Async warmup (server starts immediately, model loads in background)
-    "EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC": "1",
+    # DISABLED: Async warmup can cause first page to hang waiting for model
+    "EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC": "0",
     # Fallback to subprocess if in-proc fails
     "EXAMPAPER_STEP1_FALLBACK_SUBPROCESS": "1",
     "EXAMPAPER_STEP2_FALLBACK_SUBPROCESS": "1",
     # Table recognition (keep enabled for data analysis)
     "EXAMPAPER_LIGHT_TABLE": "0",
-    # OCR batch sizes (improve GPU utilization)
-    "EXAMPAPER_DET_BATCH_SIZE": "2",
-    "EXAMPAPER_REC_BATCH_SIZE": "16",
-    # CPU prefetch queue size
-    "EXAMPAPER_PREFETCH_SIZE": "8",
+    # Note: OCR batch sizes (DET_BATCH_SIZE, REC_BATCH_SIZE), PREFETCH_SIZE, and MAX_WORKERS
+    # are auto-calculated based on hardware in calculate_optimal_params()
     # Parallel extraction
     "EXAMPAPER_PARALLEL_EXTRACTION": "1",
-    "EXAMPAPER_MAX_WORKERS": "4",
+    # GPU lock timeout (seconds) - prevent infinite hangs
+    "EXAMPAPER_GPU_LOCK_TIMEOUT_S": "120",
+    # OCR predict warning threshold (seconds)
+    "EXAMPAPER_OCR_PREDICT_WARN_AFTER_S": "60",
 }
 
 
@@ -111,39 +115,62 @@ def detect_hardware() -> Dict[str, Any]:
 
 
 def calculate_optimal_params(hw: Dict[str, Any]) -> Dict[str, str]:
-    """Derive env defaults based on detected hardware."""
-    vram = hw.get("gpu_vram_gb") or 0
-    ram = hw.get("ram_gb") or 0
-    cores = hw.get("cpu_cores") or 4
+    """
+    Derive conservative env defaults based on detected hardware.
 
-    # Batch sizes by VRAM tiers
-    if vram >= 12:
-        det_bs, rec_bs = 4, 32
-    elif vram >= 8:
-        det_bs, rec_bs = 3, 24
-    elif vram >= 6:
-        det_bs, rec_bs = 2, 16
-    elif vram >= 4:
-        det_bs, rec_bs = 1, 12
-    else:
+    Design goal: stability > throughput.
+    - Treat 6GB and below as "small VRAM" and use extremely conservative settings.
+    - Cap workers to <=4 for all machines to reduce long-run GPU/driver instability.
+    - Use lower GPU memory fraction (0.6) by default to reduce fragmentation/OOM-like hangs.
+    """
+    vram = int(hw.get("gpu_vram_gb") or 0)
+    ram = int(hw.get("ram_gb") or 0)
+    cores = int(hw.get("cpu_cores") or 4)
+
+    # Always default to a safer GPU memory fraction for stability
+    gpu_mem_fraction = 0.6
+
+    # Conservative batch sizes by VRAM tier
+    # NOTE: For PP-StructureV3 on laptop-class GPUs, stability issues often show up as long hangs
+    # rather than clean OOM exceptions, so we bias toward smaller batches.
+    if vram <= 6:
         det_bs, rec_bs = 1, 8
-
-    # Prefetch by RAM
-    if ram >= 32:
-        prefetch = 12
-    elif ram >= 24:
-        prefetch = 10
-    elif ram >= 16:
-        prefetch = 8
-    elif ram >= 12:
-        prefetch = 6
+    elif vram <= 8:
+        det_bs, rec_bs = 1, 12
+    elif vram <= 12:
+        det_bs, rec_bs = 2, 16
     else:
-        prefetch = 4
+        det_bs, rec_bs = 2, 24
 
-    # Workers by CPU cores
-    workers = max(2, min(8, cores // 2))
+    # Conservative prefetch sizing (reduce IO/cache pressure + overall memory churn)
+    # Special-case small VRAM GPUs: keep prefetch minimal.
+    if vram <= 6:
+        prefetch = 2
+    else:
+        if ram >= 32:
+            prefetch = 6
+        elif ram >= 16:
+            prefetch = 4
+        else:
+            prefetch = 2
+
+    # Conservative worker sizing:
+    # - Small VRAM: hard cap at 2 (GPU is bottleneck; more workers adds pressure/churn)
+    # - Others: scale gently, but cap at 4 always
+    if vram <= 6:
+        workers = 2
+    else:
+        if cores >= 16:
+            workers = 4
+        elif cores >= 8:
+            workers = 3
+        else:
+            workers = 2
+
+    workers = max(1, min(4, workers))
 
     return {
+        "FLAGS_fraction_of_gpu_memory_to_use": str(gpu_mem_fraction),
         "EXAMPAPER_DET_BATCH_SIZE": str(det_bs),
         "EXAMPAPER_REC_BATCH_SIZE": str(rec_bs),
         "EXAMPAPER_PREFETCH_SIZE": str(prefetch),
@@ -187,8 +214,10 @@ def is_port_in_use(port: int) -> int | None:
     try:
         result = subprocess.run(
             ["netstat", "-ano"],
-            capture_output=True, text=True, timeout=10
+            capture_output=True, text=True, timeout=10, encoding="gbk", errors="ignore"
         )
+        if not result.stdout:
+            return None
         for line in result.stdout.splitlines():
             parts = line.split()
             # netstat output: Proto LocalAddress ForeignAddress State PID
@@ -277,13 +306,18 @@ def print_config_summary(
         if cores:
             print(f"  CPU Cores: {cores}")
     print(f"  Parallel Workers: {os.getenv('EXAMPAPER_MAX_WORKERS', workers)}")
-    print(f"  Model Warmup: {'ASYNC' if warmup else 'DISABLED'}")
+    print(f"  Model Warmup: {'ENABLED' if warmup else 'DISABLED'}")
     print(f"  In-process Execution: ENABLED")
     print(f"  Subprocess Fallback: ENABLED")
     print(
-        f"  Auto Params: det_batch={os.getenv('EXAMPAPER_DET_BATCH_SIZE')}, "
+        f"  GPU Memory Fraction: {os.getenv('FLAGS_fraction_of_gpu_memory_to_use', '0.6')}"
+    )
+    print(
+        f"  Auto Params (stability-optimized): "
+        f"det_batch={os.getenv('EXAMPAPER_DET_BATCH_SIZE')}, "
         f"rec_batch={os.getenv('EXAMPAPER_REC_BATCH_SIZE')}, "
-        f"prefetch={os.getenv('EXAMPAPER_PREFETCH_SIZE')}"
+        f"prefetch={os.getenv('EXAMPAPER_PREFETCH_SIZE')}, "
+        f"workers={os.getenv('EXAMPAPER_MAX_WORKERS')}"
     )
     print("=" * 50)
 

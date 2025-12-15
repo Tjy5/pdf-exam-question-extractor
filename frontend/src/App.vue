@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import ErrorBoundary from '@/components/common/ErrorBoundary.vue'
-import UploadZone from '@/components/dashboard/UploadZone.vue'
-import LogTerminal from '@/components/dashboard/LogTerminal.vue'
-import PipelineView from '@/components/dashboard/PipelineView.vue'
-import ResultGallery from '@/components/dashboard/ResultGallery.vue'
+import UploadZone from '@/components/upload/UploadZone.vue'
+import LogTerminal from '@/components/logs/LogTerminal.vue'
+import PipelineView from '@/components/pipeline/PipelineView.vue'
+import ResultGallery from '@/components/results/ResultGallery.vue'
 </script>
 
 <template>

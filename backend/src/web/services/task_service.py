@@ -3,13 +3,15 @@ Task Service - Task lifecycle management
 """
 import asyncio
 import hashlib
+import os
+import time
 import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 from ..schemas import LogEntry, StepState, StepStatus, TaskStatus
-from .event_bus import event_bus
+from .event_infra import emit_event, publish_live_event
 
 
 class Task:
@@ -47,16 +49,20 @@ class Task:
         self.pdf_path = self.task_workdir / self.pdf_filename
         self.exam_dir: Optional[Path] = None
 
-        # Initialize step states
+        # Initialize step states (names must match StepName enum in pipeline/contracts.py)
         self.steps: List[StepState] = [
             StepState(index=0, name="pdf_to_images", title="PDF 转图片"),
             StepState(index=1, name="extract_questions", title="题目提取"),
-            StepState(index=2, name="data_analysis", title="资料分析重组"),
-            StepState(index=3, name="compose_long_images", title="长图拼接"),
+            StepState(index=2, name="analyze_data", title="资料分析重组"),
+            StepState(index=3, name="compose_long_image", title="长图拼接"),
             StepState(index=4, name="collect_results", title="结果汇总"),
         ]
 
-    def add_log(self, message: str, log_type: str = "default") -> None:
+        # Live step event throttling (protects SSE/event loop from high-frequency updates)
+        self._live_step_emit_last_at: Dict[int, float] = {}
+        self._live_step_emit_last_progress: Dict[int, float] = {}
+
+    def add_log(self, message: str, log_type: str = "default", durable: bool = True) -> None:
         """Add a log entry with timestamp and unique ID"""
         now = datetime.now()
         time_str = now.strftime("%H:%M:%S")
@@ -65,7 +71,13 @@ class Task:
         self.logs.append(entry)
         self.updated_at = now
         self.last_log_index = len(self.logs) - 1
-        event_bus.publish(self.id, {"type": "log", "data": entry.dict()})
+        payload = entry.dict()
+        if durable:
+            # Durable: log events need SSE replay support
+            emit_event(task_id=self.id, event_type="log", payload=payload)
+        else:
+            # Live-only: avoid SQLite commit storms for high-frequency logs
+            publish_live_event(task_id=self.id, event_type="log", payload=payload)
 
     def get_step(self, step_index: int) -> Optional[StepState]:
         """Get step state by index"""
@@ -82,7 +94,7 @@ class Task:
             step.started_at = datetime.now()
             self.current_step = step_index
             self.updated_at = datetime.now()
-            self._emit_step_event()
+            self._emit_step_event(durable=True)
 
     def mark_step_completed(
         self, step_index: int, artifact_paths: Optional[List[str]] = None
@@ -96,7 +108,7 @@ class Task:
             if artifact_paths:
                 step.artifact_paths = artifact_paths
             self.updated_at = datetime.now()
-            self._emit_step_event()
+            self._emit_step_event(durable=True)
 
     def mark_step_failed(self, step_index: int, error: str) -> None:
         """Mark a step as failed"""
@@ -107,7 +119,7 @@ class Task:
             step.ended_at = datetime.now()
             step.error_message = error
             self.updated_at = datetime.now()
-            self._emit_step_event()
+            self._emit_step_event(durable=True)
 
     def update_step_progress(self, step_index: int, progress: float) -> None:
         """Update the progress (0.0-1.0) for a running step"""
@@ -115,7 +127,41 @@ class Task:
         if step and step.status == StepStatus.RUNNING:
             step.progress = max(0.0, min(1.0, progress))
             self.updated_at = datetime.now()
-            self._emit_step_event()
+            # Live-only: progress updates are high-frequency, skip DB storage
+            # Also throttle emission to avoid flooding SSE/event loop.
+            try:
+                min_interval_ms = int(os.getenv("EXAMPAPER_STEP_PROGRESS_MIN_INTERVAL_MS", "200"))
+            except (ValueError, TypeError):
+                min_interval_ms = 200
+            min_interval_ms = max(0, min_interval_ms)
+
+            try:
+                min_delta = float(os.getenv("EXAMPAPER_STEP_PROGRESS_MIN_DELTA", "0.01"))
+            except (ValueError, TypeError):
+                min_delta = 0.01
+            min_delta = max(0.0, min_delta)
+
+            interval_s = max(0.0, float(min_interval_ms) / 1000.0)
+
+            now_m = time.monotonic()
+            last_t = float(self._live_step_emit_last_at.get(step_index, 0.0))
+            last_p = self._live_step_emit_last_progress.get(step_index)
+
+            cur_p = float(step.progress if step.progress is not None else 0.0)
+            force = cur_p <= 0.0 or cur_p >= 1.0
+
+            should_emit = (
+                force
+                or last_p is None
+                or abs(cur_p - float(last_p)) >= min_delta
+                or (now_m - last_t) >= interval_s
+            )
+            if not should_emit:
+                return
+
+            self._live_step_emit_last_at[step_index] = now_m
+            self._live_step_emit_last_progress[step_index] = cur_p
+            self._emit_step_event(durable=False)
 
     def can_run_step(self, step_index: int) -> tuple[bool, Optional[str]]:
         """Check if a step can be run"""
@@ -151,7 +197,7 @@ class Task:
             step.started_at = None
             step.ended_at = None
             self.updated_at = datetime.now()
-            self._emit_step_event()
+            self._emit_step_event(durable=True)
 
     def serialize_steps(self) -> List[Dict[str, Any]]:
         """Return a lightweight view used by SSE and status APIs."""
@@ -169,9 +215,19 @@ class Task:
             for step in self.steps
         ]
 
-    def _emit_step_event(self) -> None:
-        """Publish current step snapshot to SSE listeners."""
-        event_bus.publish(self.id, {"type": "step", "data": {"steps": self.serialize_steps()}})
+    def _emit_step_event(self, *, durable: bool) -> None:
+        """
+        Publish current step snapshot to SSE listeners.
+
+        Args:
+            durable: If True, store in DB for SSE replay (status changes).
+                     If False, live-only publish (progress updates).
+        """
+        payload = {"steps": self.serialize_steps()}
+        if durable:
+            emit_event(task_id=self.id, event_type="step", payload=payload)
+        else:
+            publish_live_event(task_id=self.id, event_type="step", payload=payload)
 
 
 class TaskManager:

@@ -115,10 +115,14 @@ export const api = {
   },
 
   /**
-   * Create SSE connection URL
+   * Create SSE connection URL with optional last event ID for replay
    */
-  getStreamUrl(taskId: string): string {
-    return `/api/stream/${taskId}`
+  getStreamUrl(taskId: string, lastEventId?: string | number | null): string {
+    const base = `/api/stream/${taskId}`
+    if (lastEventId != null && lastEventId !== '') {
+      return `${base}?last_event_id=${lastEventId}`
+    }
+    return base
   },
 }
 

@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import os
+import threading
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -25,17 +27,11 @@ from ...services.pipeline import (
     TaskSnapshot,
     TaskStatus as PipelineTaskStatus,
 )
-from ...services.pipeline.steps import (
-    create_analyze_data_step,
-    create_collect_results_step,
-    create_compose_long_image_step,
-    create_extract_questions_step,
-    create_pdf_to_images_step,
-)
+from ...services.pipeline.registry import StepRegistry
 
 from ..config import config
 from ..schemas import StepStatus as WebStepStatus
-from .event_bus import event_bus
+from .event_infra import emit_event
 from .task_service import Task
 
 
@@ -187,34 +183,54 @@ class TaskExecutorService:
     def _make_steps(
         self, task: Task, loop: asyncio.AbstractEventLoop
     ) -> List[Any]:
+        """
+        Build step executors using StepRegistry.
+
+        Each step factory has different kwargs requirements. We use a parameter
+        mapping dictionary to centralize the configuration and make it easier
+        to add new steps.
+        """
         log_cb = self._log_adapter(task, loop)
-        return [
-            create_pdf_to_images_step(
-                log_callback=log_cb,
-                progress_callback=self._progress_adapter(task, loop, 0),
-            ),
-            create_extract_questions_step(
-                model_provider=self._model_provider,
-                skip_existing=True,
-                parallel=config.parallel_extraction,
-                max_workers=config.max_workers,
-                log_callback=log_cb,
-                progress_callback=self._extract_progress_adapter(task, loop, 1),
-            ),
-            create_analyze_data_step(
-                model_provider=self._model_provider,
-                log_callback=log_cb,
-                progress_callback=self._progress_adapter(task, loop, 2),
-            ),
-            create_compose_long_image_step(
-                log_callback=log_cb,
-                progress_callback=self._progress_adapter(task, loop, 3),
-            ),
-            create_collect_results_step(
-                log_callback=log_cb,
-                progress_callback=self._progress_adapter(task, loop, 4),
-            ),
-        ]
+        names = StepRegistry.get_ordered_names()
+        factories = StepRegistry.get_ordered_factories()
+
+        # Helper to build common progress callback parameters
+        def _progress_kwargs(step_index: int) -> Dict[str, Any]:
+            return {
+                "log_callback": log_cb,
+                "progress_callback": self._progress_adapter(task, loop, step_index),
+            }
+
+        steps: List[Any] = []
+        for idx, (name, factory) in enumerate(zip(names, factories)):
+            # Parameter mapping: step name -> kwargs for that step's factory
+            # This centralizes step configuration and makes extension easier
+            param_map: Dict[str, Dict[str, Any]] = {
+                StepName.pdf_to_images.value: _progress_kwargs(idx),
+                StepName.extract_questions.value: {
+                    "model_provider": self._model_provider,
+                    "skip_existing": True,
+                    "parallel": config.parallel_extraction,
+                    "max_workers": config.max_workers,
+                    "log_callback": log_cb,
+                    "progress_callback": self._extract_progress_adapter(task, loop, idx),
+                },
+                StepName.analyze_data.value: {
+                    "model_provider": self._model_provider,
+                    **_progress_kwargs(idx),
+                },
+                StepName.compose_long_image.value: _progress_kwargs(idx),
+                StepName.collect_results.value: _progress_kwargs(idx),
+            }
+
+            params = param_map.get(name)
+            if params is None:
+                raise ValueError(f"Unsupported step in registry: {name}")
+
+            step = factory(**params)
+            steps.append(step)
+
+        return steps
 
     def _progress_adapter(
         self,
@@ -222,12 +238,31 @@ class TaskExecutorService:
         loop: asyncio.AbstractEventLoop,
         step_index: int,
     ):
+        # Coalesce high-frequency callbacks from worker threads to avoid
+        # flooding loop.call_soon_threadsafe (which can stall the event loop).
+        lock = threading.Lock()
+        pending: Optional[float] = None
+        scheduled = False
+
+        def _flush() -> None:
+            nonlocal pending, scheduled
+            with lock:
+                value = pending
+                pending = None
+                scheduled = False
+            if value is None:
+                return
+            task.update_step_progress(step_index, max(0.0, min(1.0, float(value))))
+
         def _cb(progress: float) -> None:
-            loop.call_soon_threadsafe(
-                task.update_step_progress,
-                step_index,
-                max(0.0, min(1.0, progress)),
-            )
+            nonlocal pending, scheduled
+            v = max(0.0, min(1.0, float(progress)))
+            with lock:
+                pending = v
+                if scheduled:
+                    return
+                scheduled = True
+            loop.call_soon_threadsafe(_flush)
 
         return _cb
 
@@ -237,16 +272,52 @@ class TaskExecutorService:
         loop: asyncio.AbstractEventLoop,
         step_index: int,
     ):
+        lock = threading.Lock()
+        pending: Optional[float] = None
+        scheduled = False
+
+        def _flush() -> None:
+            nonlocal pending, scheduled
+            with lock:
+                value = pending
+                pending = None
+                scheduled = False
+            if value is None:
+                return
+            task.update_step_progress(step_index, max(0.0, min(1.0, float(value))))
+
         def _cb(done: int, total: int, status: str = "", page_name: str = "") -> None:
-            value = (done / total) if total else 0.0
-            loop.call_soon_threadsafe(
-                task.update_step_progress,
-                step_index,
-                max(0.0, min(1.0, value)),
-            )
+            nonlocal pending, scheduled
+            value = (float(done) / float(total)) if total else 0.0
+            v = max(0.0, min(1.0, float(value)))
+            with lock:
+                pending = v
+                if not scheduled:
+                    scheduled = True
+                    loop.call_soon_threadsafe(_flush)
+
+            # Per-page status logs can be extremely noisy; default to sampled + live-only.
+            # - Always log errors
+            # - Optionally log every N pages (EXAMPAPER_EXTRACT_LOG_EVERY_N)
+            # - Always log final completion
+            try:
+                log_every_n = int(os.getenv("EXAMPAPER_EXTRACT_LOG_EVERY_N", "0") or "0")
+            except (ValueError, TypeError):
+                log_every_n = 0
+
+            want_log = False
             if status:
+                if status.lower() in {"error", "failed", "exception"}:
+                    want_log = True
+                elif total and done >= total:
+                    want_log = True
+                elif log_every_n > 0 and (done % max(1, log_every_n) == 0):
+                    want_log = True
+
+            if want_log and status:
                 message = status if not page_name else f"{status}: {page_name}"
-                loop.call_soon_threadsafe(task.add_log, message, "info")
+                # Live-only to avoid SQLite commit storms
+                loop.call_soon_threadsafe(task.add_log, message, "info", False)
 
         return _cb
 
@@ -256,8 +327,31 @@ class TaskExecutorService:
         loop: asyncio.AbstractEventLoop,
         log_type: str = "info",
     ):
+        # Default: keep important logs durable, downgrade noisy OCR progress logs to live-only.
+        ocr_live_only = (os.getenv("EXAMPAPER_OCR_LOG_LIVE_ONLY", "1") or "").strip() == "1"
+
+        def _is_noisy(message: str) -> bool:
+            if not message:
+                return False
+            m = message.strip()
+            # Patterns from OCR/parallel_extraction that can fire per page or more.
+            return (
+                m.startswith("[并发]")
+                or m.startswith("[OCR]")
+                or m.startswith("  [OCR]")
+                or "GPU推理中" in m
+                or m.startswith("  [处理]")
+                or m.startswith("  [跳过]")
+                or m.startswith("  [空页]")
+            )
+
         def _cb(message: str) -> None:
-            loop.call_soon_threadsafe(task.add_log, message, log_type)
+            durable = True
+            if log_type in {"error", "warning"}:
+                durable = True
+            elif ocr_live_only and _is_noisy(message):
+                durable = False
+            loop.call_soon_threadsafe(task.add_log, message, log_type, durable)
 
         return _cb
 
@@ -305,12 +399,12 @@ class TaskExecutorService:
             task.current_step = -1
             task.error_message = error or "任务失败"
             task.add_log(task.error_message, "error")
-            event_bus.publish(task.id, {"type": "done", "data": "error"})
+            emit_event(task_id=task.id, event_type="done", payload={"status": "error"})
         elif event == "pipeline_completed":
             task.status = "completed"
             task.current_step = -1
             task.add_log("流水线执行完成", "success")
-            event_bus.publish(task.id, {"type": "done", "data": "completed"})
+            emit_event(task_id=task.id, event_type="done", payload={"status": "completed"})
         elif event == "pipeline_cancelled":
             task.status = "pending"
             task.current_step = -1
@@ -406,7 +500,7 @@ class TaskExecutorService:
         if not all_dir.is_dir():
             return
         task.result_images = [
-            {"filename": p.name, "path": str(p)}
+            {"filename": p.name, "name": p.stem, "path": str(p)}
             for p in sorted(all_dir.glob("*.png"))
         ]
 
@@ -430,7 +524,7 @@ class TaskExecutorService:
         task.current_step = -1
         task.error_message = str(exc)
         task.add_log(f"任务执行异常: {exc}", "error")
-        event_bus.publish(task.id, {"type": "done", "data": "error"})
+        emit_event(task_id=task.id, event_type="done", payload={"status": "error"})
 
 
 # Global executor instance

@@ -1,13 +1,16 @@
 /**
- * Task Store - Pinia store for task state management
+ * Task Store - Core task state management
+ * Coordinates with useLogsStore, useConnectionStore, useResultsStore
  */
 
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
-import type { Step, LogEntry, ImageResult, TaskMode, StepStatus } from '@/services/types'
+import type { Step, TaskMode, StepStatus } from '@/services/types'
+import { useLogsStore } from './useLogsStore'
+import { useConnectionStore } from './useConnectionStore'
+import { useResultsStore } from './useResultsStore'
 
-// Default step definitions
 const createDefaultSteps = (): Step[] => [
   { index: 0, name: 'pdf_to_images', title: 'PDF 转图片', desc: '将 PDF 每一页转换为高分辨率图像', icon: 'ph-file-image', status: 'pending', error: null, artifact_count: 0, progress: null, progress_text: null },
   { index: 1, name: 'extract_questions', title: 'OCR 识别', desc: '使用 PP-StructureV3 识别版面结构并缓存', icon: 'ph-scan', status: 'pending', error: null, artifact_count: 0, progress: null, progress_text: null },
@@ -17,20 +20,12 @@ const createDefaultSteps = (): Step[] => [
 ]
 
 export const useTaskStore = defineStore('task', () => {
-  // State
+  // Core state
   const taskId = ref<string | null>(null)
   const file = ref<File | null>(null)
   const status = ref<'idle' | 'uploading' | 'processing' | 'paused' | 'completed' | 'error'>('idle')
   const mode = ref<TaskMode>('auto')
   const steps = ref<Step[]>(createDefaultSteps())
-  const logs = ref<LogEntry[]>([])
-  const results = ref<ImageResult[]>([])
-
-  // Internal state
-  const logCursor = ref(0)
-  const eventSource = ref<EventSource | null>(null)
-  const pollTimer = ref<number | null>(null)
-  const seenLogIds = ref<Set<string>>(new Set())
 
   // Computed
   const progressPercent = computed(() => {
@@ -62,47 +57,103 @@ export const useTaskStore = defineStore('task', () => {
     return steps.value.findIndex(s => s.status === 'running')
   })
 
-  // Actions
-  function addLog(message: string, type: LogEntry['type'] = 'default') {
-    const now = new Date()
-    const timeString = now.toTimeString().split(' ')[0]
-    const id = `${Date.now()}-${Math.random().toString(36).substr(2, 8)}`
+  // Sibling stores (lazy access to avoid circular deps)
+  const getLogsStore = () => useLogsStore()
+  const getConnectionStore = () => useConnectionStore()
+  const getResultsStore = () => useResultsStore()
 
-    logs.value.push({ id, time: timeString, message, type })
+  // Step update handler
+  function updateSteps(stepsData: any[]) {
+    stepsData.forEach((s, idx) => {
+      if (steps.value[idx]) {
+        steps.value[idx].status = s.status as StepStatus
+        steps.value[idx].error = s.error || null
+        steps.value[idx].artifact_count = s.artifact_count || 0
+        steps.value[idx].progress = s.progress ?? null
+        steps.value[idx].progress_text = s.progress_text ?? null
+      }
+    })
+  }
 
-    // Keep log size manageable
-    while (logs.value.length > 100) {
-      const removed = logs.value.shift()
-      if (removed) seenLogIds.value.delete(removed.id)
+  // Connection handlers
+  function createConnectionHandlers() {
+    const logsStore = getLogsStore()
+    const resultsStore = getResultsStore()
+
+    return {
+      onStep: (stepsData: any[]) => updateSteps(stepsData),
+      onDone: (doneStatus: string) => {
+        status.value = doneStatus === 'completed' ? 'completed' : 'error'
+        if (status.value === 'completed') {
+          logsStore.addLog('所有任务处理完成！', 'success')
+          if (taskId.value) resultsStore.loadResults(taskId.value)
+        } else {
+          logsStore.addLog('处理失败', 'error')
+        }
+      },
+      onFallbackToPolling: () => startPolling(),
     }
   }
 
+  function createPollingHandlers() {
+    const logsStore = getLogsStore()
+    const resultsStore = getResultsStore()
+
+    return {
+      onStatus: (data: any) => {
+        if (data.steps) updateSteps(data.steps)
+
+        if (data.status === 'pending' && mode.value === 'manual') {
+          const hasRunning = steps.value.some(s => s.status === 'running')
+          if (!hasRunning) {
+            status.value = 'paused'
+            getConnectionStore().stopPolling()
+            logsStore.addLog('步骤执行完成', 'success')
+          }
+        }
+      },
+      onComplete: async () => {
+        status.value = 'completed'
+        logsStore.addLog('所有任务处理完成！', 'success')
+        if (taskId.value) await resultsStore.loadResults(taskId.value)
+      },
+      onError: (error: string) => {
+        status.value = 'error'
+        logsStore.addLog(`处理失败: ${error}`, 'error')
+      },
+    }
+  }
+
+  function startPolling() {
+    if (!taskId.value) return
+    getConnectionStore().startPolling(taskId.value, createPollingHandlers())
+  }
+
+  // Actions
   function reset() {
-    disconnectEventSource()
-    stopPolling()
+    getConnectionStore().reset()
+    getLogsStore().reset()
+    getResultsStore().reset()
 
     taskId.value = null
     file.value = null
     status.value = 'idle'
     steps.value = createDefaultSteps()
-    logs.value = []
-    results.value = []
-    logCursor.value = 0
-    seenLogIds.value.clear()
   }
 
   async function uploadFile(selectedFile: File, selectedMode: TaskMode) {
+    const logsStore = getLogsStore()
+
     status.value = 'uploading'
     file.value = selectedFile
     mode.value = selectedMode
 
     try {
-      addLog(`正在上传文件: ${selectedFile.name}`, 'info')
+      logsStore.addLog(`正在上传文件: ${selectedFile.name}`, 'info')
 
       const response = await api.upload(selectedFile, selectedMode)
       taskId.value = response.data.task_id
 
-      // Apply inferred step states
       if (response.data.steps) {
         response.data.steps.forEach((s, idx) => {
           if (steps.value[idx]) {
@@ -112,32 +163,34 @@ export const useTaskStore = defineStore('task', () => {
         })
       }
 
-      addLog('文件上传成功', 'success')
+      logsStore.addLog('文件上传成功', 'success')
 
       if (selectedMode === 'auto') {
         await startProcessing()
       } else {
         status.value = 'paused'
-        addLog('已上传，请手动执行各步骤', 'info')
+        logsStore.addLog('已上传，请手动执行各步骤', 'info')
       }
     } catch (error) {
       status.value = 'error'
-      addLog(`上传失败: ${error}`, 'error')
+      logsStore.addLog(`上传失败: ${error}`, 'error')
     }
   }
 
   async function startProcessing() {
     if (!taskId.value) return
 
+    const logsStore = getLogsStore()
+    const connectionStore = getConnectionStore()
+
     status.value = 'processing'
-    addLog('开始处理流程...', 'info')
+    logsStore.addLog('开始处理流程...', 'info')
 
     try {
       await api.startProcess(taskId.value)
-      connectEventSource()
+      connectionStore.connectEventSource(taskId.value, createConnectionHandlers())
     } catch (error) {
-      addLog(`启动处理失败: ${error}`, 'error')
-      // Fallback to polling
+      logsStore.addLog(`启动处理失败: ${error}`, 'error')
       startPolling()
     }
   }
@@ -145,16 +198,19 @@ export const useTaskStore = defineStore('task', () => {
   async function startStep(stepIndex: number, runToEnd: boolean = false) {
     if (!taskId.value) return
 
+    const logsStore = getLogsStore()
+    const connectionStore = getConnectionStore()
+
     status.value = 'processing'
     steps.value[stepIndex].status = 'running'
     const action = runToEnd ? '从此步执行到最后' : '执行此步'
-    addLog(`${action}: ${steps.value[stepIndex].title}`, 'info')
+    logsStore.addLog(`${action}: ${steps.value[stepIndex].title}`, 'info')
 
     try {
       await api.startStep(taskId.value, stepIndex, runToEnd)
-      connectEventSource()
+      connectionStore.connectEventSource(taskId.value, createConnectionHandlers())
     } catch (error) {
-      addLog(`步骤启动失败: ${error}`, 'error')
+      logsStore.addLog(`步骤启动失败: ${error}`, 'error')
       steps.value[stepIndex].status = 'failed'
       status.value = 'paused'
     }
@@ -162,6 +218,8 @@ export const useTaskStore = defineStore('task', () => {
 
   async function restartFromStep(stepIndex: number) {
     if (!taskId.value) return
+
+    const logsStore = getLogsStore()
 
     try {
       const response = await api.restartFromStep(taskId.value, stepIndex)
@@ -178,174 +236,17 @@ export const useTaskStore = defineStore('task', () => {
         })
       }
 
-      addLog(response.data.message || `已重置步骤 ${stepIndex + 1}`, 'info')
+      logsStore.addLog(response.data.message || `已重置步骤 ${stepIndex + 1}`, 'info')
 
       if (mode.value === 'manual') {
         await startStep(stepIndex)
       }
     } catch (error) {
-      addLog(`重置失败: ${error}`, 'error')
+      logsStore.addLog(`重置失败: ${error}`, 'error')
     }
   }
 
-  function connectEventSource() {
-    if (!taskId.value) return
-
-    disconnectEventSource()
-
-    const url = api.getStreamUrl(taskId.value)
-    const es = new EventSource(url)
-
-    es.addEventListener('step', (e) => {
-      try {
-        const data = JSON.parse(e.data)
-        if (data.steps) {
-          data.steps.forEach((s: any, idx: number) => {
-            if (steps.value[idx]) {
-              steps.value[idx].status = s.status
-              steps.value[idx].error = s.error || null
-              steps.value[idx].artifact_count = s.artifact_count || 0
-              steps.value[idx].progress = s.progress ?? null
-              steps.value[idx].progress_text = s.progress_text ?? null
-            }
-          })
-        }
-      } catch (err) {
-        console.error('Failed to parse step event:', err)
-      }
-    })
-
-    es.addEventListener('log', (e) => {
-      try {
-        const log = JSON.parse(e.data)
-        if (!seenLogIds.value.has(log.id)) {
-          seenLogIds.value.add(log.id)
-          logs.value.push(log)
-        }
-      } catch (err) {
-        console.error('Failed to parse log event:', err)
-      }
-    })
-
-    es.addEventListener('done', (e) => {
-      status.value = e.data === 'completed' ? 'completed' : 'error'
-      disconnectEventSource()
-
-      if (status.value === 'completed') {
-        addLog('所有任务处理完成！', 'success')
-        loadResults()
-      } else {
-        addLog('处理失败', 'error')
-      }
-    })
-
-    es.onerror = () => {
-      console.warn('SSE connection error, falling back to polling')
-      disconnectEventSource()
-      startPolling()
-    }
-
-    eventSource.value = es
-  }
-
-  function disconnectEventSource() {
-    if (eventSource.value) {
-      eventSource.value.close()
-      eventSource.value = null
-    }
-  }
-
-  function startPolling() {
-    stopPolling()
-
-    pollTimer.value = window.setInterval(async () => {
-      await pollStatus()
-    }, 2000)
-  }
-
-  function stopPolling() {
-    if (pollTimer.value !== null) {
-      clearInterval(pollTimer.value)
-      pollTimer.value = null
-    }
-  }
-
-  async function pollStatus() {
-    if (!taskId.value) return
-
-    try {
-      const response = await api.getStatus(taskId.value, logCursor.value)
-      const data = response.data
-
-      // Update steps
-      if (data.steps) {
-        data.steps.forEach((s, idx) => {
-          if (steps.value[idx]) {
-            steps.value[idx].status = s.status as StepStatus
-            steps.value[idx].error = s.error || null
-            steps.value[idx].artifact_count = s.artifact_count || 0
-            steps.value[idx].progress = s.progress ?? null
-            steps.value[idx].progress_text = s.progress_text ?? null
-          }
-        })
-      }
-
-      // Append new logs
-      if (data.logs?.length) {
-        data.logs.forEach(log => {
-          if (!seenLogIds.value.has(log.id)) {
-            seenLogIds.value.add(log.id)
-            logs.value.push(log)
-          }
-        })
-        logCursor.value = data.total_logs
-      }
-
-      // Check completion
-      if (data.status === 'completed') {
-        status.value = 'completed'
-        stopPolling()
-        addLog('所有任务处理完成！', 'success')
-        await loadResults()
-      } else if (data.status === 'failed') {
-        status.value = 'error'
-        stopPolling()
-        addLog(`处理失败: ${data.error}`, 'error')
-      } else if (data.status === 'pending' && mode.value === 'manual') {
-        // In manual mode, stop polling when step completes
-        const hasRunning = steps.value.some(s => s.status === 'running')
-        if (!hasRunning) {
-          status.value = 'paused'
-          stopPolling()
-          addLog('步骤执行完成', 'success')
-        }
-      }
-    } catch (error) {
-      console.error('Polling error:', error)
-    }
-  }
-
-  async function loadResults() {
-    if (!taskId.value) return
-
-    try {
-      const response = await api.getResults(taskId.value)
-      results.value = response.data.images.map(img => ({
-        src: api.getImageUrl(taskId.value!, img.filename),
-        name: img.name,
-        path: img.path,
-      }))
-    } catch (error) {
-      addLog(`加载结果失败: ${error}`, 'error')
-    }
-  }
-
-  function downloadAll() {
-    if (!taskId.value) return
-    window.location.href = api.getDownloadUrl(taskId.value)
-  }
-
-  // Helper functions for step management
+  // Helper functions
   function getStepDisplayStatus(step: Step): StepStatus {
     return step.status || 'pending'
   }
@@ -376,20 +277,38 @@ export const useTaskStore = defineStore('task', () => {
     return true
   }
 
+  // Expose logs and results for backward compatibility
+  const logs = computed(() => getLogsStore().logs)
+  const results = computed(() => getResultsStore().results)
+
+  function addLog(message: string, type: 'default' | 'info' | 'success' | 'error' = 'default') {
+    getLogsStore().addLog(message, type)
+  }
+
+  function loadResults() {
+    if (taskId.value) getResultsStore().loadResults(taskId.value)
+  }
+
+  function downloadAll() {
+    if (taskId.value) getResultsStore().downloadAll(taskId.value)
+  }
+
   return {
-    // State
+    // Core state
     taskId,
     file,
     status,
     mode,
     steps,
-    logs,
-    results,
 
     // Computed
     progressPercent,
     isBusy,
     currentStepIndex,
+
+    // Backward compatible accessors
+    logs,
+    results,
 
     // Actions
     addLog,

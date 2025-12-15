@@ -152,6 +152,16 @@ CREATE TABLE IF NOT EXISTS task_logs (
     FOREIGN KEY (task_id) REFERENCES tasks(task_id) ON DELETE CASCADE
 );
 
+-- Task events for SSE replay (append-only)
+CREATE TABLE IF NOT EXISTS task_events (
+    id INTEGER PRIMARY KEY,  -- Monotonic ID for Last-Event-ID
+    task_id TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id) ON DELETE CASCADE
+);
+
 -- Indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_tasks_status_created_at
     ON tasks(status, created_at DESC);
@@ -161,6 +171,8 @@ CREATE INDEX IF NOT EXISTS idx_tasks_hash
     ON tasks(file_hash) WHERE file_hash IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_logs_task_id_id
     ON task_logs(task_id, id);
+CREATE INDEX IF NOT EXISTS idx_events_task_id_id
+    ON task_events(task_id, id);
 
 -- Trigger to auto-update tasks.updated_at on UPDATE
 CREATE TRIGGER IF NOT EXISTS update_tasks_timestamp

@@ -82,20 +82,28 @@ class ExtractQuestionsStep(BaseStepExecutor):
             # Import the extraction function from the new implementation
             from ..impl.extract_questions import run_extract_questions
 
-            # Get thread-safe pipeline
-            with self._model_provider.lease() as pipeline:
-                # Run extraction in thread pool
-                success = await asyncio.to_thread(
-                    run_extract_questions,
-                    img_dir=workdir,
-                    pipeline=pipeline,
-                    skip_existing=self._skip_existing,
-                    pages=[],  # Process all pages
-                    log=self._log,
-                    parallel=self._parallel,
-                    max_workers=self._max_workers,
-                    progress_callback=self._progress_callback,
-                )
+            # Get raw pipeline (bypass _ThreadBoundPipeline wrapper) and shared GPU semaphore.
+            # ParallelPageProcessor already has its own GPU semaphore control via _GpuLockedPipeline,
+            # so we don't need the additional thread-binding from _ThreadBoundPipeline.
+            # Using get_pipeline() here would cause nested blocking:
+            #   ThreadPoolExecutor(workers) -> _GpuLockedPipeline -> _ThreadBoundPipeline.executor(1)
+            # which leads to deadlocks when GPU inference hangs.
+            pipeline = self._model_provider.get_pipeline_unsafe()
+            gpu_semaphore = self._model_provider.get_gpu_semaphore()
+
+            # Run extraction in thread pool
+            success = await asyncio.to_thread(
+                run_extract_questions,
+                img_dir=workdir,
+                pipeline=pipeline,
+                skip_existing=self._skip_existing,
+                pages=[],  # Process all pages
+                log=self._log,
+                parallel=self._parallel,
+                max_workers=self._max_workers,
+                progress_callback=self._progress_callback,
+                gpu_semaphore=gpu_semaphore,  # Pass shared semaphore
+            )
 
             elapsed = time.time() - start_time
 

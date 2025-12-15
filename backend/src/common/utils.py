@@ -4,7 +4,7 @@ utils.py - 通用工具函数
 提供版面分析、section boundary检测等工具函数
 """
 
-from typing import Any, Optional
+from typing import Any, Optional, Pattern
 from .types import (
     QUESTION_HEAD_PATTERN,
     SECTION_TITLE_PATTERN,
@@ -14,6 +14,54 @@ from .types import (
     DATA_INTRO_KEYWORDS,
     QUESTION_RANGE_PATTERN,
 )
+
+
+def _text_views(content: Any) -> tuple[str, str]:
+    """
+    从内容中提取两个文本视图：原始文本和去空格的紧凑文本。
+    
+    用于增强OCR文本的鲁棒性，处理"资 料 分 析"这类空格断字的情况。
+    
+    Args:
+        content: 版面块的内容
+        
+    Returns:
+        (原始文本, 紧凑文本) 元组
+    """
+    raw = content if isinstance(content, str) else str(content or "")
+    raw = raw.strip()
+    compact = "".join(raw.split())
+    return raw, compact
+
+
+def _contains_in_views(texts: tuple[str, str], keywords: list[str]) -> bool:
+    """
+    检查关键词是否在任一文本视图中出现。
+    
+    Args:
+        texts: (原始文本, 紧凑文本) 元组
+        keywords: 关键词列表
+        
+    Returns:
+        是否包含任一关键词
+    """
+    raw, compact = texts
+    return any((k in raw) or (k in compact) for k in keywords)
+
+
+def _search_in_views(texts: tuple[str, str], pattern: Pattern) -> bool:
+    """
+    检查正则模式是否在任一文本视图中匹配。
+    
+    Args:
+        texts: (原始文本, 紧凑文本) 元组
+        pattern: 正则表达式模式
+        
+    Returns:
+        是否匹配
+    """
+    raw, compact = texts
+    return bool(pattern.search(raw) or pattern.search(compact))
 
 
 def is_section_boundary_block(blk: dict[str, Any]) -> bool:
@@ -32,33 +80,30 @@ def is_section_boundary_block(blk: dict[str, Any]) -> bool:
     if label in {"footer", "number", "header"}:
         return False
 
-    content = blk.get("content") or ""
-    if not isinstance(content, str):
-        content = str(content)
-    text = content.strip()
-    if not text:
+    text = _text_views(blk.get("content"))
+    if not text[0]:
         return False
 
     # 显式的大题标题，如 "一、常识判断"
-    if SECTION_TITLE_PATTERN.search(text):
+    if _search_in_views(text, SECTION_TITLE_PATTERN):
         return True
 
     # "第X部分" 这一类提示
-    if SECTION_PART_PATTERN.search(text):
+    if _search_in_views(text, SECTION_PART_PATTERN):
         return True
 
     # 带有部分说明的句子，如 "数量关系：本部分包括……"
-    if any(k in text for k in SECTION_HEAD_KEYWORDS) and any(
-        k in text for k in SECTION_INTRO_KEYWORDS
+    if _contains_in_views(text, SECTION_HEAD_KEYWORDS) and _contains_in_views(
+        text, SECTION_INTRO_KEYWORDS
     ):
         return True
 
     # 资料分析/材料类的开篇提示
-    if any(k in text for k in DATA_INTRO_KEYWORDS):
+    if _contains_in_views(text, DATA_INTRO_KEYWORDS):
         return True
 
     # "回答XX-XX题" 范围提示
-    if QUESTION_RANGE_PATTERN.search(text):
+    if _search_in_views(text, QUESTION_RANGE_PATTERN):
         return True
 
     return False
@@ -85,7 +130,7 @@ def detect_continuation_blocks(
     blocks: list[dict[str, Any]],
     section_boundaries: Optional[set[int]] = None,
     prev_question_context: Optional[dict[str, Any]] = None,
-) -> tuple[list[dict[str, Any]], float]:
+) -> tuple[list[dict[str, Any]], float, list[dict[str, Any]]]:
     """
     检测当前页顶部的"上一题续接内容"。
 
@@ -103,7 +148,7 @@ def detect_continuation_blocks(
         prev_question_context: 上一题的上下文信息（可选，预留扩展）
 
     Returns:
-        (续接块列表, 置信度 0.0-1.0)
+        (续接块列表, 置信度 0.0-1.0, prefix_blocks: 第一个题号之前的块)
     """
     boundary_set: set[int] = section_boundaries or set()
 
@@ -112,12 +157,15 @@ def detect_continuation_blocks(
     for idx, blk in enumerate(blocks):
         if blk.get("label") != "text":
             continue
-        content = blk.get("content") or ""
-        if not isinstance(content, str):
-            content = str(content)
-        if QUESTION_HEAD_PATTERN.search(content):
+        raw, compact = _text_views(blk.get("content"))
+        if QUESTION_HEAD_PATTERN.search(raw) or QUESTION_HEAD_PATTERN.search(compact):
             first_head_idx = idx
             break
+
+    # prefix_blocks: 第一个题号之前的所有块（包含可能的section boundary文本）
+    prefix_blocks = (
+        blocks[:first_head_idx] if first_head_idx is not None else list(blocks)
+    )
 
     # 确定截止位置：题号或 section boundary，取较小者
     stop_idx = len(blocks)
@@ -192,4 +240,4 @@ def detect_continuation_blocks(
             if page_bottom > 0 and cand_tops and min(cand_tops) >= page_bottom * 0.5:
                 confidence *= 0.2
 
-    return candidates, confidence
+    return candidates, confidence, prefix_blocks

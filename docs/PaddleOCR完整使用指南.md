@@ -5,7 +5,9 @@
 面向 PaddleOCR 3.x 系列的实战笔记，重点围绕四条主力产线，并说明本项目脚本是如何基于这些产线封装的（若后续版本接口有变动，请以官方 README 为准）：
 
 - **PP-OCRv5**：通用 OCR 识别（检测 + 识别）。
+https://www.paddleocr.ai/latest/version3.x/pipeline_usage/OCR.html#422
 - **PP-StructureV3**：文档结构化（版面、表格、公式、图表）。✨ **本项目核心依赖**
+https://www.paddleocr.ai/latest/version3.x/pipeline_usage/PP-StructureV3.html
 - **PP-ChatOCRv4**：基于大模型的关键信息抽取。
 - **PaddleOCR-VL**：视觉语言模型，多模态文档解析。
 

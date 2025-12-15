@@ -29,13 +29,15 @@ async def test_lifespan_and_history_api():
 
     # Test 1: Import app
     print("\n[Test 1] Importing FastAPI app...")
-    from web_interface.app import app
+    from backend.src.web.main import create_app
+    app = create_app()
     print("  ✓ App imported successfully")
 
     # Test 2: Access app.state.repo through lifespan simulation
     print("\n[Test 2] Simulating lifespan initialization...")
     from contextlib import asynccontextmanager
-    from src.db import DatabaseManager, TaskRepository
+    from backend.src.db.connection import DatabaseManager
+    from backend.src.db.crud import TaskRepository
 
     db_path = PROJECT_ROOT / "data" / "test_web_integration.db"
     db = DatabaseManager(db_path)

@@ -4,30 +4,51 @@ Tasks Router - API endpoints for task management
 import asyncio
 import hashlib
 import json
+import logging
+import shutil
+from pathlib import Path
 
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import StreamingResponse
 
+from ...common.paths import resolve_exam_dir_by_hash
+from ...db.connection import get_db_manager
+from ...db.crud import TaskRepository
 from ..limiter import limiter
 from ..schemas import ProcessRequest, StepStatus
 from ..services.event_bus import event_bus
+from ..services.event_infra import get_event_store
 from ..services.task_executor import task_executor
 from ..services.task_service import task_manager
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["tasks"])
 
 
-def _format_sse(event: str, data: object) -> str:
-    """Encode data as SSE-formatted string."""
+def _format_sse(event: str, data: object, event_id: int | None = None) -> str:
+    """Encode data as SSE-formatted string with optional event ID."""
+    lines = []
+    if event_id is not None:
+        lines.append(f"id: {event_id}")
+    lines.append(f"event: {event}")
     if isinstance(data, str):
-        return f"event: {event}\ndata: {data}\n\n"
-    return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+        lines.append(f"data: {data}")
+    else:
+        lines.append(f"data: {json.dumps(data, ensure_ascii=False)}")
+    lines.append("")
+    lines.append("")
+    return "\n".join(lines)
 
 
 @router.get("/stream/{task_id}")
-async def stream_task(task_id: str, last_log_index: int = 0):
+async def stream_task(
+    task_id: str,
+    request: Request,
+    last_event_id: int | None = None,
+):
     """
-    Server-Sent Events stream for a task.
+    Server-Sent Events stream for a task with replay support.
 
     Sends:
     - step: whenever any step status/progress changes
@@ -35,45 +56,127 @@ async def stream_task(task_id: str, last_log_index: int = 0):
     - done: once when task finishes (completed/error)
 
     Query params:
-    - last_log_index: skip logs before this index on reconnect (default 0)
+    - last_event_id: replay events after this ID (for SSE reconnection)
+
+    Headers:
+    - Last-Event-ID: alternative to last_event_id query param (standard SSE)
     """
     task = task_manager.get_task(task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    async def event_generator():
-        queue = await event_bus.subscribe(task_id)
-        last_sent_log = max(0, last_log_index)
+    # Support Last-Event-ID header (standard SSE reconnection)
+    header_last_id = request.headers.get("Last-Event-ID")
+    if header_last_id and last_event_id is None:
         try:
-            # Send current snapshot
+            last_event_id = int(header_last_id)
+        except ValueError:
+            pass
+
+    async def event_generator():
+        store = get_event_store()
+        queue = await event_bus.subscribe(task_id)
+        after_id = max(0, int(last_event_id or 0))
+        cursor = after_id  # Track highest event ID seen
+
+        def _extract_live_event_id(evt: dict) -> int | None:
+            """Extract event ID from live event (may be at top level or in data)."""
+            top = evt.get("_event_id")
+            if isinstance(top, int):
+                return top
+            data = evt.get("data")
+            if isinstance(data, dict) and isinstance(data.get("_event_id"), int):
+                return int(data["_event_id"])
+            return None
+
+        def _normalize_done_data(data: object) -> str:
+            """Normalize done event data to plain string for frontend compatibility."""
+            if isinstance(data, str):
+                return data
+            if isinstance(data, dict):
+                v = data.get("status") or data.get("value") or ""
+                return str(v)
+            return str(data)
+
+        try:
+            # 0) Always send a bootstrap snapshot (NO id!) for immediate UI state
             yield _format_sse("step", {"steps": task.serialize_steps()})
 
-            # Send any backlog logs (from last_sent_log)
-            for log in task.logs[last_sent_log:]:
-                yield _format_sse("log", log.dict())
-                last_sent_log += 1
-
-            # If already finished, send done and exit
-            if task.status in ("completed", "failed"):
-                yield _format_sse("done", "completed" if task.status == "completed" else "error")
-                return
-
+            # 1) Replay durable events from SQLite (if reconnecting)
+            limit = 500
             while True:
-                event = await queue.get()
-                etype = event.get("type")
-                if etype == "log":
-                    yield _format_sse("log", event.get("data", {}))
-                elif etype == "step":
-                    yield _format_sse("step", event.get("data", {}))
-                elif etype == "done":
-                    yield _format_sse("done", event.get("data"))
+                batch = await store.list_since(task_id=task_id, after_id=cursor, limit=limit)
+                if not batch:
                     break
+                for ev in batch:
+                    data = ev.payload
+                    if ev.event_type == "done":
+                        data = _normalize_done_data(data)
+                    yield _format_sse(ev.event_type, data, event_id=ev.id)
+                    cursor = ev.id
+                if len(batch) < limit:
+                    break
+
+            # 2) Drain any live events that arrived during replay (dedupe by id)
+            while True:
+                try:
+                    live = queue.get_nowait()
+                except asyncio.QueueEmpty:
+                    break
+                etype = live.get("type")
+                data = live.get("data")
+                eid = _extract_live_event_id(live)
+                # Skip if already sent during replay
+                if eid is not None and eid <= cursor:
+                    continue
+                if etype == "done":
+                    yield _format_sse("done", _normalize_done_data(data), event_id=eid)
+                    return
+                if eid is not None:
+                    cursor = eid
+                    yield _format_sse(str(etype), data, event_id=eid)
+                else:
+                    yield _format_sse(str(etype), data)
+
+            # 3) Live streaming loop with heartbeat
+            while True:
+                if await request.is_disconnected():
+                    break
+                try:
+                    live = await asyncio.wait_for(queue.get(), timeout=15.0)
+                except asyncio.TimeoutError:
+                    # Send heartbeat to keep connection alive
+                    yield ": keep-alive\n\n"
+                    continue
+
+                etype = live.get("type")
+                data = live.get("data")
+                eid = _extract_live_event_id(live)
+
+                # Skip duplicates
+                if eid is not None and eid <= cursor:
+                    continue
+
+                if etype == "done":
+                    yield _format_sse("done", _normalize_done_data(data), event_id=eid)
+                    break
+
+                if eid is not None:
+                    cursor = eid
+                    yield _format_sse(str(etype), data, event_id=eid)
+                else:
+                    yield _format_sse(str(etype), data)
+
         except asyncio.CancelledError:
             pass
         finally:
             await event_bus.unsubscribe(task_id, queue)
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    headers = {
+        "Cache-Control": "no-cache",
+        "X-Accel-Buffering": "no",  # Disable Nginx buffering
+    }
+    return StreamingResponse(event_generator(), media_type="text/event-stream", headers=headers)
 
 
 @router.post("/upload")
@@ -86,20 +189,73 @@ async def upload_pdf(request: Request, file: UploadFile = File(...), mode: str =
     if mode not in ["auto", "manual"]:
         raise HTTPException(status_code=400, detail="Mode must be 'auto' or 'manual'")
 
+    # Step 1: Create in-memory task
     task = task_manager.create_task(file.filename, mode)
 
+    # Step 2: Read file content and compute hash
     content = await file.read()
-    task.file_hash = hashlib.sha256(content).hexdigest()
-    task.pdf_path.write_bytes(content)
+    file_hash = hashlib.sha256(content).hexdigest()
 
+    # Step 3: Calculate exam directory using server-normalized filename
+    # Use task.pdf_filename (already normalized in Task.__init__) for consistency
+    clean_name = Path(task.pdf_filename).stem
+    exam_dir, exam_dir_name = resolve_exam_dir_by_hash(clean_name, file_hash)
+
+    # Step 4: Write PDF to filesystem
+    try:
+        task.pdf_path.write_bytes(content)
+        exam_dir.mkdir(parents=True, exist_ok=True)
+    except Exception as exc:
+        # Cleanup: Remove in-memory task and task workdir on filesystem failure
+        task_manager.tasks.pop(task.id, None)
+        task_manager.task_locks.pop(task.id, None)
+        if task.task_workdir.exists():
+            shutil.rmtree(task.task_workdir, ignore_errors=True)
+        # Log detailed error for debugging, but return generic message to client
+        logger.error(f"Failed to save PDF for task {task.id}: {exc}", exc_info=True)
+        raise HTTPException(
+            status_code=500, detail="Failed to save uploaded file"
+        ) from exc
+
+    # Step 5: Update task attributes
+    task.file_hash = file_hash
+    task.exam_dir = exam_dir
+
+    # Step 6: Create database record
+    # CRITICAL: This MUST happen before any emit_event call (e.g., task.add_log)
+    # because events have a foreign key constraint to tasks table
+    try:
+        db = get_db_manager()
+        repo = TaskRepository(db)
+        await repo.create_task(
+            task_id=task.id,
+            mode=mode,
+            pdf_name=task.pdf_filename,  # Use normalized filename for consistency
+            file_hash=file_hash,
+            exam_dir_name=exam_dir_name,
+            expected_pages=None,  # Will be determined during PDF conversion
+        )
+    except Exception as exc:
+        # Cleanup: Remove filesystem and in-memory task on database failure
+        task_manager.tasks.pop(task.id, None)
+        task_manager.task_locks.pop(task.id, None)
+        if task.task_workdir.exists():
+            shutil.rmtree(task.task_workdir, ignore_errors=True)
+        # Log detailed error for debugging, but return generic message to client
+        logger.error(f"Failed to create task {task.id} in database: {exc}", exc_info=True)
+        raise HTTPException(
+            status_code=500, detail="Failed to create task record"
+        ) from exc
+
+    # Step 7: Now safe to emit events (database record exists)
     task.add_log(
-        f"文件上传成功: {file.filename} (模式: {mode}, hash: {task.file_hash[:8]})",
+        f"文件上传成功: {task.pdf_filename} (模式: {mode}, hash: {file_hash[:8]}, 目录: {exam_dir_name})",
         "success",
     )
 
     return {
         "task_id": task.id,
-        "filename": file.filename,
+        "filename": task.pdf_filename,  # Return normalized filename for consistency
         "mode": mode,
         "steps": [
             {
@@ -149,6 +305,7 @@ async def get_status(task_id: str, since: int = 0):
         new_logs.append(entry)
 
     return {
+        "task_id": task_id,
         "status": task.status,
         "mode": task.mode,
         "current_step": task.current_step,
@@ -309,4 +466,4 @@ async def get_results(task_id: str):
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    return {"status": task.status, "images": task.result_images}
+    return {"task_id": task_id, "status": task.status, "images": task.result_images}

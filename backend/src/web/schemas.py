@@ -34,7 +34,7 @@ class StepState(BaseModel):
     progress: Optional[float] = None
     started_at: Optional[datetime] = None
     ended_at: Optional[datetime] = None
-    artifact_paths: List[str] = []
+    artifact_paths: List[str] = Field(default_factory=list)
     error_message: Optional[str] = None
 
 
@@ -46,6 +46,7 @@ class TaskResponse(BaseModel):
 
 
 class StatusResponse(BaseModel):
+    task_id: str
     status: TaskStatus
     mode: str
     current_step: int

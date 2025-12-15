@@ -19,6 +19,16 @@ from .contracts import (
     TaskSnapshot,
     TaskStatus,
 )
+from .ports import (
+    ArtifactStore,
+    AsyncEventStore,
+    CompositeEventSink,
+    EventPublisher,
+    EventStore,
+    StoredEvent,
+    TaskRepository,
+)
+from .registry import StepRegistry, register_default_steps
 from .runner import PipelineRunner
 
 __all__ = [
@@ -38,4 +48,15 @@ __all__ = [
     "FatalError",
     # Runner
     "PipelineRunner",
+    # Ports (interfaces)
+    "ArtifactStore",
+    "AsyncEventStore",
+    "EventPublisher",
+    "EventStore",
+    "StoredEvent",
+    "TaskRepository",
+    "CompositeEventSink",
+    # Registry
+    "StepRegistry",
+    "register_default_steps",
 ]
