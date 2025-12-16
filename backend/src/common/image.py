@@ -48,26 +48,25 @@ def crop_and_save(
     Returns:
         实际使用的裁剪框（经过边界修正）
     """
-    img = Image.open(img_path)
-    x1, y1, x2, y2 = box
+    with Image.open(img_path) as img:
+        x1, y1, x2, y2 = box
 
-    # 边界修正
-    x1 = max(0, min(x1, img.width))
-    x2 = max(0, min(x2, img.width))
-    y1 = max(0, min(y1, img.height))
-    y2 = max(0, min(y2, img.height))
+        x1 = max(0, min(x1, img.width))
+        x2 = max(0, min(x2, img.width))
+        y1 = max(0, min(y1, img.height))
+        y2 = max(0, min(y2, img.height))
 
-    # 确保有效裁剪区域
-    if x2 <= x1:
-        x1, x2 = 0, img.width
-    if y2 <= y1:
-        y1, y2 = 0, img.height
+        if x2 <= x1:
+            x1, x2 = 0, img.width
+        if y2 <= y1:
+            y1, y2 = 0, img.height
 
-    final_box = (x1, y1, x2, y2)
-    crop_img = img.crop(final_box)
+        final_box = (x1, y1, x2, y2)
+        crop_img = img.crop(final_box)
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    crop_img.save(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        crop_img.save(output_path)
+        crop_img.close()
 
     return final_box
 
@@ -94,24 +93,25 @@ def crop_page_and_save(
     if not img_path.is_file():
         raise FileNotFoundError(img_path)
 
-    img = Image.open(img_path)
-    x1, y1, x2, y2 = box
-    x1 = max(0, min(x1, img.width))
-    x2 = max(0, min(x2, img.width))
-    y1 = max(0, min(y1, img.height))
-    y2 = max(0, min(y2, img.height))
-    if x2 <= x1:
-        x1, x2 = 0, img.width
-    if y2 <= y1:
-        y1, y2 = 0, img.height
-    final_box = (x1, y1, x2, y2)
-    crop = img.crop(final_box)
+    with Image.open(img_path) as img:
+        x1, y1, x2, y2 = box
+        x1 = max(0, min(x1, img.width))
+        x2 = max(0, min(x2, img.width))
+        y1 = max(0, min(y1, img.height))
+        y2 = max(0, min(y2, img.height))
+        if x2 <= x1:
+            x1, x2 = 0, img.width
+        if y2 <= y1:
+            y1, y2 = 0, img.height
+        final_box = (x1, y1, x2, y2)
+        crop = img.crop(final_box)
 
-    out_dir = img_dir / f"questions_{page}"
-    out_dir.mkdir(parents=True, exist_ok=True)
+        out_dir = img_dir / f"questions_{page}"
+        out_dir.mkdir(parents=True, exist_ok=True)
 
-    out_path = out_dir / name
-    crop.save(out_path)
+        out_path = out_dir / name
+        crop.save(out_path)
+        crop.close()
 
     try:
         rel_path = out_path.relative_to(img_dir.parent)

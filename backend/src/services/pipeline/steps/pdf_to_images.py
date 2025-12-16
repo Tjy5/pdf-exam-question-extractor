@@ -2,17 +2,37 @@
 Step 0: PDF to Images
 
 Converts PDF pages to high-resolution PNG images using PyMuPDF (fitz).
+Supports parallel rendering via ProcessPoolExecutor for multi-core speedup.
 """
 
 from __future__ import annotations
 
 import asyncio
+import os
 import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Tuple
 
 from ..contracts import FatalError, RetryableError, StepContext, StepName, StepResult
 from .base import BaseStepExecutor
+
+
+def _render_page(args: Tuple[str, int, str, int]) -> Tuple[int, str]:
+    """
+    Worker function for parallel PDF page rendering.
+    Must be module-level for ProcessPoolExecutor pickling.
+    """
+    import fitz
+    pdf_path, page_num, out_path, dpi = args
+    doc = fitz.open(pdf_path)
+    try:
+        page = doc[page_num]
+        pix = page.get_pixmap(dpi=dpi)
+        pix.save(out_path)
+        return page_num, out_path
+    finally:
+        doc.close()
 
 
 class PdfToImagesStep(BaseStepExecutor):
@@ -72,7 +92,7 @@ class PdfToImagesStep(BaseStepExecutor):
             raise FatalError(f"Cannot open PDF: {e}")
 
     async def execute(self, ctx: StepContext) -> StepResult:
-        """Convert PDF to images."""
+        """Convert PDF to images with parallel rendering."""
         start_time = time.time()
 
         pdf_path = Path(ctx.pdf_path)
@@ -84,43 +104,49 @@ class PdfToImagesStep(BaseStepExecutor):
 
             doc = fitz.open(pdf_path)
             total_pages = len(doc)
+            doc.close()
 
             self._log(f"开始转换 PDF，共 {total_pages} 页")
 
-            artifact_paths: List[str] = []
-            converted_count = 0
+            artifact_paths: List[str] = [""] * total_pages
             skipped_count = 0
+            tasks_to_run: List[Tuple[str, int, str, int]] = []
 
             for page_num in range(total_pages):
                 img_name = f"page_{page_num + 1}.png"
                 img_path = workdir / img_name
 
-                # Check if we can skip
                 if self._skip_existing and img_path.exists():
-                    artifact_paths.append(str(img_path))
+                    artifact_paths[page_num] = str(img_path)
                     skipped_count += 1
                 else:
-                    # Render page
-                    page = doc[page_num]
-                    pix = page.get_pixmap(dpi=self._dpi)
-                    pix.save(str(img_path))
+                    tasks_to_run.append((str(pdf_path), page_num, str(img_path), self._dpi))
 
-                    artifact_paths.append(str(img_path))
-                    converted_count += 1
+            converted_count = 0
+            if tasks_to_run:
+                max_workers = min(len(tasks_to_run), os.cpu_count() or 4)
+                self._log(f"  并行渲染 {len(tasks_to_run)} 页 (workers={max_workers})")
 
-                    self._log(f"  转换第 {page_num + 1}/{total_pages} 页")
-
-                # Report progress
-                self._progress_callback((page_num + 1) / total_pages)
-
-            doc.close()
+                loop = asyncio.get_running_loop()
+                with ProcessPoolExecutor(max_workers=max_workers) as executor:
+                    futures = {executor.submit(_render_page, t): t[1] for t in tasks_to_run}
+                    for future in as_completed(futures):
+                        page_num = futures[future]
+                        try:
+                            _, out_path = future.result()
+                            artifact_paths[page_num] = out_path
+                            converted_count += 1
+                            done = skipped_count + converted_count
+                            self._progress_callback(done / total_pages)
+                        except Exception as e:
+                            raise RuntimeError(f"Page {page_num + 1} render failed: {e}")
+            else:
+                self._progress_callback(1.0)
 
             elapsed = time.time() - start_time
 
             if skipped_count > 0:
-                self._log(
-                    f"PDF 转图片完成: 转换 {converted_count} 页, 跳过 {skipped_count} 页"
-                )
+                self._log(f"PDF 转图片完成: 转换 {converted_count} 页, 跳过 {skipped_count} 页")
             else:
                 self._log(f"PDF 转图片完成: 共 {total_pages} 页")
 

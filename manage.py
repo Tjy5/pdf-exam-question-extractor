@@ -57,6 +57,15 @@ DEFAULT_ENV_CONFIG = {
     "EXAMPAPER_GPU_LOCK_TIMEOUT_S": "120",
     # OCR predict warning threshold (seconds)
     "EXAMPAPER_OCR_PREDICT_WARN_AFTER_S": "60",
+    # Performance optimizations
+    # In-memory LRU cache for OCR results (avoid re-loading JSON files)
+    "EXAMPAPER_OCR_MEM_CACHE": "1",
+    "EXAMPAPER_OCR_MEM_CACHE_MAX_PAGES": "64",
+    # Pre-load image to memory before GPU lock (move I/O out of critical section)
+    # NOTE: Disabled - some PPStructureV3 versions don't support numpy array input
+    # "EXAMPAPER_OCR_PASS_IMAGE": "1",
+    # Trim large non-text content (table HTML) to reduce JSON size
+    "EXAMPAPER_TRIM_NON_TEXT_CONTENT_MAX": "2000",
 }
 
 
