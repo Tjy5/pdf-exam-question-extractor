@@ -6,10 +6,19 @@ from pathlib import Path
 from typing import Optional
 
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# 加载 backend/.env 文件（避免与 Gemini CLI 冲突）
+_backend_env = Path(__file__).parent.parent.parent / ".env"
+if _backend_env.exists():
+    load_dotenv(_backend_env)
 
 
 class AppConfig(BaseModel):
     """Application configuration with environment variable support"""
+
+    # App mode: "dev" for AI chat, "production" for PDF processing
+    app_mode: str = "production"
 
     # Server settings
     host: str = "127.0.0.1"
@@ -38,10 +47,27 @@ class AppConfig(BaseModel):
     data_dir: Path = project_root / "data"
     uploads_dir: Path = project_root / "uploads"
 
+    # AI Configuration
+    ai_provider: str = "mock"  # "mock" or "openai_compatible"
+    ai_base_url: str = "https://api.openai.com/v1"
+    ai_api_key: str = ""
+    ai_model: str = "gpt-3.5-turbo"
+    ai_temperature: float = 0.7
+    ai_top_p: float = 0.95
+    ai_max_tokens: int = 2000
+    ai_timeout: float = 60.0
+
+    # AI Session Title Configuration (optional)
+    # When AI_TITLE_MODEL is set, the backend can use it to auto-generate chat session titles.
+    ai_title_model: str = ""
+    ai_title_temperature: float = 0.2
+    ai_title_max_tokens: int = 64
+
     @classmethod
     def from_env(cls) -> "AppConfig":
         """Load configuration from environment variables"""
         return cls(
+            app_mode=os.getenv("APP_MODE", "production"),
             use_gpu=os.getenv("EXAMPAPER_USE_GPU", "1") == "1",
             gpu_memory_fraction=float(os.getenv("FLAGS_fraction_of_gpu_memory_to_use", "0.8")),
             max_workers=int(os.getenv("EXAMPAPER_MAX_WORKERS", "4")),
@@ -53,6 +79,18 @@ class AppConfig(BaseModel):
             step1_fallback_subprocess=os.getenv("EXAMPAPER_STEP1_FALLBACK_SUBPROCESS", "1") == "1",
             step2_fallback_subprocess=os.getenv("EXAMPAPER_STEP2_FALLBACK_SUBPROCESS", "1") == "1",
             light_table=os.getenv("EXAMPAPER_LIGHT_TABLE", "0") == "1",
+            # AI Configuration
+            ai_provider=os.getenv("AI_PROVIDER", "mock"),
+            ai_base_url=os.getenv("AI_BASE_URL", "https://api.openai.com/v1"),
+            ai_api_key=os.getenv("AI_API_KEY", ""),
+            ai_model=os.getenv("AI_MODEL", "gpt-3.5-turbo"),
+            ai_temperature=float(os.getenv("AI_TEMPERATURE", "0.7")),
+            ai_top_p=float(os.getenv("AI_TOP_P", "0.95")),
+            ai_max_tokens=int(os.getenv("AI_MAX_TOKENS", "2000")),
+            ai_timeout=float(os.getenv("AI_TIMEOUT", "60.0")),
+            ai_title_model=os.getenv("AI_TITLE_MODEL", ""),
+            ai_title_temperature=float(os.getenv("AI_TITLE_TEMPERATURE", "0.2")),
+            ai_title_max_tokens=int(os.getenv("AI_TITLE_MAX_TOKENS", "64")),
         )
 
     def setup_environment(self) -> None:

@@ -174,6 +174,199 @@ CREATE INDEX IF NOT EXISTS idx_logs_task_id_id
 CREATE INDEX IF NOT EXISTS idx_events_task_id_id
     ON task_events(task_id, id);
 
+-- ==================== AI Chat Feature Tables ====================
+-- These tables support exam browsing, answer import, wrong question marking, and AI chat
+
+-- Exams table (links to tasks for processing history)
+CREATE TABLE IF NOT EXISTS exams (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id TEXT UNIQUE,
+    exam_dir_name TEXT UNIQUE NOT NULL,
+    display_name TEXT,
+    file_hash TEXT,
+    question_count INTEGER DEFAULT 0,
+    has_answers INTEGER DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    processed_at TEXT,
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id) ON DELETE SET NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_exams_task_id ON exams(task_id);
+CREATE INDEX IF NOT EXISTS idx_exams_created_at ON exams(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_exams_file_hash ON exams(file_hash) WHERE file_hash IS NOT NULL;
+
+-- Exam questions table
+CREATE TABLE IF NOT EXISTS exam_questions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    exam_id INTEGER NOT NULL,
+    question_no INTEGER NOT NULL,
+    question_type TEXT DEFAULT 'single',
+    image_filename TEXT NOT NULL,
+    image_data TEXT,
+    ocr_text TEXT,
+    meta_json TEXT,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    UNIQUE(exam_id, question_no),
+    FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_exam_questions_exam_id ON exam_questions(exam_id, question_no);
+
+-- Standard answers table
+CREATE TABLE IF NOT EXISTS exam_answers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    exam_id INTEGER NOT NULL,
+    question_no INTEGER NOT NULL,
+    answer TEXT NOT NULL,
+    source TEXT DEFAULT 'manual',
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    UNIQUE(exam_id, question_no),
+    FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_exam_answers_exam_id ON exam_answers(exam_id);
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT UNIQUE NOT NULL,
+    display_name TEXT DEFAULT '学员',
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    last_active_at TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_user_id ON users(user_id);
+
+-- User wrong questions table (supports exam source and independent upload)
+CREATE TABLE IF NOT EXISTS user_wrong_questions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+
+    -- Source type: 'exam' (from exam marking) or 'upload' (independent upload)
+    source_type TEXT DEFAULT 'exam' CHECK (source_type IN ('exam', 'upload')),
+
+    -- Exam source fields (used when source_type='exam')
+    exam_id INTEGER,
+    question_no INTEGER,
+    user_answer TEXT,
+
+    -- Upload source field (used when source_type='upload')
+    original_image TEXT,           -- Base64 encoded image
+
+    -- AI analysis results (shared by both sources)
+    ai_question_text TEXT,         -- AI parsed question text (Markdown + LaTeX)
+    ai_answer_text TEXT,           -- AI generated answer
+    ai_analysis TEXT,              -- AI analysis steps
+
+    -- Metadata
+    subject TEXT,                  -- Subject: 数学/物理/化学/生物/英语/语文/其他
+    source_name TEXT,              -- Source name: 期中考试/周测 etc.
+    error_type TEXT,               -- Error type: 计算错误/概念错误/审题错误/方法错误
+    user_notes TEXT,               -- User notes
+
+    -- Status
+    status TEXT DEFAULT 'wrong',
+    mastery_level INTEGER DEFAULT 0 CHECK (mastery_level BETWEEN 0 AND 2),
+
+    -- Timestamps
+    marked_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+
+    -- Unique constraint only for exam source
+    UNIQUE(user_id, exam_id, question_no),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_wrong_user_exam ON user_wrong_questions(user_id, exam_id);
+CREATE INDEX IF NOT EXISTS idx_wrong_user_source ON user_wrong_questions(user_id, source_type);
+CREATE INDEX IF NOT EXISTS idx_wrong_mastery ON user_wrong_questions(mastery_level);
+CREATE INDEX IF NOT EXISTS idx_wrong_subject ON user_wrong_questions(subject);
+CREATE INDEX IF NOT EXISTS idx_wrong_updated ON user_wrong_questions(updated_at DESC);
+
+-- Knowledge tags table (hierarchical with adjacency list)
+CREATE TABLE IF NOT EXISTS knowledge_tags (
+    id TEXT PRIMARY KEY,                    -- UUID
+    name TEXT NOT NULL,                     -- Tag name: 勾股定理
+    subject TEXT NOT NULL,                  -- Subject: math/physics/chemistry/biology/english/chinese/other
+
+    -- Hierarchy (adjacency list)
+    parent_id TEXT,                         -- Parent tag ID
+
+    -- Classification
+    is_system INTEGER DEFAULT 0,            -- 1=system preset, 0=user custom
+    user_id TEXT,                           -- User ID for custom tags
+
+    -- Sorting
+    sort_order INTEGER DEFAULT 0,
+
+    -- Timestamps
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+
+    -- Foreign keys
+    FOREIGN KEY (parent_id) REFERENCES knowledge_tags(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+
+    -- Unique constraint: same name under same subject for same user (or system)
+    UNIQUE(subject, name, user_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_tags_subject ON knowledge_tags(subject);
+CREATE INDEX IF NOT EXISTS idx_tags_parent ON knowledge_tags(parent_id);
+CREATE INDEX IF NOT EXISTS idx_tags_user ON knowledge_tags(user_id);
+CREATE INDEX IF NOT EXISTS idx_tags_system ON knowledge_tags(is_system);
+
+-- Wrong question to tag association table (many-to-many)
+CREATE TABLE IF NOT EXISTS wrong_question_tags (
+    wrong_question_id INTEGER NOT NULL,
+    tag_id TEXT NOT NULL,
+    PRIMARY KEY (wrong_question_id, tag_id),
+    FOREIGN KEY (wrong_question_id) REFERENCES user_wrong_questions(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES knowledge_tags(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_wqt_question ON wrong_question_tags(wrong_question_id);
+CREATE INDEX IF NOT EXISTS idx_wqt_tag ON wrong_question_tags(tag_id);
+
+-- Chat sessions table
+CREATE TABLE IF NOT EXISTS chat_sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT UNIQUE NOT NULL,
+    user_id TEXT NOT NULL,
+    exam_id INTEGER NOT NULL,
+    question_no INTEGER NOT NULL,
+    title TEXT,
+    provider TEXT DEFAULT 'openai_compatible',
+    model TEXT,
+    settings_json TEXT,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    last_message_at TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_chat_sessions_user ON chat_sessions(user_id, last_message_at DESC);
+CREATE INDEX IF NOT EXISTS idx_chat_sessions_question ON chat_sessions(exam_id, question_no);
+
+-- Chat messages table
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    role TEXT NOT NULL CHECK(role IN ('system', 'user', 'assistant', 'tool')),
+    content TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    provider TEXT,
+    model TEXT,
+    request_id TEXT,
+    usage_json TEXT,
+    FOREIGN KEY (session_id) REFERENCES chat_sessions(session_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON chat_messages(session_id, id);
+
 -- Trigger to auto-update tasks.updated_at on UPDATE
 CREATE TRIGGER IF NOT EXISTS update_tasks_timestamp
 AFTER UPDATE ON tasks

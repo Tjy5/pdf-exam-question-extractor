@@ -71,7 +71,7 @@ function previewImage(src: string) {
           loading="lazy"
           decoding="async"
           class="w-full h-full object-contain p-2"
-          alt="Question"
+          alt="题目"
         >
         <div class="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 right-0 p-3 bg-white/90 backdrop-blur-sm translate-y-full group-hover:translate-y-0 transition-transform duration-300 border-t border-slate-100">

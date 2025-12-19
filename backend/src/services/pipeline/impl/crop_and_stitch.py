@@ -8,6 +8,7 @@ crop_and_stitch.py - 裁剪拼接核心逻辑
 from __future__ import annotations
 
 import os
+import re
 import shutil
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -296,6 +297,21 @@ def process_structure_to_images(
     output_dir = get_all_questions_dir(workdir)
 
     da_qnos = structure_doc.get_data_analysis_qnos()
+    
+    # Clean up any existing data analysis sub-question files
+    # These should not exist in all_questions as they belong to combined data_analysis_*.png
+    if da_qnos:
+        for old_file in output_dir.glob("q*.png"):
+            match = re.match(r"^q(\d+)\.png$", old_file.name, re.IGNORECASE)
+            if match:
+                try:
+                    qno = int(match.group(1))
+                    if qno in da_qnos:
+                        old_file.unlink(missing_ok=True)
+                        log_fn(f"删除资料分析子题旧文件: {old_file.name}")
+                except (ValueError, OSError):
+                    pass
+    
     all_questions: Dict[str, QuestionNode] = {
         q.id: q for q in structure_doc.questions
     }

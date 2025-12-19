@@ -81,6 +81,7 @@ class DatabaseManager:
 
                 # Execute schema (PRAGMAs + CREATE TABLE + indexes + triggers)
                 await self._connection.executescript(SCHEMA_SQL)
+                await self._apply_migrations()
                 await self._connection.commit()
 
                 self._initialized = True
@@ -90,6 +91,39 @@ class DatabaseManager:
                 if self._connection:
                     await self._connection.close()
                     self._connection = None
+                raise
+
+    async def _apply_migrations(self) -> None:
+        """
+        Best-effort runtime migrations for existing DB files.
+        We avoid a full migration framework and only apply additive changes.
+        """
+        await self._ensure_column("exam_questions", "image_data", "TEXT")
+
+    async def _ensure_column(self, table: str, column: str, column_def: str) -> None:
+        """
+        Add a column if missing.
+        NOTE: SQLite doesn't support ALTER TABLE ... ADD COLUMN IF NOT EXISTS,
+        so we probe PRAGMA table_info first.
+        Handles multi-process race conditions by ignoring "duplicate column" errors.
+        """
+        if not self._connection:
+            return
+
+        cursor = await self._connection.execute(f"PRAGMA table_info({table})")
+        rows = await cursor.fetchall()
+        existing = {str(r["name"]) for r in rows}
+        if column in existing:
+            return
+
+        try:
+            await self._connection.execute(
+                f"ALTER TABLE {table} ADD COLUMN {column} {column_def}"
+            )
+        except Exception as e:
+            # Ignore "duplicate column name" error from race condition
+            err_msg = str(e).lower()
+            if "duplicate column" not in err_msg:
                 raise
 
     async def close(self):

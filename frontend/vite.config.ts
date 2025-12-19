@@ -9,6 +9,9 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  define: {
+    __APP_MODE__: JSON.stringify(process.env.APP_MODE || 'production'),
+  },
   server: {
     port: 5173,
     proxy: {

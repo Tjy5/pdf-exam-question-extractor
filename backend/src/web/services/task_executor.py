@@ -10,14 +10,17 @@ Bridges the Web Task model with the pipeline runner by:
 from __future__ import annotations
 
 import asyncio
+import base64
 import hashlib
 import os
+import re
 import threading
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from ...common.paths import resolve_exam_dir_by_hash
+from ...db.connection import get_db_manager
 from ...services.models.model_provider import PPStructureProvider
 from ...services.pipeline import (
     PipelineRunner,
@@ -101,6 +104,7 @@ class TaskExecutorService:
             self._sync_snapshot_to_task(final_snapshot, task)
             if final_snapshot.status == PipelineTaskStatus.completed:
                 self._populate_results(task)
+                await self._persist_question_images_to_db(task)
         except Exception as exc:
             self._on_pipeline_error(task, exc)
 
@@ -503,6 +507,172 @@ class TaskExecutorService:
             {"filename": p.name, "name": p.stem, "path": str(p)}
             for p in sorted(all_dir.glob("*.png"))
         ]
+
+    async def _persist_question_images_to_db(self, task: Task) -> None:
+        """
+        Persist q*.png to SQLite as Base64 (exam_questions.image_data).
+        Best-effort: failures should not fail the pipeline output generation.
+        """
+        if not task.exam_dir:
+            return
+
+        all_dir = task.exam_dir / "all_questions"
+        if not all_dir.is_dir():
+            return
+
+        candidates: List[tuple[int, Path]] = []
+        for p in all_dir.glob("q*.png"):
+            m = re.match(r"^q(\d+)\.png$", p.name, flags=re.IGNORECASE)
+            if not m:
+                continue
+            try:
+                qno = int(m.group(1))
+            except ValueError:
+                continue
+            if qno <= 0:
+                continue
+            # Skip data analysis sub-questions (111-130)
+            # These are already included in combined data_analysis_*.png images
+            if 111 <= qno <= 130:
+                continue
+            candidates.append((qno, p))
+
+        # Also collect data_analysis_*.png files
+        # These will use special question numbers: 1001, 1002, 1003, 1004
+        da_candidates: List[tuple[int, Path]] = []
+        for p in all_dir.glob("data_analysis_*.png"):
+            m = re.match(r"^data_analysis_(\d+)\.png$", p.name, flags=re.IGNORECASE)
+            if not m:
+                continue
+            try:
+                da_order = int(m.group(1))
+            except ValueError:
+                continue
+            if da_order <= 0:
+                continue
+            # Use 1000 + order as question number (1001, 1002, 1003, 1004)
+            da_qno = 1000 + da_order
+            da_candidates.append((da_qno, p))
+
+        da_candidates.sort(key=lambda t: t[0])
+
+        if not candidates and not da_candidates:
+            return
+
+        candidates.sort(key=lambda t: t[0])
+
+        # Deduplicate by question number (keep first occurrence after sort)
+        seen_qnos: set[int] = set()
+        unique_candidates: List[tuple[int, Path]] = []
+        for qno, path in candidates:
+            if qno not in seen_qnos:
+                seen_qnos.add(qno)
+                unique_candidates.append((qno, path))
+        candidates = unique_candidates
+
+        def _read_b64(path: Path) -> Optional[str]:
+            try:
+                raw = path.read_bytes()
+            except Exception:
+                return None
+            try:
+                return base64.b64encode(raw).decode("ascii")
+            except Exception:
+                return None
+
+        # Prepare payloads for normal questions
+        payloads: List[tuple[int, str, str, str]] = []  # (qno, filename, b64, question_type)
+        for qno, path in candidates:
+            b64 = await asyncio.to_thread(_read_b64, path)
+            if not b64:
+                continue
+            payloads.append((qno, path.name, b64, "single"))
+
+        # Prepare payloads for data analysis questions
+        for da_qno, path in da_candidates:
+            b64 = await asyncio.to_thread(_read_b64, path)
+            if not b64:
+                continue
+            payloads.append((da_qno, path.name, b64, "data_analysis"))
+
+        if not payloads:
+            return
+
+        exam_dir_name = task.exam_dir.name
+        display_name = re.sub(r"__[a-f0-9]{8}$", "", exam_dir_name)
+        now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+        try:
+            db = get_db_manager()
+        except ValueError:
+            task.add_log("DB not initialized: skip persisting images", "info", False)
+            return
+
+        try:
+            await db.init()
+        except Exception as e:
+            task.add_log(f"DB init failed: {e}", "error", False)
+            return
+
+        # Count normal questions only for question_count
+        normal_count = len([p for p in payloads if p[3] == "single"])
+        da_count = len([p for p in payloads if p[3] == "data_analysis"])
+
+        try:
+            async with db.transaction():
+                await db.execute(
+                    """
+                    INSERT INTO exams (
+                        task_id, exam_dir_name, display_name, file_hash,
+                        question_count, created_at, updated_at, processed_at
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(exam_dir_name) DO UPDATE SET
+                        task_id = excluded.task_id,
+                        display_name = excluded.display_name,
+                        file_hash = excluded.file_hash,
+                        question_count = excluded.question_count,
+                        updated_at = excluded.updated_at,
+                        processed_at = excluded.processed_at
+                    """,
+                    (
+                        task.id,
+                        exam_dir_name,
+                        display_name,
+                        task.file_hash,
+                        normal_count,  # Only count normal questions
+                        now,
+                        now,
+                        now,
+                    ),
+                )
+
+                exam_row = await db.fetch_one(
+                    "SELECT id FROM exams WHERE exam_dir_name = ?",
+                    (exam_dir_name,),
+                )
+                if not exam_row:
+                    return
+                exam_id = int(exam_row["id"])
+
+                for qno, image_filename, image_b64, question_type in payloads:
+                    await db.execute(
+                        """
+                        INSERT INTO exam_questions (
+                            exam_id, question_no, question_type, image_filename, image_data, created_at
+                        )
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(exam_id, question_no) DO UPDATE SET
+                            question_type = excluded.question_type,
+                            image_filename = excluded.image_filename,
+                            image_data = excluded.image_data
+                        """,
+                        (exam_id, qno, question_type, image_filename, image_b64, now),
+                    )
+
+            task.add_log(f"Saved {normal_count} questions + {da_count} data analysis to DB", "success", False)
+        except Exception as e:
+            task.add_log(f"Failed to persist images to DB: {e}", "error", False)
 
     def _ensure_warmup_started(self) -> None:
         if (

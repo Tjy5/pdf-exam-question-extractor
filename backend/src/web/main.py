@@ -21,6 +21,7 @@ except ImportError:  # pragma: no cover
 from .limiter import limiter
 from .routers import files, health, tasks
 from ..db.connection import get_db_manager
+from .config import config
 
 
 logger = logging.getLogger(__name__)
@@ -47,7 +48,13 @@ async def lifespan(app: FastAPI):
         raise RuntimeError(f"Database initialization failed: {e}") from e
 
     # Warmup PP-StructureV3 model if enabled (synchronous to avoid first-page hangs)
-    if os.getenv("EXAMPAPER_PPSTRUCTURE_WARMUP", "1") == "1":
+    # Skip warmup in dev mode (AI chat) to reduce startup time
+    should_warmup = (
+        config.app_mode == "production" and
+        os.getenv("EXAMPAPER_PPSTRUCTURE_WARMUP", "1") == "1"
+    )
+
+    if should_warmup:
         async_warmup = os.getenv("EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC", "0") == "1"
         if not async_warmup:
             logger.info("Warming up PP-StructureV3 model (synchronous)...")
@@ -62,6 +69,8 @@ async def lifespan(app: FastAPI):
             except Exception as e:
                 logger.exception("Model warmup exception")
                 logger.warning(f"Will retry warmup on first request: {e}")
+    else:
+        logger.info(f"Skipping PP-StructureV3 warmup (app_mode={config.app_mode})")
 
     yield
 
@@ -134,6 +143,13 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(tasks.router)
     app.include_router(files.router)
+
+    # AI Chat Feature routers
+    from .routers import exams, users, chat, wrong_notebook
+    app.include_router(exams.router)
+    app.include_router(users.router)
+    app.include_router(chat.router)
+    app.include_router(wrong_notebook.router)
 
     # API v1 alias - redirect /api/v1/* to /api/*
     # This provides forward compatibility for clients using versioned endpoints

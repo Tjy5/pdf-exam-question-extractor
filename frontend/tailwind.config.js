@@ -20,7 +20,22 @@ export default {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
+      animationDelay: {
+        '100': '100ms',
+        '200': '200ms',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.delay-100': {
+          'animation-delay': '100ms',
+        },
+        '.delay-200': {
+          'animation-delay': '200ms',
+        },
+      })
+    },
+  ],
 }

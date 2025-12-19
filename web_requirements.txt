@@ -6,4 +6,6 @@ uvicorn[standard]==0.24.0
 python-multipart==0.0.6  # For file upload support
 pydantic==2.5.0
 aiosqlite==0.19.0  # For SQLite async operations
+httpx==0.25.0  # For AI API HTTP client
+python-dotenv==1.0.0  # For loading environment variables from .env
 slowapi>=0.1.8  # Optional: API rate limiting (server runs without it)

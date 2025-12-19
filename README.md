@@ -6,7 +6,13 @@
 ![PaddleOCR](https://img.shields.io/badge/PaddleOCR-3.x-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-基于 **PaddleOCR + PP-StructureV3** 的智能试卷处理平台，自动将 PDF 试卷切分成题目图片（普通题输出单题图，资料分析输出大题合并图）。支持 **实时进度推送（SSE）**、**手动分步执行**、**GPU 加速**、**智能续跑**。
+基于 **PaddleOCR + PP-StructureV3** 的智能试卷处理平台，集PDF切题、AI答疑、错题管理于一体。核心功能包括：
+- **PDF智能切题**：自动将 PDF 试卷切分成题目图片（普通题输出单题图，资料分析输出大题合并图）
+- **AI聊天答疑**：集成LLM提供题目解析、教学指导和个性化答疑
+- **错题本系统**：完整的错题收集、AI分析、知识标签和复习训练
+- **实时进度推送**：基于 SSE 的实时处理状态和AI流式回复
+- **手动分步执行**：灵活的处理流程控制，支持断点续跑和失败重试
+- **GPU加速**：PaddleOCR GPU加速实现3-10倍性能提升
 
 > **版本说明**: README 版本号为 v2.3.1，OpenAPI 文档版本暂为 v2.0.0（待对齐）
 
@@ -41,8 +47,16 @@
   - 6GB 及以下显卡：极保守配置（workers=2, batch=1/8, prefetch=2, vram=0.6）
   - 所有显卡：workers 上限降至 4（原 8），显存占用降至 60%（原 80%）
   - 零配置即可稳定运行，无需手动调整环境变量
+- **数据库一致性**: 修复数据库步骤命名与Pipeline不一致问题，确保状态同步和错误处理
 - **资源管理**: 改进 ThreadPoolExecutor 生命周期管理，防止线程泄漏
 - **GPU 锁超时保护**: 120 秒超时机制防止无限等待（`EXAMPAPER_GPU_LOCK_TIMEOUT_S`）
+
+### AI 智能功能
+- **AI 聊天答疑**: 集成LLM进行题目解析和教学指导，支持SSE流式回复
+- **错题本管理**: 完整的错题收集、AI分析和复习系统，支持知识点标签
+- **智能图片分析**: 基于 Vision AI 自动识别上传的题目图片并生成解析
+- **多模型支持**: 兼容 OpenAI、DeepSeek、Gemini 等多种模型，支持原生 Thinking 模式
+- **流式交互**: 所有 AI 交互采用 Server-Sent Events (SSE) 实现实时响应
 
 ---
 
@@ -59,7 +73,11 @@ newvl/
 │       │   ├── routers/         # API 路由
 │       │   │   ├── tasks.py     # 任务管理 + SSE 实时流
 │       │   │   ├── files.py     # 文件下载
-│       │   │   └── health.py    # 健康检查
+│       │   │   ├── health.py    # 健康检查
+│       │   │   ├── exams.py     # 试卷管理、答案导入
+│       │   │   ├── users.py     # 用户错题标记
+│       │   │   ├── chat.py      # AI 聊天（SSE 流式）
+│       │   │   └── wrong_notebook.py  # 错题本管理
 │       │   └── services/        # Web 服务
 │       │       ├── event_bus.py      # 内存事件总线
 │       │       ├── event_infra.py    # 事件基础设施（持久化 + 发布）
@@ -76,8 +94,17 @@ newvl/
 │       │   ├── events/          # 事件持久化
 │       │   ├── artifacts/       # 工件存储（预留）
 │       │   ├── queue/           # 任务队列（预留）
-│       │   ├── models/          # 模型管理
-│       │   └── recovery/        # 任务恢复（预留）
+│       │   ├── models/          # 模型管理（GPU加速、PP-StructureV3）
+│       │   ├── recovery/        # 任务恢复（预留）
+│       │   ├── ai/              # AI 服务（聊天、分析、错题本）
+│       │   │   ├── base.py        # AI提供商抽象接口
+│       │   │   ├── openai_compatible.py  # OpenAI兼容API实现
+│       │   │   ├── mock_provider.py      # 开发测试模拟提供者
+│       │   │   ├── prompts.py            # 系统提示词构建
+│       │   │   └── parser.py             # 响应解析工具
+│       │   ├── answers/         # 答案导入与匹配
+│       │   │   └── answer_pdf_importer.py  # PDF答案提取和试卷匹配
+│       │   └── tasks/           # 任务服务
 │       ├── db/                  # 数据库层
 │       │   ├── base.py          # 抽象基类
 │       │   ├── connection.py    # 连接管理
@@ -93,16 +120,30 @@ newvl/
 │
 ├── frontend/                    # Vue 3 前端
 │   ├── src/
+│   │   ├── views/               # 页面视图
+│   │   │   ├── DashboardView.vue    # 主页（PDF处理）
+│   │   │   ├── ChatView.vue         # AI 聊天页
+│   │   │   ├── ReviewView.vue       # 试卷复习页
+│   │   │   └── WrongNotebook.vue    # 错题本页
 │   │   ├── components/          # Vue 组件
 │   │   │   ├── upload/          # 上传区域
 │   │   │   ├── pipeline/        # 流水线视图
 │   │   │   ├── logs/            # 日志终端
-│   │   │   └── results/         # 结果画廊
-│   │   ├── stores/              # 状态管理
+│   │   │   ├── results/         # 结果画廊
+│   │   │   ├── exams/           # 试卷列表、答案导入
+│   │   │   ├── chat/            # 聊天组件（会话列表、Markdown渲染、思考块等）
+│   │   │   └── common/          # 通用组件（错误边界、图片查看器等）
+│   │   ├── stores/              # Pinia 状态管理
 │   │   │   ├── useTaskStore.ts       # 任务状态
 │   │   │   ├── useConnectionStore.ts # SSE 连接
 │   │   │   ├── useLogsStore.ts       # 日志管理
-│   │   │   └── useResultsStore.ts    # 结果展示
+│   │   │   ├── useResultsStore.ts    # 结果展示
+│   │   │   ├── useExamStore.ts       # 试卷状态
+│   │   │   ├── useChatStore.ts       # 聊天状态
+│   │   │   ├── useUserStore.ts       # 用户状态
+│   │   │   ├── useWrongStore.ts      # 错题标记
+│   │   │   └── useWrongNotebookStore.ts  # 错题本状态
+│   │   ├── router/              # Vue Router 路由
 │   │   ├── services/            # API 服务
 │   │   └── composables/         # 组合式函数
 │   ├── dist/                    # 构建输出（由后端提供静态服务）
@@ -118,7 +159,8 @@ newvl/
 ├── tests/                       # 测试用例
 ├── docs/                        # 文档
 │
-├── manage.py                    # 统一启动入口（硬件探测、默认配置）
+├── manage.py                    # 生产环境启动入口（硬件探测、默认配置）
+├── dev.py                       # 开发环境启动入口（前后端同时启动）
 ├── requirements.txt             # Python 依赖
 └── web_requirements.txt         # Web 依赖
 ```
@@ -147,8 +189,9 @@ npm run build
 
 ### 2. 启动服务
 
+**生产环境（推荐）**:
 ```bash
-# 使用 manage.py 启动（推荐，会根据硬件自动配置）
+# 使用 manage.py 启动（会根据硬件自动配置）
 python manage.py
 
 # 自定义端口和并发数
@@ -158,6 +201,22 @@ python manage.py web --port 9000 --workers 8
 python manage.py web --no-gpu
 
 # 服务启动后访问 http://localhost:8000
+```
+
+**开发环境**:
+```bash
+# 使用 dev.py 同时启动前后端（热重载）
+python dev.py
+
+# 仅启动后端
+python dev.py --backend
+
+# 仅启动前端
+python dev.py --frontend
+
+# 开发环境访问：
+#   后端 API: http://localhost:8000
+#   前端页面: http://localhost:5173
 ```
 
 > **注意**: 如果 `frontend/dist/` 不存在，后端会提示先构建前端。前端构建后由后端的 `/` 和 `/assets` 路由提供静态资源服务。
@@ -178,6 +237,28 @@ python manage.py web --no-gpu
 4. 每步完成后可查看该步骤的中间结果
 5. 如果某步失败，可以"重试"或"重置"从该步重新开始
 
+#### AI 聊天答疑功能
+1. 访问 `http://localhost:8000` 并切换到 **AI 答疑** 页面
+2. **选择试卷**：从已处理的试卷列表中选择要分析的试卷
+3. **浏览题目**：使用题目导航器查看所有已处理题目
+4. **创建会话**：点击题目开启AI答疑会话
+5. **提问互动**：在聊天框中输入问题，AI会提供解析和教学指导
+6. **特殊功能**：
+   - **提示模式**：激活提示模式，AI将引导式教学而非直接给答案
+   - **图片增强**：AI结合题目图片进行Vision分析
+   - **流式回复**：实时看到AI思考过程
+
+#### 错题本管理
+1. **收集错题**：
+   - 方式一：在试卷复习页面标记做错的题目
+   - 方式二：上传错题图片，AI自动分析识别
+2. **AI分析**：系统自动分析错题的考点和知识点
+3. **标签管理**：为错题添加知识标签，建立体系化分类
+4. **复习训练**：
+   - 生成相似题目练习
+   - 重新作答获取AI解析
+   - 按知识点维度复习错题
+
 ---
 
 ## 配置
@@ -189,9 +270,9 @@ python manage.py web --no-gpu
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
 | `EXAMPAPER_USE_GPU` | `1` | 是否启用 GPU 加速 |
-| `FLAGS_fraction_of_gpu_memory_to_use` | `0.8` | GPU 显存占用比例（0.0-1.0） |
+| `FLAGS_fraction_of_gpu_memory_to_use` | `0.6` | GPU 显存占用比例（0.0-1.0） |
 | `EXAMPAPER_PPSTRUCTURE_WARMUP` | `1` | 是否在启动时预热模型 |
-| `EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC` | `1` | 是否异步预热（服务先启动，模型后台加载） |
+| `EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC` | `0` | 是否异步预热（服务先启动，模型后台加载） |
 
 ### 并发与性能
 
@@ -213,6 +294,20 @@ python manage.py web --no-gpu
 | `EXAMPAPER_STEP2_FALLBACK_SUBPROCESS` | `1` | 同上 |
 | `EXAMPAPER_LIGHT_TABLE` | `0` | 是否启用轻量表格识别模式 |
 
+### AI 服务配置
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `AI_PROVIDER` | `mock` | AI提供商类型：`openai_compatible`、`mock` |
+| `AI_BASE_URL` | `https://api.openai.com/v1` | OpenAI兼容API的基础URL |
+| `AI_API_KEY` | `your_key_here` | API密钥（不含空格） |
+| `AI_MODEL` | `gpt-3.5-turbo` | 默认AI模型名称 |
+| `AI_TIMEOUT` | `60` | API调用超时时间（秒） |
+| `AI_MAX_TOKENS` | `2000` | 生成的最大token数 |
+| `AI_TEMPERATURE` | `0.7` | 温度参数（0.0-2.0） |
+| `AI_TOP_P` | `0.95` | Top-p采样参数（0.0-1.0） |
+| `EXAMPAPER_CHAT_VISION_MAX_BYTES` | `1500000` | 聊天中图片的最大字节数（默认1.5MB） |
+
 ### 推荐配置
 
 **生产环境（GPU）**:
@@ -221,13 +316,11 @@ EXAMPAPER_USE_GPU=1
 EXAMPAPER_PARALLEL_EXTRACTION=1
 EXAMPAPER_MAX_WORKERS=4
 EXAMPAPER_PPSTRUCTURE_WARMUP=1
-EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC=1
-FLAGS_fraction_of_gpu_memory_to_use=0.8
+FLAGS_fraction_of_gpu_memory_to_use=0.6
 ```
 
 **开发/调试环境**:
 ```bash
-EXAMPAPER_PPSTRUCTURE_WARMUP_ASYNC=1  # 快速启动
 EXAMPAPER_MAX_WORKERS=2                # 降低资源占用
 ```
 
@@ -249,11 +342,11 @@ EXAMPAPER_PPSTRUCTURE_WARMUP=0
 
 | 步骤 | 用户友好名称 | 代码步骤名 | 说明 |
 |------|-------------|-----------|------|
-| 0 | PDF → 图片 | `pdf_to_images` | 高分辨率转换 |
-| 1 | 题目提取 + OCR | `extract_questions` | PP-StructureV3 版面结构分析 |
-| 2 | 资料分析处理 | `analyze_data` | 检测资料分析区域 |
-| 3 | 裁剪拼接 | `compose_long_image` | 跨页题目智能拼接 |
-| 4 | 结果汇总 | `collect_results` | 验证完整性，生成汇总 |
+| 0 | PDF → 图片 | `pdf_to_images` | PyMuPDF 高分辨率转换，支持并行渲染 |
+| 1 | 题目提取 + OCR | `extract_questions` | PP-StructureV3版面分析 + OCR识别 + 题目边界检测，结果缓存到 `ocr/page_*.json` |
+| 2 | 文档结构分析 | `analyze_data` | 分析题目边界关系，检测资料分析区域（标题检测 + 题号111-130兜底），输出 `structure.json` |
+| 3 | 裁剪拼接 | `compose_long_image` | 普通题跨页拼接(`q1.png~q110.png`)，资料分析大题合并(`data_analysis_*.png`)，不生成q111-q130 |
+| 4 | 结果汇总 | `collect_results` | 验证输出完整性，生成最终汇总文件 `summary.json` |
 
 ```
 PDF 上传
@@ -335,6 +428,47 @@ pdf_images/{文件名stem}__{sha256前8位}/
 | `GET` | `/api/health/live` | 存活探针 |
 | `GET` | `/api/health/ready` | 就绪探针（包含 GPU 信息） |
 | `GET` | `/api/health/models/ppstructure` | PP-StructureV3 模型状态与 GPU 信息 |
+
+### AI 聊天功能
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| `POST` | `/api/chat/sessions` | 创建聊天会话（JSON: `{"user_id": "...", "exam_id": ..., "question_no": ...}`） |
+| `GET` | `/api/chat/sessions` | 获取用户的聊天会话列表（Query: `user_id`, 可选 `exam_id`） |
+| `GET` | `/api/chat/sessions/{session_id}/messages` | 获取会话的所有消息 |
+| `POST` | `/api/chat/sessions/{session_id}/messages:stream` | **SSE 流式聊天**（发送消息并流式接收AI回复）<br>Content-Type: `application/json`, Body: `{"content": "...", "model": "..."}` |
+
+### 试卷管理
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| `GET` | `/api/exams` | 获取所有试卷列表 |
+| `GET` | `/api/exams/{exam_id}` | 获取试卷详情（含题目列表） |
+| `GET` | `/api/exams/{exam_id}/questions/{question_no}/image` | 获取题目图片（基于数据库，支持重启后访问） |
+| `POST` | `/api/exams/{exam_id}/answers:import` | 批量导入标准答案（支持JSON/CSV/PDF格式） |
+| `GET` | `/api/exams/{exam_id}/answers` | 获取试卷的所有答案（返回 `{"question_no": "answer"}` 映射） |
+| `POST` | `/api/exams/answers:import-pdfs` | 批量导入服务器端answer目录中的PDF答案（自动匹配试卷） |
+
+### 用户错题管理
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| `POST` | `/api/users/{user_id}/exams/{exam_id}/wrongs` | 标记错题（JSON: `{"answers": {"1": "A", "2": "B"}}`） |
+| `GET` | `/api/users/{user_id}/exams/{exam_id}/wrongs` | 获取用户的错题列表 |
+| `DELETE` | `/api/users/{user_id}/exams/{exam_id}/wrongs/{question_no}` | 删除错题标记 |
+
+### 错题本管理
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| `POST` | `/api/wrong-notebook/analyze` | AI分析上传的错题图片（返回题目信息和知识点） |
+| `POST` | `/api/wrong-notebook/items` | 创建错题本条目（JSON: 参考`WrongItemCreate`模型） |
+| `GET` | `/api/wrong-notebook/items` | 获取用户的错题本条目（Query: `user_id`, 可选过滤条件） |
+| `GET` | `/api/wrong-notebook/items/{item_id}` | 获取错题本条目详情 |
+| `POST` | `/api/wrong-notebook/items/{item_id}/practice` | 生成相似题目练习（SSE流式） |
+| `POST` | `/api/wrong-notebook/items/{item_id}/reanswer` | 重新作答（获取AI解析指导） |
+| `GET` | `/api/wrong-notebook/tags` | 获取知识标签树（按科目分类的层级结构） |
+| `POST` | `/api/wrong-notebook/tags` | 创建知识标签（管理员功能） |
 
 ### SSE 事件流说明
 
@@ -435,6 +569,21 @@ npm run build    # 构建生产版本
 - 更新项目结构图，反映新的模块组织
 - 补充 SSE 事件流使用说明和示例
 - 新增架构扩展点说明
+
+### v2.3.1 (2025-12-16)
+
+**稳定性改进**:
+- **GPU 线程稳定性**: 修复异步环境下 Paddle/CUDA 线程亲和性导致的 hang 问题
+  - 模型初始化和预热在同一线程完成，避免跨线程状态不一致
+  - 可选的线程绑定推理模式（默认启用）
+  - 自动检测 GPU 并发度，高并发时禁用线程绑定以保持性能
+- **保守参数策略**: 重构硬件参数自动计算逻辑，优先稳定性而非吞吐量
+  - 6GB 及以下显卡：极保守配置（workers=2, batch=1/8, prefetch=2, vram=0.6）
+  - 所有显卡：workers 上限降至 4（原 8），显存占用降至 60%（原 80%）
+  - 零配置即可稳定运行，无需手动调整环境变量
+- **数据库一致性**: 修复数据库步骤命名与Pipeline不一致问题，确保状态同步和错误处理
+- **资源管理**: 改进 ThreadPoolExecutor 生命周期管理，防止线程泄漏
+- **GPU 锁超时保护**: 120 秒超时机制防止无限等待（`EXAMPAPER_GPU_LOCK_TIMEOUT_S`）
 
 ### v2.2.0 (2025-12-13)
 

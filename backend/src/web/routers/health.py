@@ -71,6 +71,13 @@ async def health_live():
     return {"status": "live"}
 
 
+@router.get("/config")
+async def health_config():
+    """Get app configuration for frontend"""
+    app_mode = os.getenv("APP_MODE", "production")
+    return {"app_mode": app_mode}
+
+
 @router.get("/ready")
 async def health_ready():
     """Readiness probe: server can accept work"""
