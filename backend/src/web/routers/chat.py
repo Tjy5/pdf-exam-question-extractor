@@ -2,7 +2,7 @@
 Chat Router - AI 聊天对话（SSE 流式）
 """
 
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, AsyncIterator
 import logging
 import base64
 import os
@@ -11,14 +11,16 @@ import re
 import uuid
 from datetime import datetime
 
+import httpx
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from ...common.types import DEFAULT_DATA_DIR, LEGACY_PDF_IMAGES_DIR
 from ...db.connection import get_db_manager
-from ...services.ai import ChatMessage, AIProvider, AIProviderError
+from ...services.ai import ChatMessage, AIProvider, AIProviderError, StreamChunk
 from ..config import config
+from ..dependencies import get_current_user, verify_owner
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 logger = logging.getLogger(__name__)
@@ -80,10 +82,6 @@ class DeleteAllSessionsResponse(BaseModel):
 
 
 HINT_MODE_NOTE_PREFIX = "\n\n[System Note: The user has enabled 'Hint Mode'."
-HINT_MODE_SYSTEM_PROMPT = (
-    "Hint Mode is enabled. Provide guidance and hints with Socratic questioning. "
-    "Avoid giving the full complete answer directly."
-)
 
 
 def _strip_hint_mode_note(text: str) -> tuple[str, bool]:
@@ -272,70 +270,6 @@ async def _ensure_user(user_id: str) -> None:
     )
 
 
-async def _build_system_prompt(exam_id: int, question_no: int, *, show_reasoning: bool, use_native_thinking: bool = False) -> str:
-    """构建系统提示词（Gemini 3 Pro 优化版）
-
-    Args:
-        exam_id: 试卷ID
-        question_no: 题号
-        show_reasoning: 是否显示推理过程
-        use_native_thinking: 是否使用模型原生thinking模式(DeepSeek R1/Gemini Thinking)
-                            若为True则不在提示词中要求<think>标签(避免双重推理)
-    """
-    db = get_db_manager()
-
-    # 获取题目和答案信息
-    question = await db.fetch_one(
-        """
-        SELECT eq.ocr_text, ea.answer
-        FROM exam_questions eq
-        LEFT JOIN exam_answers ea ON eq.exam_id = ea.exam_id AND eq.question_no = ea.question_no
-        WHERE eq.exam_id = ? AND eq.question_no = ?
-        """,
-        (exam_id, question_no)
-    )
-
-    ocr_text = question["ocr_text"] if question and question["ocr_text"] else "（无OCR文本）"
-    correct_answer = question["answer"] if question and question["answer"] else "（无标准答案）"
-
-    reasoning_req = ""
-    if show_reasoning and not use_native_thinking:
-        # 仅在非原生thinking模式下要求使用<think>标签
-        # 原生thinking模式会自动在reasoning_content字段返回推理过程
-        reasoning_req = (
-            "- **思考过程（必须使用 <think> 标签）**：将你的详细推理过程放在 <think></think> 标签中，例如：\n"
-            "  <think>\n"
-            "  1. 分析题干：识别题目类型和关键信息...\n"
-            "  2. 判断考点：本题考查的核心知识点是...\n"
-            "  3. 分析选项：逐一分析各选项的正确性...\n"
-            "  4. 确定答案：排除错误选项，选择正确答案...\n"
-            "  </think>\n"
-            "  **重要**：思考过程必须放在 <think> 标签内，标签外输出简洁的解题步骤。\n"
-        )
-
-    system_prompt = f"""你是一位经验丰富的公务员考试辅导老师，擅长解析行测题目并进行教学式讲解。
-
-【题目信息】
-题号：第 {question_no} 题
-题目内容：{ocr_text}
-正确答案：{correct_answer}
-
-【写作要求】
-1) 只输出给学生看的内容（允许“推理要点/依据”，但不要输出隐藏推理草稿/链路）。
-2) 用中文输出，允许使用 Markdown 排版（不要输出 JSON、不要输出代码块包裹的 JSON）。
-3) 若题目 OCR 文本缺失：优先以“题目图片”为准进行作答；若图片也无法识别，再说明缺失信息并给出通用解题思路（不要编造题干细节）。
-4) 若“正确答案”存在：以此为准，解析要能自洽地解释为什么选它，以及其他选项常见错因/迷惑点。
-
-【输出结构（Markdown）】
-你必须按下面顺序输出小节（缺一不可）：
-- **答案**：一句话给出结论（可直接引用“正确答案”）。
-{reasoning_req}- **解析**：考点 → 方法 → 本题抓手（引用题干/图片里的关键信息）→ 常见陷阱 → 快速检验。
-- **知识点**：列出 5–8 个知识点（用要点列表），并用“关联：A → B（关系）”给出 3–6 条关联。
-"""
-
-    return system_prompt
-
-
 def _safe_png_filename(filename: str) -> None:
     if "/" in filename or "\\" in filename:
         raise HTTPException(status_code=400, detail="Invalid filename")
@@ -384,15 +318,16 @@ def _write_bytes_atomic(path, data: bytes) -> None:
 
 async def _get_question_image_path(exam_id: int, question_no: int):
     db = get_db_manager()
-    row = await db.fetch_one(
-        """
-        SELECT e.exam_dir_name, eq.image_filename, eq.image_data
-        FROM exams e
-        JOIN exam_questions eq ON eq.exam_id = e.id
-        WHERE e.id = ? AND eq.question_no = ?
-        """,
-        (exam_id, question_no),
-    )
+    async with db.transaction():
+        row = await db.fetch_one(
+            """
+            SELECT e.exam_dir_name, eq.image_filename, eq.image_data
+            FROM exams e
+            JOIN exam_questions eq ON eq.exam_id = e.id
+            WHERE e.id = ? AND eq.question_no = ?
+            """,
+            (exam_id, question_no),
+        )
     if not row:
         return None
 
@@ -508,6 +443,190 @@ def _image_path_to_data_url(image_path) -> Optional[str]:
     return f"data:{mime};base64,{b64}"
 
 
+def _gemini_root_from_base_url(base_url: str) -> str:
+    """
+    Derive the NewAPI root URL from an OpenAI-compatible base_url.
+
+    Example:
+    - https://x666.me/v1 -> https://x666.me
+    """
+    u = (base_url or "").rstrip("/")
+    if u.endswith("/v1"):
+        return u[:-3]
+    return u
+
+
+def _gemini_parts_from_content(content: Any) -> list[dict[str, Any]]:
+    """
+    Convert OpenAI-style message content into Gemini v1beta parts.
+
+    Supports:
+    - str -> [{"text": "..."}]
+    - [{"type":"text","text":"..."}, {"type":"image_url","image_url":{"url":"data:..."}}]
+      -> [{"text": ...}, {"inlineData": {"mimeType": ..., "data": ...}}]
+    """
+    if isinstance(content, str):
+        t = content.strip("\n")
+        return [{"text": t}] if t else []
+
+    parts: list[dict[str, Any]] = []
+    if not isinstance(content, list):
+        return parts
+
+    for item in content:
+        if not isinstance(item, dict):
+            continue
+        t = item.get("type")
+        if t == "text" and isinstance(item.get("text"), str):
+            text = str(item["text"]).strip("\n")
+            if text:
+                parts.append({"text": text})
+            continue
+        if t == "image_url":
+            image_url = item.get("image_url")
+            url = None
+            if isinstance(image_url, dict):
+                url = image_url.get("url")
+            if not isinstance(url, str) or not url:
+                continue
+
+            # Only data URLs are supported here; other URLs may require fileData/fileUri.
+            if not url.startswith("data:"):
+                continue
+
+            # data:<mime>;base64,<payload>
+            m = re.match(r"^data:([^;]+);base64,(.+)$", url, re.IGNORECASE | re.DOTALL)
+            if not m:
+                continue
+            mime_type = (m.group(1) or "").strip().lower()
+            b64_data = (m.group(2) or "").strip()
+            if not mime_type or not b64_data:
+                continue
+
+            parts.append(
+                {
+                    "inlineData": {
+                        "mimeType": mime_type,
+                        "data": b64_data,
+                    }
+                }
+            )
+            continue
+
+    return parts
+
+
+def _gemini_contents_from_messages(messages: list[ChatMessage]) -> list[dict[str, Any]]:
+    """
+    Convert ChatMessage list to Gemini v1beta 'contents'.
+
+    Gemini roles:
+    - user
+    - model
+    """
+    out: list[dict[str, Any]] = []
+    for msg in messages:
+        role = (msg.role or "").strip().lower()
+        gem_role = "model" if role == "assistant" else "user"
+        parts = _gemini_parts_from_content(msg.content)
+        if not parts:
+            continue
+        out.append({"role": gem_role, "parts": parts})
+    return out
+
+
+async def _stream_gemini_generate_content(
+    *,
+    base_url: str,
+    api_key: str,
+    model: str,
+    messages: list[ChatMessage],
+    temperature: float,
+    max_tokens: int,
+    include_thoughts: bool = True,
+    thinking_budget: int = -1,
+) -> List[StreamChunk]:
+    """
+    Call NewAPI Gemini v1beta generateContent and map parts into StreamChunk list.
+
+    Note: NewAPI's streamGenerateContent currently returns a single JSON object (not incremental),
+    so we use generateContent and emulate streaming by yielding parts in-order.
+    """
+    root = _gemini_root_from_base_url(base_url)
+    url = f"{root}/v1beta/models/{model}:generateContent"
+
+    payload: dict[str, Any] = {
+        "contents": _gemini_contents_from_messages(messages),
+        "generationConfig": {
+            "temperature": float(temperature),
+            # IMPORTANT: NewAPI/Gemini counts 'thoughts' tokens into the same budget.
+            # Keep this large enough, otherwise the final answer may be truncated.
+            "maxOutputTokens": int(max(1, max_tokens)),
+        },
+    }
+
+    if include_thoughts:
+        payload["generationConfig"]["thinkingConfig"] = {
+            "includeThoughts": True,
+            "thinkingBudget": int(thinking_budget),
+        }
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+
+    timeout = httpx.Timeout(connect=10.0, read=1800.0, write=60.0, pool=60.0)
+    # Do not inherit system proxy env vars (HTTP_PROXY/HTTPS_PROXY), which can break
+    # outbound calls in some dev environments.
+    async with httpx.AsyncClient(timeout=timeout, trust_env=False) as client:
+        resp = await client.post(url, headers=headers, json=payload)
+        if resp.status_code != 200:
+            preview = resp.text[:2048]
+            raise AIProviderError(f"Gemini v1beta request failed: status={resp.status_code} body={preview}")
+
+        try:
+            data = resp.json()
+        except Exception as e:
+            raise AIProviderError(f"Gemini v1beta invalid JSON: {e}") from e
+
+    chunks: List[StreamChunk] = []
+    if not isinstance(data, dict):
+        return chunks
+
+    candidates = data.get("candidates")
+    if not isinstance(candidates, list) or not candidates:
+        return chunks
+
+    c0 = candidates[0]
+    if not isinstance(c0, dict):
+        return chunks
+
+    finish_reason = c0.get("finishReason") or c0.get("finish_reason")
+    content = c0.get("content")
+    if isinstance(content, dict):
+        parts = content.get("parts")
+        if isinstance(parts, list):
+            for part in parts:
+                if not isinstance(part, dict):
+                    continue
+                text = part.get("text")
+                if not isinstance(text, str) or not text:
+                    continue
+                is_thought = bool(part.get("thought"))
+                chunks.append(
+                    StreamChunk(
+                        content=text,
+                        finish_reason=None,
+                        kind="reasoning" if is_thought else "content",
+                    )
+                )
+
+    # Termination chunk
+    chunks.append(StreamChunk(content="", finish_reason=str(finish_reason or "stop")))
+    return chunks
+
+
 # ==================== API Endpoints ====================
 
 @router.post("/sessions", response_model=CreateSessionResponse)
@@ -565,7 +684,8 @@ async def list_sessions(user_id: str, exam_id: Optional[int] = None):
         """
         params = (user_id,)
 
-    rows = await db.fetch_all(query, params)
+    async with db.transaction():
+        rows = await db.fetch_all(query, params)
 
     return [SessionOut(**dict(row)) for row in rows]
 
@@ -575,16 +695,16 @@ async def delete_session(session_id: str, user_id: str):
     """删除单个会话（会级别删除，消息表会通过外键级联删除）"""
     db = get_db_manager()
 
-    session = await db.fetch_one(
-        "SELECT user_id FROM chat_sessions WHERE session_id = ?",
-        (session_id,),
-    )
-    if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
-    if str(session["user_id"]) != user_id:
-        raise HTTPException(status_code=403, detail="Forbidden")
-
     async with db.transaction():
+        session = await db.fetch_one(
+            "SELECT user_id FROM chat_sessions WHERE session_id = ?",
+            (session_id,),
+        )
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        if str(session["user_id"]) != user_id:
+            raise HTTPException(status_code=403, detail="Forbidden")
+
         await db.execute(
             "DELETE FROM chat_sessions WHERE session_id = ? AND user_id = ?",
             (session_id, user_id),
@@ -594,7 +714,10 @@ async def delete_session(session_id: str, user_id: str):
 
 
 @router.delete("/sessions", response_model=DeleteAllSessionsResponse)
-async def delete_all_sessions(user_id: str, exam_id: Optional[int] = None):
+async def delete_all_sessions(
+    current_user: str = Depends(get_current_user),
+    exam_id: Optional[int] = None,
+):
     """删除用户会话（可选按试卷 exam_id 过滤）"""
     db = get_db_manager()
 
@@ -602,41 +725,53 @@ async def delete_all_sessions(user_id: str, exam_id: Optional[int] = None):
         if exam_id is not None:
             row = await db.fetch_one(
                 "SELECT COUNT(*) AS c FROM chat_sessions WHERE user_id = ? AND exam_id = ?",
-                (user_id, int(exam_id)),
+                (current_user, int(exam_id)),
             )
             deleted_count = int((row["c"] if row is not None else 0) or 0)
             await db.execute(
                 "DELETE FROM chat_sessions WHERE user_id = ? AND exam_id = ?",
-                (user_id, int(exam_id)),
+                (current_user, int(exam_id)),
             )
         else:
             row = await db.fetch_one(
                 "SELECT COUNT(*) AS c FROM chat_sessions WHERE user_id = ?",
-                (user_id,),
+                (current_user,),
             )
             deleted_count = int((row["c"] if row is not None else 0) or 0)
             await db.execute(
                 "DELETE FROM chat_sessions WHERE user_id = ?",
-                (user_id,),
+                (current_user,),
             )
 
     return DeleteAllSessionsResponse(deleted_count=deleted_count)
 
 
 @router.get("/sessions/{session_id}/messages", response_model=List[MessageOut])
-async def get_messages(session_id: str):
+async def get_messages(
+    session_id: str,
+    current_user: str = Depends(get_current_user),
+):
     """获取会话的所有消息"""
     db = get_db_manager()
 
-    rows = await db.fetch_all(
-        """
-        SELECT id, role, content, created_at
-        FROM chat_messages
-        WHERE session_id = ?
-        ORDER BY id
-        """,
-        (session_id,)
-    )
+    async with db.transaction():
+        session = await db.fetch_one(
+            "SELECT user_id FROM chat_sessions WHERE session_id = ?",
+            (session_id,),
+        )
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        verify_owner(session["user_id"], current_user)
+
+        rows = await db.fetch_all(
+            """
+            SELECT id, role, content, created_at
+            FROM chat_messages
+            WHERE session_id = ?
+            ORDER BY id
+            """,
+            (session_id,)
+        )
 
     out: List[MessageOut] = []
     for row in rows:
@@ -656,47 +791,48 @@ async def generate_session_title(
     """为会话生成标题（可用于补齐历史对话标题）"""
     db = get_db_manager()
 
-    session = await db.fetch_one(
-        "SELECT user_id, exam_id, question_no, title FROM chat_sessions WHERE session_id = ?",
-        (session_id,),
-    )
-    if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
-
-    if str(session["user_id"]) != request.user_id:
-        raise HTTPException(status_code=403, detail="Forbidden")
-
-    current_title = session["title"]
-    if not request.force and not _is_generic_session_title(current_title):
-        return GenerateSessionTitleResponse(title=str(current_title))
-
-    qno = int(request.question_no) if request.question_no else int(session["question_no"])
-
-    last_user = await db.fetch_one(
-        """
-        SELECT content
-        FROM chat_messages
-        WHERE session_id = ? AND role = 'user'
-        ORDER BY id DESC
-        LIMIT 1
-        """,
-        (session_id,),
-    )
-    if not last_user or last_user["content"] is None:
-        raise HTTPException(status_code=400, detail="No user message found")
-
-    user_text, _ = _strip_hint_mode_note(str(last_user["content"] or ""))
-
-    ocr_text: Optional[str] = None
-    try:
-        ocr_row = await db.fetch_one(
-            "SELECT ocr_text FROM exam_questions WHERE exam_id = ? AND question_no = ?",
-            (int(session["exam_id"]), qno),
+    async with db.transaction():
+        session = await db.fetch_one(
+            "SELECT user_id, exam_id, question_no, title FROM chat_sessions WHERE session_id = ?",
+            (session_id,),
         )
-        if ocr_row and isinstance(ocr_row["ocr_text"], str):
-            ocr_text = ocr_row["ocr_text"]
-    except Exception:
-        ocr_text = None
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+
+        if str(session["user_id"]) != request.user_id:
+            raise HTTPException(status_code=403, detail="Forbidden")
+
+        current_title = session["title"]
+        if not request.force and not _is_generic_session_title(current_title):
+            return GenerateSessionTitleResponse(title=str(current_title))
+
+        qno = int(request.question_no) if request.question_no else int(session["question_no"])
+
+        last_user = await db.fetch_one(
+            """
+            SELECT content
+            FROM chat_messages
+            WHERE session_id = ? AND role = 'user'
+            ORDER BY id DESC
+            LIMIT 1
+            """,
+            (session_id,),
+        )
+        if not last_user or last_user["content"] is None:
+            raise HTTPException(status_code=400, detail="No user message found")
+
+        user_text, _ = _strip_hint_mode_note(str(last_user["content"] or ""))
+
+        ocr_text: Optional[str] = None
+        try:
+            ocr_row = await db.fetch_one(
+                "SELECT ocr_text FROM exam_questions WHERE exam_id = ? AND question_no = ?",
+                (int(session["exam_id"]), qno),
+            )
+            if ocr_row and isinstance(ocr_row["ocr_text"], str):
+                ocr_text = ocr_row["ocr_text"]
+        except Exception:
+            ocr_text = None
 
     title = await _generate_session_title(
         ai,
@@ -722,7 +858,8 @@ async def generate_session_title(
 async def stream_message(
     session_id: str,
     request: SendMessageRequest,
-    ai: AIProvider = Depends(get_ai_provider)
+    ai: AIProvider = Depends(get_ai_provider),
+    current_user: str = Depends(get_current_user),
 ):
     """
     发送消息并流式接收 AI 回复（SSE）
@@ -732,15 +869,17 @@ async def stream_message(
     db = get_db_manager()
 
     # 验证会话存在
-    session = await db.fetch_one(
-        "SELECT user_id, exam_id, question_no FROM chat_sessions WHERE session_id = ?",
-        (session_id,)
-    )
-    if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
+    async with db.transaction():
+        session = await db.fetch_one(
+            "SELECT user_id, exam_id, question_no FROM chat_sessions WHERE session_id = ?",
+            (session_id,)
+        )
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        verify_owner(session["user_id"], current_user)
 
-    exam_id = session["exam_id"]
-    question_no = int(request.question_no) if request.question_no else int(session["question_no"])
+        exam_id = session["exam_id"]
+        question_no = int(request.question_no) if request.question_no else int(session["question_no"])
 
     # 输入验证和参数准备
     raw_content = (request.content or "").strip()
@@ -756,6 +895,13 @@ async def stream_message(
     top_p = None
     use_image = True if request.use_image is None else bool(request.use_image)
     show_reasoning = True if request.show_reasoning is None else bool(request.show_reasoning)
+    logger.debug(
+        "[AI Request] Incoming flags: show_reasoning=%s, hint_mode=%s, use_image=%s, model_override=%s",
+        request.show_reasoning,
+        request.hint_mode,
+        request.use_image,
+        request.model,
+    )
 
     # 1. 保存用户消息（短事务：避免在长连接流式期间持锁）
     now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -769,55 +915,65 @@ async def stream_message(
         )
 
     # 2. 构建对话历史
-    history_rows = await db.fetch_all(
-        """
-        SELECT role, content
-        FROM chat_messages
-        WHERE session_id = ?
-        ORDER BY id
-        """,
-        (session_id,)
-    )
+    async with db.transaction():
+        history_rows = await db.fetch_all(
+            """
+            SELECT role, content
+            FROM chat_messages
+            WHERE session_id = ?
+            ORDER BY id
+            """,
+            (session_id,)
+        )
 
-    # 检测是否使用原生thinking模式(避免双重推理)
+    # Thinking panel policy:
+    # - Only models that expose native reasoning/thoughts should show a thinking panel in the UI.
+    # - We do NOT prompt-inject <think> blocks; the panel is fed only by upstream native fields.
+    thinking_enabled = False
+    # Whether we expect provider to emit reasoning_content separately (affects chunk typing only).
     use_native_thinking = False
+
     if show_reasoning:
         model_lower = model.lower()
-        # DeepSeek R1 系列自动输出 reasoning_content
+
+        # DeepSeek R1 系列：常见网关会返回 reasoning_content
         if "deepseek" in model_lower and "r1" in model_lower:
-            use_native_thinking = True
-        # Gemini Thinking 模型
-        elif "gemini" in model_lower and "thinking" in model_lower:
+            thinking_enabled = True
             use_native_thinking = True
 
-    # 只传递最小信息：题目和答案
+        # Gemini 2.5/3：通常具备内部推理，但很多 OpenAI-compatible 网关不暴露 reasoning_content
+        elif "gemini" in model_lower:
+            # Prefer showing the thinking panel for Gemini "thinking-capable" models.
+            # - When the gateway exposes native reasoning_content (chat/completions) or thought parts (v1beta),
+            #   the panel will show real text.
+            # - When it doesn't, the panel may remain empty (we do NOT inject <think> prompts).
+            if "nothinking" not in model_lower and (
+                "thinking" in model_lower
+                or "gemini-2.5" in model_lower
+                or "gemini-3" in model_lower
+                or "gemini-3-pro-high" in model_lower
+            ):
+                thinking_enabled = True
+    else:
+        logger.info("[AI Request] show_reasoning disabled; thinking panel will be hidden.")
+
     messages: List[ChatMessage] = []
 
-    # 获取题目答案信息
-    question_info = await db.fetch_one(
-        """
-        SELECT eq.ocr_text, ea.answer
-        FROM exam_questions eq
-        LEFT JOIN exam_answers ea ON eq.exam_id = ea.exam_id AND eq.question_no = ea.question_no
-        WHERE eq.exam_id = ? AND eq.question_no = ?
-        """,
-        (exam_id, question_no)
-    )
+    async with db.transaction():
+        # 获取题目答案信息
+        question_info = await db.fetch_one(
+            """
+            SELECT eq.ocr_text, ea.answer
+            FROM exam_questions eq
+            LEFT JOIN exam_answers ea ON eq.exam_id = ea.exam_id AND eq.question_no = ea.question_no
+            WHERE eq.exam_id = ? AND eq.question_no = ?
+            """,
+            (exam_id, question_no)
+        )
 
     ocr_text_for_title: Optional[str] = None
     if question_info:
-        ocr_text = question_info["ocr_text"] or ""
-        ocr_text_for_title = ocr_text if isinstance(ocr_text, str) else None
-        correct_answer = question_info["answer"] or ""
-
-        # 只提供最小上下文，不加任何角色设定和输出格式要求
-        minimal_context = f"Question #{question_no}"
-        if ocr_text:
-            minimal_context += f"\nContent: {ocr_text}"
-        if correct_answer:
-            minimal_context += f"\nCorrect Answer: {correct_answer}"
-
-        messages.append(ChatMessage(role="system", content=minimal_context))
+        ocr_text_for_title = question_info["ocr_text"] if isinstance(question_info["ocr_text"], str) else None
 
     image_data_url: Optional[str] = None
     if use_image:
@@ -858,33 +1014,144 @@ async def stream_message(
 
         try:
             # 发送流开始事件
-            yield f"data: {json.dumps({'type': 'start'})}\n\n"
+            yield f"data: {json.dumps({'type': 'start', 'thinking_enabled': bool(thinking_enabled), 'model': model})}\n\n"
 
             # 记录请求参数（用于调试）
-            logger.info(f"[AI Request] model={model}, temperature={temperature}, top_p={top_p}, max_tokens={config.ai_max_tokens}, show_reasoning={show_reasoning}, use_native_thinking={use_native_thinking}")
+            logger.info(
+                "[AI Request] model=%s, temperature=%s, top_p=%s, max_tokens=%s, show_reasoning=%s, thinking_enabled=%s, use_native_thinking=%s",
+                model,
+                temperature,
+                top_p,
+                config.ai_max_tokens,
+                show_reasoning,
+                thinking_enabled,
+                use_native_thinking,
+            )
 
             # 根据 use_native_thinking 决定是否启用thinking参数
             thinking_param = None
-            if use_native_thinking:
-                # Gemini 2.0 Flash Thinking 需要显式启用thinking参数
-                if "gemini" in model.lower() and "thinking" in model.lower():
-                    thinking_param = {"type": "enabled"}
-                # DeepSeek R1 会自动在 reasoning_content 字段返回推理过程
-                # 无需特殊参数,backend 会自动处理 reasoning_content 并包装成 <think> 标签
+            extra_params = {}
+            # NOTE: Do not force provider-specific thinking parameters here by default.
+            # Some OpenAI-compatible gateways reject/disable Gemini thinking_config; if a provider
+            # streams reasoning_content, OpenAICompatibleProvider will detect it automatically.
 
-            async def _stream_once(msgs: List[ChatMessage]):
-                async for chunk in ai.stream_chat(
+            logger.info(
+                f"[AI Request] Streaming parameters: thinking_param={thinking_param}, extra_params={extra_params}, show_reasoning={show_reasoning}, thinking_enabled={thinking_enabled}, use_native_thinking={use_native_thinking}"
+            )
+
+            async def _iter_provider_chunks(msgs: List[ChatMessage]) -> AsyncIterator[StreamChunk]:
+                """
+                Choose the best upstream protocol for the configured model.
+
+                - Gemini models: optionally use v1beta generateContent with includeThoughts to get
+                  thought parts (only if AI_GEMINI_USE_V1BETA=1). Many gateways do not support
+                  this endpoint reliably, so we keep it opt-in.
+                - Otherwise: fall back to OpenAI-compatible streaming.
+                """
+                model_lower = (model or "").lower()
+                # Prefer true streaming first (OpenAI-compatible /chat/completions), because many
+                # Gemini v1beta endpoints are not incremental. If the stream does not expose native
+                # reasoning, we can optionally backfill thought parts via v1beta (best-effort).
+                if config.ai_gemini_use_v1beta and thinking_enabled and model_lower.startswith("gemini"):
+                    saw_reasoning = False
+                    final_finish_reason: Optional[str] = None
+                    try:
+                        async for ch in ai.stream_chat(
+                            msgs,
+                            model=model,
+                            temperature=temperature,
+                            top_p=top_p,
+                            max_tokens=config.ai_max_tokens,
+                            thinking=thinking_param,
+                            **extra_params,
+                        ):
+                            if ch.content:
+                                if ch.kind == "reasoning":
+                                    saw_reasoning = True
+                                # Strip finish_reason so we can optionally backfill reasoning before closing.
+                                yield StreamChunk(content=ch.content, finish_reason=None, kind=ch.kind)
+                            if ch.finish_reason:
+                                final_finish_reason = ch.finish_reason
+                                break
+                    except Exception:
+                        logger.warning(
+                            "[Gemini stream_chat] Failed; falling back to v1beta generateContent",
+                            exc_info=True,
+                        )
+                        gemini_chunks = await _stream_gemini_generate_content(
+                            base_url=config.ai_base_url,
+                            api_key=config.ai_api_key,
+                            model=model,
+                            messages=msgs,
+                            temperature=temperature,
+                            max_tokens=int(config.ai_max_tokens),
+                            include_thoughts=True,
+                            thinking_budget=-1,
+                        )
+                        for ch in gemini_chunks:
+                            yield ch
+                        return
+
+                    # Backfill: if the stream had no native reasoning_content, try v1beta thoughts.
+                    if not saw_reasoning:
+                        try:
+                            gemini_chunks = await _stream_gemini_generate_content(
+                                base_url=config.ai_base_url,
+                                api_key=config.ai_api_key,
+                                model=model,
+                                messages=msgs,
+                                temperature=temperature,
+                                max_tokens=int(config.ai_max_tokens),
+                                include_thoughts=True,
+                                thinking_budget=-1,
+                            )
+                            for ch in gemini_chunks:
+                                if ch.kind == "reasoning" and ch.content:
+                                    yield ch
+                        except Exception:
+                            logger.warning("[Gemini v1beta] Thought backfill failed", exc_info=True)
+
+                    if final_finish_reason:
+                        yield StreamChunk(content="", finish_reason=str(final_finish_reason))
+                    return
+
+                async for ch in ai.stream_chat(
                     msgs,
                     model=model,
                     temperature=temperature,
                     top_p=top_p,
                     max_tokens=config.ai_max_tokens,
                     thinking=thinking_param,
+                    **extra_params,
                 ):
+                    yield ch
+
+            async def _stream_once(msgs: List[ChatMessage]):
+                chunk_count = 0
+                async for chunk in _iter_provider_chunks(msgs):
+                    chunk_count += 1
                     if chunk.content:
-                        assistant_content_parts.append(chunk.content)
-                        yield f"data: {json.dumps({'type': 'token', 'content': chunk.content})}\n\n"
+                        logger.debug(f"[Stream Chunk #{chunk_count}] kind={chunk.kind}, content_len={len(chunk.content)}, content_preview={chunk.content[:50]}...")
+
+                        if chunk.kind == "reasoning":
+                            assistant_content_parts.append(f"<think>{chunk.content}</think>")
+                            payload = {"type": "token", "content": chunk.content, "kind": "reasoning"}
+                            logger.debug(f"[Stream] Sending reasoning token")
+                        elif chunk.kind == "content" or (chunk.kind is None and use_native_thinking):
+                            assistant_content_parts.append(chunk.content)
+                            payload = {"type": "token", "content": chunk.content, "kind": "content"}
+                            logger.debug(f"[Stream] Sending content token")
+                        else:
+                            assistant_content_parts.append(chunk.content)
+                            payload = {"type": "token", "content": chunk.content}
+                            logger.debug(f"[Stream] Sending untyped token")
+                            if show_reasoning and not use_native_thinking and chunk_count <= 5:
+                                logger.debug(
+                                    "[Stream] Untyped token while show_reasoning=true; provider may not emit reasoning_content or <think> tags."
+                                )
+                        yield f"data: {json.dumps(payload)}\n\n"
                     if chunk.finish_reason:
+                        logger.info(f"[Stream] Finished with reason: {chunk.finish_reason}, total chunks: {chunk_count}")
                         break
 
             # Stream once; if provider rejects vision payload, retry once without image.
@@ -968,10 +1235,10 @@ async def stream_message(
             # 发送完成事件
             yield f"data: {json.dumps({'type': 'done'})}\n\n"
 
-        except AIProviderError as e:
-            # AI 调用错误
-            error_msg = str(e)
-            yield f"data: {json.dumps({'type': 'error', 'message': error_msg})}\n\n"
+        except AIProviderError:
+            # AI 调用错误（不泄露内部错误详情）
+            logger.exception("AI provider error")
+            yield f"data: {json.dumps({'type': 'error', 'message': 'AI service error'})}\n\n"
 
         except Exception as e:
             # 其他异常（不泄露内部错误详情）
@@ -984,6 +1251,7 @@ async def stream_message(
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
             "X-Accel-Buffering": "no",  # 禁用 Nginx 缓冲
         }
     )

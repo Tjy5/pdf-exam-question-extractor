@@ -31,6 +31,9 @@ from ..config import config
 
 router = APIRouter(prefix="/api", tags=["exams"])
 
+# PNG file signature
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
 
 # ==================== Response Models ====================
 
@@ -97,6 +100,32 @@ class AnswerPdfDirImportResult(BaseModel):
     results: List[AnswerPdfImportFileResult]
 
 
+class LocalExamImportRequest(BaseModel):
+    """本地试卷目录导入请求"""
+    exam_dir_name: str
+    display_name: Optional[str] = None
+    dry_run: bool = False
+    overwrite: bool = False
+
+
+class LocalExamImportResult(BaseModel):
+    """本地试卷目录导入结果"""
+    exam_id: Optional[int] = None
+    exam_dir_name: str
+    display_name: Optional[str] = None
+    question_count: int = 0
+    data_analysis_count: int = 0
+    imported: int = 0
+    skipped: int = 0
+    warnings: List[str] = []
+    errors: List[str] = []
+
+
+class LocalDirectoriesResponse(BaseModel):
+    """本地目录列表响应"""
+    directories: List[str]
+
+
 # ==================== Utility Functions ====================
 
 def _safe_filename(filename: str) -> None:
@@ -110,10 +139,11 @@ def _safe_filename(filename: str) -> None:
 async def _resolve_exam_dir(exam_id: int) -> Path:
     """解析试卷目录"""
     db = get_db_manager()
-    exam = await db.fetch_one(
-        "SELECT exam_dir_name FROM exams WHERE id = ?",
-        (exam_id,)
-    )
+    async with db.transaction():
+        exam = await db.fetch_one(
+            "SELECT exam_dir_name FROM exams WHERE id = ?",
+            (exam_id,)
+        )
     if not exam:
         raise HTTPException(status_code=404, detail="Exam not found")
 
@@ -215,21 +245,298 @@ async def _upsert_answers_for_exam(
     return imported, skipped, errs
 
 
+async def _scan_local_exam_directory(
+    exam_dir: Path,
+    *,
+    display_name: Optional[str] = None,
+) -> Dict[str, Any]:
+    """扫描本地试卷目录，提取题目图片和元数据"""
+    errors: List[str] = []
+    warnings: List[str] = []
+    questions: List[Dict[str, Any]] = []
+
+    if not exam_dir.exists() or not exam_dir.is_dir():
+        raise HTTPException(status_code=404, detail="Exam directory not found")
+
+    exam_dir_name = exam_dir.name
+    if not display_name:
+        # 移除末尾的hash后缀 (e.g., "__17531029")
+        display_name = re.sub(r"__[a-f0-9]{8}$", "", exam_dir_name)
+
+    all_dir = (exam_dir / "all_questions").resolve()
+    if not all_dir.exists() or not all_dir.is_dir():
+        raise HTTPException(status_code=400, detail="all_questions directory not found")
+
+    # 防止符号链接攻击
+    if all_dir.is_symlink():
+        raise HTTPException(status_code=400, detail="Symlinked directories are not allowed")
+
+    # 扫描PNG文件
+    normal_candidates: Dict[int, Path] = {}
+    data_candidates: Dict[int, Path] = {}
+
+    for p in sorted(all_dir.glob("*.png")):
+        # 跳过符号链接文件
+        if p.is_symlink():
+            warnings.append(f"Skipped symlinked file: {p.name}")
+            continue
+
+        # 确保文件在all_dir内
+        try:
+            p.resolve().relative_to(all_dir)
+        except ValueError:
+            warnings.append(f"Skipped file outside directory: {p.name}")
+            continue
+
+        name = p.name
+        # 匹配普通题目 (q1.png, q2.png, ...)
+        m = re.match(r"^q(\d+)\.png$", name, flags=re.IGNORECASE)
+        if m:
+            try:
+                qno = int(m.group(1))
+            except ValueError:
+                warnings.append(f"Invalid question number in {name}")
+                continue
+            if qno <= 0:
+                warnings.append(f"Invalid question number in {name}")
+                continue
+            # 跳过资料分析子题 (111-130)
+            if 111 <= qno <= 130:
+                warnings.append(f"Skipped data analysis sub-question: {name}")
+                continue
+            if qno in normal_candidates:
+                warnings.append(f"Duplicate question number: q{qno}")
+                continue
+            normal_candidates[qno] = p
+            continue
+
+        # 匹配资料分析大题 (data_analysis_1.png, ...)
+        m = re.match(r"^data_analysis_(\d+)\.png$", name, flags=re.IGNORECASE)
+        if m:
+            try:
+                da_order = int(m.group(1))
+            except ValueError:
+                warnings.append(f"Invalid data analysis number in {name}")
+                continue
+            if da_order <= 0:
+                warnings.append(f"Invalid data analysis number in {name}")
+                continue
+            da_qno = 1000 + da_order
+            if da_qno in data_candidates:
+                warnings.append(f"Duplicate data analysis number: data_analysis_{da_order}")
+                continue
+            data_candidates[da_qno] = p
+            continue
+
+        warnings.append(f"Ignored non-question image: {name}")
+
+    if not normal_candidates and not data_candidates:
+        errors.append("No valid question images found in all_questions")
+
+    # 读取summary.json (可选)
+    summary_path = all_dir / "summary.json"
+    if summary_path.exists():
+        try:
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+            if isinstance(summary, dict):
+                if "normal_questions" in summary and summary["normal_questions"] != len(normal_candidates):
+                    warnings.append(f"summary.json normal_questions mismatch: expected {summary['normal_questions']}, found {len(normal_candidates)}")
+                if "big_questions" in summary and summary["big_questions"] != len(data_candidates):
+                    warnings.append(f"summary.json big_questions mismatch: expected {summary['big_questions']}, found {len(data_candidates)}")
+        except Exception as e:
+            warnings.append(f"Failed to read summary.json: {e}")
+
+    # 构建题目列表
+    for qno in sorted(normal_candidates.keys()):
+        questions.append({
+            "question_no": qno,
+            "question_type": "single",
+            "path": normal_candidates[qno],
+            "image_filename": normal_candidates[qno].name,
+        })
+    for qno in sorted(data_candidates.keys()):
+        questions.append({
+            "question_no": qno,
+            "question_type": "data_analysis",
+            "path": data_candidates[qno],
+            "image_filename": data_candidates[qno].name,
+        })
+
+    return {
+        "exam_dir_name": exam_dir_name,
+        "display_name": display_name,
+        "questions": questions,
+        "question_count": len(normal_candidates),
+        "data_analysis_count": len(data_candidates),
+        "warnings": warnings,
+        "errors": errors,
+    }
+
+
+async def _import_local_questions(
+    scan: Dict[str, Any],
+    *,
+    overwrite: bool = False,
+) -> LocalExamImportResult:
+    """将扫描的本地题目导入数据库"""
+    from datetime import datetime, timezone
+
+    db = get_db_manager()
+    exam_dir_name = scan["exam_dir_name"]
+    display_name = scan.get("display_name")
+    questions = scan.get("questions", [])
+    warnings: List[str] = list(scan.get("warnings") or [])
+    errors: List[str] = list(scan.get("errors") or [])
+
+    if not questions:
+        raise HTTPException(status_code=400, detail="No valid question images to import")
+
+    def _read_b64(path: Path) -> Optional[str]:
+        """读取图片并转为Base64"""
+        try:
+            # 检查文件大小（限制10MB）
+            file_size = path.stat().st_size
+            max_size = 10 * 1024 * 1024  # 10MB
+            if file_size > max_size:
+                errors.append(f"File too large: {path.name} ({file_size} bytes)")
+                return None
+
+            raw = path.read_bytes()
+        except Exception as e:
+            errors.append(f"Failed to read {path.name}: {e}")
+            return None
+        if not raw.startswith(PNG_SIGNATURE):
+            errors.append(f"Invalid PNG signature: {path.name}")
+            return None
+        try:
+            return base64.b64encode(raw).decode("ascii")
+        except Exception as e:
+            errors.append(f"Failed to encode {path.name}: {e}")
+            return None
+
+    imported = 0
+    skipped = 0
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+    async with db.transaction():
+        # 检查试卷是否已存在
+        existing = await db.fetch_one(
+            "SELECT id FROM exams WHERE exam_dir_name = ?",
+            (exam_dir_name,),
+        )
+        if existing and not overwrite:
+            raise HTTPException(status_code=409, detail="Exam already exists (set overwrite=true)")
+
+        # 如果overwrite，删除现有题目和答案
+        if existing and overwrite:
+            await db.execute(
+                "DELETE FROM exam_questions WHERE exam_id = ?",
+                (int(existing["id"]),),
+            )
+            await db.execute(
+                "DELETE FROM exam_answers WHERE exam_id = ?",
+                (int(existing["id"]),),
+            )
+            await db.execute(
+                "UPDATE exams SET has_answers = 0 WHERE id = ?",
+                (int(existing["id"]),),
+            )
+
+        # 插入或更新试卷记录
+        await db.execute(
+            """
+            INSERT INTO exams (
+                exam_dir_name, display_name, question_count,
+                created_at, updated_at, processed_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            ON CONFLICT(exam_dir_name) DO UPDATE SET
+                display_name = excluded.display_name,
+                question_count = excluded.question_count,
+                updated_at = excluded.updated_at,
+                processed_at = excluded.processed_at
+            """,
+            (
+                exam_dir_name,
+                display_name,
+                int(scan.get("question_count", 0)),
+                now,
+                now,
+                now,
+            ),
+        )
+
+        # 获取试卷ID
+        exam_row = await db.fetch_one(
+            "SELECT id FROM exams WHERE exam_dir_name = ?",
+            (exam_dir_name,),
+        )
+        if not exam_row:
+            raise HTTPException(status_code=500, detail="Failed to resolve exam_id")
+        exam_id = int(exam_row["id"])
+
+        # 插入题目
+        for item in questions:
+            path: Path = item["path"]
+            image_b64 = await asyncio.to_thread(_read_b64, path)
+            if not image_b64:
+                skipped += 1
+                continue
+
+            try:
+                await db.execute(
+                    """
+                    INSERT INTO exam_questions (
+                        exam_id, question_no, question_type, image_filename, image_data, created_at
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(exam_id, question_no) DO UPDATE SET
+                        question_type = excluded.question_type,
+                        image_filename = excluded.image_filename,
+                        image_data = excluded.image_data
+                    """,
+                    (
+                        exam_id,
+                        int(item["question_no"]),
+                        item["question_type"],
+                        item["image_filename"],
+                        image_b64,
+                        now,
+                    ),
+                )
+                imported += 1
+            except Exception as e:
+                errors.append(f"Failed to insert Q{item['question_no']}: {e}")
+                skipped += 1
+
+    return LocalExamImportResult(
+        exam_id=exam_id,
+        exam_dir_name=exam_dir_name,
+        display_name=display_name,
+        question_count=int(scan.get("question_count", 0)),
+        data_analysis_count=int(scan.get("data_analysis_count", 0)),
+        imported=imported,
+        skipped=skipped,
+        warnings=warnings,
+        errors=errors,
+    )
+
+
 # ==================== API Endpoints ====================
 
 @router.get("/exams", response_model=List[ExamOut])
 async def list_exams():
     """获取所有试卷列表"""
     db = get_db_manager()
-    rows = await db.fetch_all(
-        """
-        SELECT id, exam_dir_name, display_name, question_count, has_answers,
-               created_at, processed_at
-        FROM exams
-        ORDER BY created_at DESC
-        """
-    )
-
+    async with db.transaction():
+        rows = await db.fetch_all(
+            """
+            SELECT id, exam_dir_name, display_name, question_count, has_answers,
+                   created_at, processed_at
+            FROM exams
+            ORDER BY created_at DESC
+            """
+        )
     return [ExamOut(**dict(row)) for row in rows]
 
 
@@ -238,33 +545,34 @@ async def get_exam_detail(exam_id: int):
     """获取试卷详情（含题目列表）"""
     db = get_db_manager()
 
-    # 获取试卷信息
-    exam_row = await db.fetch_one(
-        """
-        SELECT id, exam_dir_name, display_name, question_count, has_answers,
-               created_at, processed_at
-        FROM exams
-        WHERE id = ?
-        """,
-        (exam_id,)
-    )
-    if not exam_row:
-        raise HTTPException(status_code=404, detail="Exam not found")
+    async with db.transaction():
+        # 获取试卷信息
+        exam_row = await db.fetch_one(
+            """
+            SELECT id, exam_dir_name, display_name, question_count, has_answers,
+                   created_at, processed_at
+            FROM exams
+            WHERE id = ?
+            """,
+            (exam_id,)
+        )
+        if not exam_row:
+            raise HTTPException(status_code=404, detail="Exam not found")
 
-    exam = ExamOut(**dict(exam_row))
+        exam = ExamOut(**dict(exam_row))
 
-    # 获取题目列表
-    question_rows = await db.fetch_all(
-        """
-        SELECT eq.question_no, eq.question_type, eq.image_filename,
-               CASE WHEN ea.id IS NOT NULL THEN 1 ELSE 0 END as has_answer
-        FROM exam_questions eq
-        LEFT JOIN exam_answers ea ON eq.exam_id = ea.exam_id AND eq.question_no = ea.question_no
-        WHERE eq.exam_id = ?
-        ORDER BY eq.question_no
-        """,
-        (exam_id,)
-    )
+        # 获取题目列表
+        question_rows = await db.fetch_all(
+            """
+            SELECT eq.question_no, eq.question_type, eq.image_filename,
+                   CASE WHEN ea.id IS NOT NULL THEN 1 ELSE 0 END as has_answer
+            FROM exam_questions eq
+            LEFT JOIN exam_answers ea ON eq.exam_id = ea.exam_id AND eq.question_no = ea.question_no
+            WHERE eq.exam_id = ?
+            ORDER BY eq.question_no
+            """,
+            (exam_id,)
+        )
 
     # Helper to generate display label
     def _get_display_label(qno: int, qtype: str) -> str:
@@ -321,15 +629,16 @@ async def get_question_image(exam_id: int, question_no: int):
 
     db = get_db_manager()
 
-    # 获取图片文件名和image_data
-    question = await db.fetch_one(
-        """
-        SELECT image_filename, image_data
-        FROM exam_questions
-        WHERE exam_id = ? AND question_no = ?
-        """,
-        (exam_id, question_no)
-    )
+    async with db.transaction():
+        # 获取图片文件名和image_data
+        question = await db.fetch_one(
+            """
+            SELECT image_filename, image_data
+            FROM exam_questions
+            WHERE exam_id = ? AND question_no = ?
+            """,
+            (exam_id, question_no)
+        )
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
 
@@ -376,16 +685,17 @@ async def import_answers(
     """
     db = get_db_manager()
 
-    exam = await db.fetch_one("SELECT id, question_count FROM exams WHERE id = ?", (exam_id,))
-    if not exam:
-        raise HTTPException(status_code=404, detail="Exam not found")
-    question_count = int(exam["question_count"] or 0)
+    async with db.transaction():
+        exam = await db.fetch_one("SELECT id, question_count FROM exams WHERE id = ?", (exam_id,))
+        if not exam:
+            raise HTTPException(status_code=404, detail="Exam not found")
+        question_count = int(exam["question_count"] or 0)
 
-    # Determine schema from existing questions (more reliable than question_count).
-    question_rows = await db.fetch_all(
-        "SELECT question_no FROM exam_questions WHERE exam_id = ?",
-        (exam_id,),
-    )
+        # Determine schema from existing questions (more reliable than question_count).
+        question_rows = await db.fetch_all(
+            "SELECT question_no FROM exam_questions WHERE exam_id = ?",
+            (exam_id,),
+        )
     valid_qnos = {int(r["question_no"]) for r in question_rows} if question_rows else None
     force_fold = False
     if valid_qnos:
@@ -485,15 +795,16 @@ async def get_answers(exam_id: int) -> Dict[str, str]:
     """获取试卷的所有答案"""
     db = get_db_manager()
 
-    rows = await db.fetch_all(
-        """
-        SELECT question_no, answer
-        FROM exam_answers
-        WHERE exam_id = ?
-        ORDER BY question_no
-        """,
-        (exam_id,)
-    )
+    async with db.transaction():
+        rows = await db.fetch_all(
+            """
+            SELECT question_no, answer
+            FROM exam_answers
+            WHERE exam_id = ?
+            ORDER BY question_no
+            """,
+            (exam_id,)
+        )
 
     return {str(row["question_no"]): row["answer"] for row in rows}
 
@@ -521,10 +832,11 @@ async def import_answers_from_pdf_dir(req: AnswerPdfDirImportRequest):
     if req.max_files:
         pdf_files = pdf_files[: int(req.max_files)]
 
-    exam_rows = await db.fetch_all(
-        "SELECT id, exam_dir_name, display_name, question_count FROM exams ORDER BY id",
-        (),
-    )
+    async with db.transaction():
+        exam_rows = await db.fetch_all(
+            "SELECT id, exam_dir_name, display_name, question_count FROM exams ORDER BY id",
+            (),
+        )
     exams = [
         ExamInfo(
             id=int(r["id"]),
@@ -595,10 +907,11 @@ async def import_answers_from_pdf_dir(req: AnswerPdfDirImportRequest):
                 )
                 continue
 
-            question_rows = await db.fetch_all(
-                "SELECT question_no FROM exam_questions WHERE exam_id = ?",
-                (match.exam.id,),
-            )
+            async with db.transaction():
+                question_rows = await db.fetch_all(
+                    "SELECT question_no FROM exam_questions WHERE exam_id = ?",
+                    (match.exam.id,),
+                )
             valid_qnos = {int(r["question_no"]) for r in question_rows} if question_rows else None
             force_fold = False
             if valid_qnos:
@@ -657,3 +970,68 @@ async def import_answers_from_pdf_dir(req: AnswerPdfDirImportRequest):
         skipped_total=skipped_total,
         results=results,
     )
+
+
+@router.get("/exams/local/directories", response_model=LocalDirectoriesResponse)
+async def list_local_exam_directories():
+    """列出pdf_images目录下的所有试卷目录"""
+    base_dir = LEGACY_PDF_IMAGES_DIR.resolve()
+
+    if not base_dir.exists() or not base_dir.is_dir():
+        return LocalDirectoriesResponse(directories=[])
+
+    directories = []
+    for item in sorted(base_dir.iterdir()):
+        if item.is_dir():
+            # 检查是否包含all_questions子目录
+            all_questions_dir = item / "all_questions"
+            if all_questions_dir.exists() and all_questions_dir.is_dir():
+                directories.append(item.name)
+
+    return LocalDirectoriesResponse(directories=directories)
+
+
+@router.post("/exams/local:import", response_model=LocalExamImportResult)
+async def import_local_exam(req: LocalExamImportRequest):
+    """从本地目录导入试卷（跳过PDF处理流程）"""
+    # 验证exam_dir_name不为空
+    if not req.exam_dir_name or not req.exam_dir_name.strip():
+        raise HTTPException(status_code=400, detail="exam_dir_name cannot be empty")
+
+    # 禁止相对路径
+    if req.exam_dir_name in (".", "..") or "/" in req.exam_dir_name or "\\" in req.exam_dir_name:
+        raise HTTPException(status_code=400, detail="Invalid exam_dir_name")
+
+    base_dir = LEGACY_PDF_IMAGES_DIR.resolve()
+    target_dir = (base_dir / req.exam_dir_name).resolve()
+
+    # 防止路径遍历攻击
+    try:
+        target_dir.relative_to(base_dir)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid directory (path traversal)")
+
+    if not target_dir.exists() or not target_dir.is_dir():
+        raise HTTPException(status_code=404, detail="Directory not found")
+
+    # 扫描目录
+    scan = await _scan_local_exam_directory(
+        target_dir,
+        display_name=req.display_name,
+    )
+
+    # 如果是dry_run，只返回扫描结果
+    if req.dry_run:
+        return LocalExamImportResult(
+            exam_dir_name=scan["exam_dir_name"],
+            display_name=scan.get("display_name"),
+            question_count=int(scan.get("question_count", 0)),
+            data_analysis_count=int(scan.get("data_analysis_count", 0)),
+            imported=0,
+            skipped=0,
+            warnings=list(scan.get("warnings") or []),
+            errors=list(scan.get("errors") or []),
+        )
+
+    # 执行导入
+    return await _import_local_questions(scan, overwrite=req.overwrite)

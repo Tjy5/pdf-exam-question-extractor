@@ -1,18 +1,40 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, computed } from 'vue'
 import MarkdownRenderer from './MarkdownRenderer.vue'
 
 const props = defineProps<{
   thinking: string
   isStreaming?: boolean
+  defaultExpanded?: boolean
+  collapseAt?: number
+  durationMs?: number
 }>()
 
 const contentRef = ref<HTMLDivElement | null>(null)
-const isExpanded = ref(false)
+const isExpanded = ref(props.collapseAt != null ? false : (props.isStreaming ? true : Boolean(props.defaultExpanded)))
+const lastCollapseAt = ref<number | undefined>(props.collapseAt)
+const userToggled = ref(false)
 
 function toggleExpand() {
+  userToggled.value = true
   isExpanded.value = !isExpanded.value
 }
+
+function formatDuration(ms?: number): string {
+  if (!ms || ms <= 0) return ''
+  const seconds = Math.max(1, Math.round(ms / 1000))
+  return `${seconds}秒`
+}
+
+const statusText = computed(() => {
+  // When the panel auto-collapses at "content started", we already have durationMs.
+  // Show the finished duration even if the overall message is still streaming.
+  if (!isExpanded.value && props.durationMs) {
+    return `已深度思考 (耗时 ${formatDuration(props.durationMs)})`
+  }
+  if (props.isStreaming) return '思考中...'
+  return props.thinking ? `${props.thinking.length} 字` : '无内容'
+})
 
 // 预览文本：取最后几行
 function getPreviewText(text: string): string {
@@ -20,6 +42,18 @@ function getPreviewText(text: string): string {
   const previewLines = lines.slice(-3).join('\n')
   return previewLines.length > 150 ? '...' + previewLines.slice(-150) : previewLines
 }
+
+watch(() => props.defaultExpanded, (nextVal) => {
+  if (userToggled.value) return
+  isExpanded.value = Boolean(nextVal)
+})
+
+watch(() => props.collapseAt, (nextVal) => {
+  if (userToggled.value) return
+  if (!nextVal || nextVal === lastCollapseAt.value) return
+  lastCollapseAt.value = nextVal
+  isExpanded.value = false
+})
 
 // UX 改进：流式阶段自动滚动到底部，跟随思考过程
 watch(() => props.thinking, () => {
@@ -68,7 +102,7 @@ watch(() => props.thinking, () => {
             class="text-xs px-2 py-0.5 rounded-full font-medium"
             :class="isStreaming ? 'bg-indigo-500 text-white' : 'bg-slate-200 text-slate-600'"
           >
-            {{ isStreaming ? '思考中...' : `${thinking.length} 字` }}
+            {{ statusText }}
           </span>
         </div>
       </div>
@@ -105,9 +139,12 @@ watch(() => props.thinking, () => {
       <div v-if="isExpanded" id="thinking-content-body" class="thinking-content border-t border-slate-200">
         <div
           ref="contentRef"
-          class="thinking-content-inner px-4 py-4 text-sm text-slate-600 max-h-[60vh] overflow-y-auto"
+          class="thinking-content-inner px-4 py-4 text-xs text-slate-500 max-h-[60vh] overflow-y-auto"
         >
-          <MarkdownRenderer :content="thinking" />
+          <div v-if="!thinking && isStreaming" class="flex items-center gap-2 text-slate-400 italic animate-pulse">
+             <span>正在梳理思路...</span>
+          </div>
+          <MarkdownRenderer v-else :content="thinking" class="thinking-markdown prose-sm" />
         </div>
       </div>
     </transition>
@@ -155,5 +192,9 @@ watch(() => props.thinking, () => {
 
 .thinking-header:hover {
   background: linear-gradient(to right, rgba(241, 245, 249, 0.5), transparent);
+}
+
+:deep(.thinking-markdown strong) {
+  color: inherit;
 }
 </style>

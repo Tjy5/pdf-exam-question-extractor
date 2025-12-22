@@ -42,7 +42,7 @@ const dropZoneClass = computed(() => {
 </script>
 
 <template>
-  <div class="glass-panel rounded-3xl p-6 transition-transform hover:scale-[1.02] duration-300">
+  <div class="glass-panel rounded-2xl p-6 transition-transform hover:scale-[1.02] duration-300">
     <h3 class="text-xl font-bold mb-4 flex items-center">
       <span class="text-rose-500 mr-2 text-2xl">📄</span>
       第一步: 上传文件

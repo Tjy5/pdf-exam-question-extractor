@@ -1,14 +1,20 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { useUserStore } from './useUserStore'
+import { parseThinkingContent, parseTimestamp, normalizeRole, readErrorDetail, type ChatRole } from '@/utils/chat'
+import { readSseJson } from '@/services/sse'
 
 export interface Message {
   id: string
-  role: 'user' | 'assistant' | 'system'
+  role: ChatRole
   content: string
   timestamp: number
   isStreaming?: boolean
   thinking?: string  // 思考过程内容（从 <think> 标签中提取）
+  thinkingEnabled?: boolean  // 是否展示“思考面板”（仅原生深度思考模型）
+  thinkingDefaultExpanded?: boolean
+  thinkingCollapseAt?: number
+  thinkingDurationMs?: number
 }
 
 export interface SessionSummary {
@@ -34,17 +40,6 @@ interface MessageOut {
   role: string
   content: string
   created_at: string
-}
-
-function parseTimestamp(createdAt: string | null | undefined): number {
-  if (!createdAt) return Date.now()
-  const t = Date.parse(createdAt)
-  return Number.isFinite(t) ? t : Date.now()
-}
-
-function normalizeRole(role: string): Message['role'] {
-  if (role === 'user' || role === 'assistant' || role === 'system') return role
-  return 'assistant'
 }
 
 type BookmarkMap = Record<string, true>
@@ -74,48 +69,6 @@ function toDraftMap(value: unknown): Record<string, string> {
   return map
 }
 
-async function readErrorDetail(res: Response): Promise<string | null> {
-  try {
-    const data = await res.json()
-    const detail = (data && typeof data === 'object' && 'detail' in data) ? (data as any).detail : null
-    return typeof detail === 'string' && detail.trim() ? detail : null
-  } catch {
-    return null
-  }
-}
-
-// 解析思考内容：提取 <think> 标签中的内容
-function parseThinkingContent(text: string, trimContent = true): { thinking: string; content: string } {
-  if (!text) return { thinking: '', content: '' }
-
-  const thinkingParts: string[] = []
-  let mainContent = text
-
-  // 支持多种思考标签格式
-  const thinkingPatterns = [
-    /<think>([\s\S]*?)<\/think>/gi,
-    /<thinking>([\s\S]*?)<\/thinking>/gi,
-    /<reason>([\s\S]*?)<\/reason>/gi,
-    /<reasoning>([\s\S]*?)<\/reasoning>/gi,
-  ]
-
-  for (const pattern of thinkingPatterns) {
-    let match: RegExpExecArray | null
-    while ((match = pattern.exec(mainContent)) !== null) {
-      const thinkContent = match[1].trim()
-      if (thinkContent) {
-        thinkingParts.push(thinkContent)
-      }
-      mainContent = mainContent.replace(match[0], '')
-      pattern.lastIndex = 0
-    }
-  }
-
-  return {
-    thinking: thinkingParts.join('\n\n'),
-    content: trimContent ? mainContent.trim() : mainContent
-  }
-}
 
 export const useChatStore = defineStore('chat', () => {
   const messages = ref<Message[]>([])
@@ -430,6 +383,7 @@ export const useChatStore = defineStore('chat', () => {
 
   async function switchSession(newSessionId: string) {
     if (!newSessionId) return
+    if (!userStore.userId) throw new Error('User ID missing')
 
     if (isStreaming.value) abortActiveStream()
 
@@ -452,7 +406,9 @@ export const useChatStore = defineStore('chat', () => {
     error.value = null
 
     try {
-      const res = await fetch(`/api/chat/sessions/${encodeURIComponent(newSessionId)}/messages`)
+      const res = await fetch(`/api/chat/sessions/${encodeURIComponent(newSessionId)}/messages`, {
+        headers: { 'X-User-Id': userStore.userId }
+      })
 
       // 检查是否是最新请求
       if (requestId !== switchSessionRequestId) {
@@ -473,12 +429,28 @@ export const useChatStore = defineStore('chat', () => {
         return
       }
 
-      const mapped: Message[] = (Array.isArray(data) ? data : []).map((m) => ({
-        id: `${newSessionId}:${m.id}`,
-        role: normalizeRole(m.role),
-        content: String(m.content ?? ''),
-        timestamp: parseTimestamp(m.created_at)
-      }))
+      const mapped: Message[] = (Array.isArray(data) ? data : []).map((m) => {
+        const role = normalizeRole(m.role)
+        let content = String(m.content ?? '')
+        let thinking = ''
+        let thinkingEnabled = false
+
+        if (role === 'assistant') {
+          const parsed = parseThinkingContent(content, true)
+          thinking = parsed.thinking
+          content = parsed.content
+          thinkingEnabled = thinking.trim().length > 0
+        }
+
+        return {
+          id: `${newSessionId}:${m.id}`,
+          role,
+          content,
+          thinking,
+          thinkingEnabled,
+          timestamp: parseTimestamp(m.created_at)
+        }
+      })
 
       messages.value = mapped
       messagesCacheBySessionId.value[newSessionId] = mapped
@@ -618,6 +590,7 @@ export const useChatStore = defineStore('chat', () => {
   async function sendMessage(content: string, opts: { questionNo?: number } = {}) {
     if (!sessionId.value) throw new Error('No active session')
     if (isStreaming.value) throw new Error('Already streaming')
+    if (!userStore.userId) throw new Error('User ID missing')
 
     // 添加用户消息
     const userMsg: Message = {
@@ -630,19 +603,51 @@ export const useChatStore = defineStore('chat', () => {
     messages.value.push(userMsg)
 
     // 创建 AI 消息占位符
-    const aiMsg: Message = {
+    let aiMsg: Message = {
       id: (Date.now() + 1).toString(),
       role: 'assistant',
       content: '',
       timestamp: Date.now(),
-      isStreaming: true
+      isStreaming: true,
+      thinkingEnabled: false,
+      thinkingDefaultExpanded: true
     }
     messages.value.push(aiMsg)
+    aiMsg = messages.value[messages.value.length - 1]  // 获取响应式代理以触发视图更新
 
     isStreaming.value = true
     error.value = null
     let requestAccepted = false
     let rawAssistantText = ''  // 缓冲完整文本，避免流式 trim 导致空格丢失
+    let rawReasoningText = ''
+    let rawContentText = ''
+    let thinkingStartedAt: number | null = null
+    let hadThinkingText = false
+    let contentStarted = false
+    let streamMode: 'unknown' | 'tagged' | 'separate' = 'unknown'
+
+    function ensureThinkingStarted() {
+      if (thinkingStartedAt === null) thinkingStartedAt = Date.now()
+    }
+
+    function markThinkingObserved() {
+      hadThinkingText = true
+      ensureThinkingStarted()
+    }
+
+    function markContentStarted() {
+      if (contentStarted) return
+      contentStarted = true
+
+      const now = Date.now()
+      // 自动折叠思考面板，让正文更快露出
+      aiMsg.thinkingCollapseAt = now
+
+      // 深度思考模型：从 start 到正文开始的耗时
+      if (aiMsg.thinkingEnabled && thinkingStartedAt !== null) {
+        aiMsg.thinkingDurationMs = Math.max(0, now - thinkingStartedAt)
+      }
+    }
 
     try {
       const controller = new AbortController()
@@ -655,7 +660,10 @@ export const useChatStore = defineStore('chat', () => {
 
       const response = await fetch(`/api/chat/sessions/${sessionId.value}/messages:stream`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': userStore.userId
+        },
         body: JSON.stringify(payload),
         signal: controller.signal
       })
@@ -667,72 +675,95 @@ export const useChatStore = defineStore('chat', () => {
       requestAccepted = true
       if (!response.body) throw new Error('No response body')
 
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder()
-
-      let buffer = ''
-      let streamEnded = false
-
-      // SSE spec: events are delimited by a blank line; each event may contain multiple "data:" lines.
-      while (!streamEnded) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        buffer += decoder.decode(value, { stream: true })
-        // Normalize CRLF to LF for simpler parsing
-        buffer = buffer.replace(/\r/g, '')
-
-        while (true) {
-          const boundaryIndex = buffer.indexOf('\n\n')
-          if (boundaryIndex === -1) break
-
-          const rawEvent = buffer.slice(0, boundaryIndex)
-          buffer = buffer.slice(boundaryIndex + 2)
-
-          const dataLines = rawEvent.split('\n').filter(l => l.startsWith('data:'))
-          if (dataLines.length === 0) continue
-
-          const dataStr = dataLines
-            .map(l => l.slice(5).trimStart())
-            .join('\n')
-            .trim()
-          if (!dataStr) continue
-
-          let data: any
-          try {
-            data = JSON.parse(dataStr)
-          } catch (e) {
-            console.error('SSE JSON parse error:', e, { dataStr })
-            continue
+      for await (const data of readSseJson<any>(response.body)) {
+        if (data?.type === 'start') {
+          // 后端已建立流连接：从此刻开始计时更贴近“思考耗时”
+          ensureThinkingStarted()
+          // 仅原生“深度思考”模型才展示思考面板
+          if (typeof data.thinking_enabled === 'boolean') {
+            aiMsg.thinkingEnabled = data.thinking_enabled
           }
+          continue
+        }
 
-          if (data?.type === 'token') {
-            if (typeof data.content === 'string') {
+        if (data?.type === 'token') {
+          if (typeof data.content === 'string') {
+            ensureThinkingStarted()
+            const thinkingEnabled = aiMsg.thinkingEnabled === true
+            const kind = typeof data.kind === 'string' ? data.kind.toLowerCase() : ''
+            if (kind === 'reasoning' || kind === 'thinking' || kind === 'content') {
+              streamMode = 'separate'
+              if (kind === 'reasoning' || kind === 'thinking') {
+                if (thinkingEnabled) {
+                  markThinkingObserved()
+                  rawReasoningText += data.content
+                  // 清理可能的包装标签
+                  aiMsg.thinking = rawReasoningText
+                    .replace(/^<(think|thinking|thought|reason|reasoning)(?:\s[^>]*)?>[\r\n\s]*/i, '')
+                    .replace(/<\/(think|thinking|thought|reason|reasoning)>[\r\n\s]*$/i, '')
+                }
+              } else {
+                rawContentText += data.content
+                aiMsg.content = rawContentText
+              }
+
+              const hasContent = rawContentText.length > 0
+
+              if (kind === 'content' || hasContent) markContentStarted()
+            } else if (streamMode !== 'separate') {
+              streamMode = 'tagged'
               rawAssistantText += data.content
-              // 实时解析思考内容（流式阶段不 trim，避免丢失单词间空格和"抖动"）
-              const parsed = parseThinkingContent(rawAssistantText, false)
-              aiMsg.thinking = parsed.thinking
+              // 实时解析思考内容（流式阶段启用 streaming=true 支持未闭合标签）
+              const parsed = parseThinkingContent(rawAssistantText, false, true)
+              aiMsg.thinking = thinkingEnabled ? parsed.thinking : ''
               aiMsg.content = parsed.content
+
+              const hasThinking = parsed.thinking.trim().length > 0
+              const hasContent = parsed.content && parsed.content.trim().length > 0
+
+              if (thinkingEnabled && hasThinking) markThinkingObserved()
+              if (hasContent) markContentStarted()
+            } else {
+              rawContentText += data.content
+              aiMsg.content = rawContentText
+              const hasContent = rawContentText.length > 0
+              if (hasContent) markContentStarted()
             }
-            continue
           }
-          if (data?.type === 'done') {
-            // 流式完成后，最终 trim 一次
+          continue
+        }
+
+        if (data?.type === 'done') {
+          // 流式完成后，最终 trim 一次
+          if (streamMode === 'separate') {
+            // 清理可能的包装标签
+            if (aiMsg.thinkingEnabled) {
+              aiMsg.thinking = rawReasoningText.trim()
+                .replace(/^<(think|thinking|thought|reason|reasoning)(?:\s[^>]*)?>[\r\n\s]*/i, '')
+                .replace(/<\/(think|thinking|thought|reason|reasoning)>[\r\n\s]*$/i, '')
+            } else {
+              aiMsg.thinking = ''
+            }
+            aiMsg.content = rawContentText.trim()
+          } else {
             const finalParsed = parseThinkingContent(rawAssistantText, true)
-            aiMsg.thinking = finalParsed.thinking.trim()
+            aiMsg.thinking = aiMsg.thinkingEnabled ? finalParsed.thinking.trim() : ''
             aiMsg.content = finalParsed.content.trim()
-            aiMsg.isStreaming = false
-            streamEnded = true
-            break
           }
-          if (data?.type === 'error') {
-            const msg = (typeof data.message === 'string' && data.message) ? data.message : 'Stream error'
-            error.value = msg
-            if (!aiMsg.content.trim()) aiMsg.content = `（错误）${msg}`
-            aiMsg.isStreaming = false
-            streamEnded = true
-            break
+          aiMsg.isStreaming = false
+          if (!aiMsg.thinkingDurationMs && aiMsg.thinkingEnabled && thinkingStartedAt !== null) {
+            const endAt = Date.now()
+            aiMsg.thinkingDurationMs = Math.max(0, endAt - thinkingStartedAt)
           }
+          break
+        }
+
+        if (data?.type === 'error') {
+          const msg = (typeof data.message === 'string' && data.message) ? data.message : 'Stream error'
+          error.value = msg
+          if (!aiMsg.content.trim()) aiMsg.content = `（错误）${msg}`
+          aiMsg.isStreaming = false
+          break
         }
       }
     } catch (err: any) {

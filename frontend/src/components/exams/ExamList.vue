@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useExamStore } from '@/stores/useExamStore'
 import AnswerImporter from './AnswerImporter.vue'
@@ -9,6 +9,7 @@ const router = useRouter()
 
 const showImporter = ref(false)
 const selectedExam = ref<{ id: number; name: string } | null>(null)
+const searchQuery = ref('')
 
 onMounted(() => {
   examStore.fetchExams()
@@ -55,15 +56,37 @@ function handleImportSuccess(result: any) {
   // 刷新试卷列表以更新 has_answers 状态
   examStore.fetchExams()
 }
+
+const filteredExams = computed(() => {
+  if (!searchQuery.value.trim()) return examStore.exams
+  const query = searchQuery.value.toLowerCase()
+  return examStore.exams.filter(exam => {
+    const name = (exam.display_name || exam.exam_dir_name || '').toLowerCase()
+    return name.includes(query)
+  })
+})
 </script>
 
 <template>
-  <div class="glass-panel rounded-3xl p-8">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-bold text-slate-800 flex items-center">
-        <span class="text-indigo-500 mr-2 text-3xl">📚</span>
-        试卷列表
-      </h2>
+  <div class="glass-panel rounded-2xl p-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-2xl font-bold text-slate-800 flex items-center whitespace-nowrap">
+          <span class="text-indigo-500 mr-2 text-3xl">🗂️</span>
+          试卷列表
+        </h2>
+        <!-- Search Bar -->
+        <div class="relative w-full max-w-md">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="搜索试卷名称..."
+            class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+          />
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+        </div>
+      </div>
+
       <button
         @click="examStore.fetchExams()"
         class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors"
@@ -91,10 +114,16 @@ function handleImportSuccess(result: any) {
       <p class="text-slate-400 text-sm mt-2">请先上传 PDF 试卷进行处理</p>
     </div>
 
+    <!-- 无搜索结果 -->
+    <div v-else-if="filteredExams.length === 0" class="text-center py-12">
+      <div class="text-5xl mb-4">🔍</div>
+      <p class="text-slate-500">未找到匹配的试卷</p>
+    </div>
+
     <!-- 试卷卡片列表 -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div
-        v-for="exam in examStore.exams"
+        v-for="exam in filteredExams"
         :key="exam.id"
         class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-100"
       >

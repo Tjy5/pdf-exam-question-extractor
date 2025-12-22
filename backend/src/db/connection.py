@@ -10,11 +10,15 @@ Provides:
 
 import asyncio
 import aiosqlite
+import logging
+import warnings
 from pathlib import Path
 from typing import Optional
 from contextlib import asynccontextmanager
 
 from .schema import SCHEMA_SQL
+
+logger = logging.getLogger(__name__)
 
 
 class DatabaseManager:
@@ -47,6 +51,9 @@ class DatabaseManager:
 
         # Prevent concurrent init() calls
         self._init_lock = asyncio.Lock()
+
+        # Track active transaction owner to prevent interleaving/reentrancy
+        self._transaction_owner: Optional[asyncio.Task] = None
 
     async def init(self):
         """
@@ -99,6 +106,21 @@ class DatabaseManager:
         We avoid a full migration framework and only apply additive changes.
         """
         await self._ensure_column("exam_questions", "image_data", "TEXT")
+        await self._ensure_wrong_notebook_schema()
+
+    async def _table_exists(self, table: str) -> bool:
+        """Check if a table exists in the SQLite schema."""
+        if not self._connection:
+            return False
+        cursor = await self._connection.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name = ?",
+            (table,),
+        )
+        try:
+            row = await cursor.fetchone()
+        finally:
+            await cursor.close()
+        return row is not None
 
     async def _ensure_column(self, table: str, column: str, column_def: str) -> None:
         """
@@ -110,8 +132,14 @@ class DatabaseManager:
         if not self._connection:
             return
 
+        if not await self._table_exists(table):
+            return
+
         cursor = await self._connection.execute(f"PRAGMA table_info({table})")
-        rows = await cursor.fetchall()
+        try:
+            rows = await cursor.fetchall()
+        finally:
+            await cursor.close()
         existing = {str(r["name"]) for r in rows}
         if column in existing:
             return
@@ -125,6 +153,139 @@ class DatabaseManager:
             err_msg = str(e).lower()
             if "duplicate column" not in err_msg:
                 raise
+
+    async def _ensure_wrong_notebook_schema(self) -> None:
+        """
+        Ensure wrong-notebook related tables/columns exist.
+        Applies additive changes only; safe for existing databases.
+        """
+        if not self._connection:
+            return
+
+        # Create missing tables (idempotent)
+        await self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT UNIQUE NOT NULL,
+                display_name TEXT DEFAULT '学员',
+                created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                last_active_at TEXT
+            )
+            """
+        )
+        await self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS user_wrong_questions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL,
+                source_type TEXT DEFAULT 'exam' CHECK (source_type IN ('exam', 'upload')),
+                exam_id INTEGER,
+                question_no INTEGER,
+                user_answer TEXT,
+                original_image TEXT,
+                ai_question_text TEXT,
+                ai_answer_text TEXT,
+                ai_analysis TEXT,
+                subject TEXT,
+                source_name TEXT,
+                error_type TEXT,
+                user_notes TEXT,
+                status TEXT DEFAULT 'wrong',
+                mastery_level INTEGER DEFAULT 0 CHECK (mastery_level BETWEEN 0 AND 2),
+                marked_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                UNIQUE(user_id, exam_id, question_no),
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+                FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+            )
+            """
+        )
+        await self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS knowledge_tags (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                subject TEXT NOT NULL,
+                parent_id TEXT,
+                is_system INTEGER DEFAULT 0,
+                user_id TEXT,
+                sort_order INTEGER DEFAULT 0,
+                created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                FOREIGN KEY (parent_id) REFERENCES knowledge_tags(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+                UNIQUE(subject, name, user_id)
+            )
+            """
+        )
+        await self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS wrong_question_tags (
+                wrong_question_id INTEGER NOT NULL,
+                tag_id TEXT NOT NULL,
+                PRIMARY KEY (wrong_question_id, tag_id),
+                FOREIGN KEY (wrong_question_id) REFERENCES user_wrong_questions(id) ON DELETE CASCADE,
+                FOREIGN KEY (tag_id) REFERENCES knowledge_tags(id) ON DELETE CASCADE
+            )
+            """
+        )
+
+        # Ensure missing columns for existing tables
+        await self._ensure_column("users", "display_name", "TEXT DEFAULT '学员'")
+        await self._ensure_column(
+            "users",
+            "created_at",
+            "TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))",
+        )
+        await self._ensure_column("users", "last_active_at", "TEXT")
+
+        await self._ensure_column(
+            "user_wrong_questions",
+            "source_type",
+            "TEXT DEFAULT 'exam' CHECK (source_type IN ('exam', 'upload'))",
+        )
+        await self._ensure_column("user_wrong_questions", "exam_id", "INTEGER")
+        await self._ensure_column("user_wrong_questions", "question_no", "INTEGER")
+        await self._ensure_column("user_wrong_questions", "user_answer", "TEXT")
+        await self._ensure_column("user_wrong_questions", "original_image", "TEXT")
+        await self._ensure_column("user_wrong_questions", "ai_question_text", "TEXT")
+        await self._ensure_column("user_wrong_questions", "ai_answer_text", "TEXT")
+        await self._ensure_column("user_wrong_questions", "ai_analysis", "TEXT")
+        await self._ensure_column("user_wrong_questions", "subject", "TEXT")
+        await self._ensure_column("user_wrong_questions", "source_name", "TEXT")
+        await self._ensure_column("user_wrong_questions", "error_type", "TEXT")
+        await self._ensure_column("user_wrong_questions", "user_notes", "TEXT")
+        await self._ensure_column("user_wrong_questions", "status", "TEXT DEFAULT 'wrong'")
+        await self._ensure_column(
+            "user_wrong_questions",
+            "mastery_level",
+            "INTEGER DEFAULT 0 CHECK (mastery_level BETWEEN 0 AND 2)",
+        )
+        await self._ensure_column(
+            "user_wrong_questions",
+            "marked_at",
+            "TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))",
+        )
+        await self._ensure_column(
+            "user_wrong_questions",
+            "updated_at",
+            "TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))",
+        )
+
+        await self._ensure_column("knowledge_tags", "name", "TEXT NOT NULL")
+        await self._ensure_column("knowledge_tags", "subject", "TEXT NOT NULL")
+        await self._ensure_column("knowledge_tags", "parent_id", "TEXT")
+        await self._ensure_column("knowledge_tags", "is_system", "INTEGER DEFAULT 0")
+        await self._ensure_column("knowledge_tags", "user_id", "TEXT")
+        await self._ensure_column("knowledge_tags", "sort_order", "INTEGER DEFAULT 0")
+        await self._ensure_column(
+            "knowledge_tags",
+            "created_at",
+            "TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))",
+        )
+
+        await self._ensure_column("wrong_question_tags", "wrong_question_id", "INTEGER NOT NULL")
+        await self._ensure_column("wrong_question_tags", "tag_id", "TEXT NOT NULL")
 
     async def close(self):
         """
@@ -151,6 +312,32 @@ class DatabaseManager:
             raise RuntimeError("Database not initialized. Call init() first.")
         return self._connection
 
+    def _warn_outside_transaction(self, operation: str, reason: str) -> None:
+        message = (
+            f"{operation} called outside of transaction(): {reason}. "
+            "Use 'async with db.transaction()' to ensure isolation."
+        )
+        warnings.warn(message, RuntimeWarning, stacklevel=3)
+        logger.warning(message)
+
+    def _require_transaction(self, operation: str) -> None:
+        current_task = asyncio.current_task()
+        owner = self._transaction_owner
+        if owner is None:
+            self._warn_outside_transaction(operation, "no active transaction")
+            raise RuntimeError(
+                f"{operation} requires an active transaction. "
+                "Use 'async with db.transaction()'."
+            )
+        if owner is not current_task:
+            self._warn_outside_transaction(
+                operation, "transaction owned by a different task"
+            )
+            raise RuntimeError(
+                f"{operation} must run within the current task's transaction. "
+                "Use 'async with db.transaction()' in this task."
+            )
+
     async def execute(self, sql: str, parameters=None) -> aiosqlite.Cursor:
         """
         Execute a single SQL statement.
@@ -162,6 +349,7 @@ class DatabaseManager:
         Returns:
             Cursor object
         """
+        self._require_transaction("execute")
         return await self.connection.execute(sql, parameters or ())
 
     async def execute_many(self, sql: str, parameters_list):
@@ -172,6 +360,7 @@ class DatabaseManager:
             sql: SQL statement
             parameters_list: List of parameter tuples
         """
+        self._require_transaction("execute_many")
         await self.connection.executemany(sql, parameters_list)
 
     async def fetch_one(self, sql: str, parameters=None) -> Optional[aiosqlite.Row]:
@@ -185,8 +374,12 @@ class DatabaseManager:
         Returns:
             Row object or None
         """
+        self._require_transaction("fetch_one")
         cursor = await self.execute(sql, parameters)
-        return await cursor.fetchone()
+        try:
+            return await cursor.fetchone()
+        finally:
+            await cursor.close()
 
     async def fetch_all(self, sql: str, parameters=None) -> list[aiosqlite.Row]:
         """
@@ -199,8 +392,12 @@ class DatabaseManager:
         Returns:
             List of row objects
         """
+        self._require_transaction("fetch_all")
         cursor = await self.execute(sql, parameters)
-        return await cursor.fetchall()
+        try:
+            return await cursor.fetchall()
+        finally:
+            await cursor.close()
 
     async def commit(self):
         """Commit current transaction."""
@@ -228,13 +425,31 @@ class DatabaseManager:
         Calling transaction() inside another transaction() will deadlock.
         Repository methods should not call other repository methods directly.
         """
+        current_task = asyncio.current_task()
+        if self._transaction_owner is current_task:
+            self._warn_outside_transaction(
+                "transaction()", "nested transaction in the same task"
+            )
+            raise RuntimeError("Nested transaction() is not allowed.")
+
         async with self._lock:
+            if self._transaction_owner is not None:
+                self._warn_outside_transaction(
+                    "transaction()", "transaction already active in another task"
+                )
+                raise RuntimeError("Another transaction is already active.")
+            self._transaction_owner = current_task
             try:
-                yield self
-                await self.commit()
-            except Exception:
-                await self.rollback()
-                raise
+                await self.connection.execute("BEGIN TRANSACTION")
+                try:
+                    yield self
+                except Exception:
+                    await self.rollback()
+                    raise
+                else:
+                    await self.commit()
+            finally:
+                self._transaction_owner = None
 
 
 # ==================== Global Instance ====================

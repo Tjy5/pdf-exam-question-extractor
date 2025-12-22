@@ -124,6 +124,25 @@ export const api = {
     }
     return base
   },
+
+  /**
+   * List available local exam directories
+   */
+  listLocalExamDirectories(): Promise<AxiosResponse<{ directories: string[] }>> {
+    return client.get('/exams/local/directories')
+  },
+
+  /**
+   * Import a local exam directory
+   */
+  importLocalExam(data: {
+    exam_dir_name: string
+    display_name?: string
+    dry_run?: boolean
+    overwrite?: boolean
+  }): Promise<AxiosResponse<any>> {
+    return client.post('/exams/local:import', data)
+  },
 }
 
 export default api

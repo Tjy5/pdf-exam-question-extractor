@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useUserStore } from './useUserStore'
+import { readSseJson } from '@/services/sse'
 
 export interface WrongItem {
   id: number
@@ -35,6 +36,7 @@ export interface AnalyzeResult {
   question_text?: string
   answer_text?: string
   analysis?: string
+  thinking?: string
   subject?: string
   knowledge_points: string[]
   error_type?: string
@@ -63,6 +65,7 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
 
   // Analysis state
   const analyzeText = ref('')
+  const analyzeThinking = ref('')
   const analyzeResult = ref<AnalyzeResult | null>(null)
   const analyzeError = ref<string | null>(null)
 
@@ -73,7 +76,6 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
     loading.value = true
     try {
       const params = new URLSearchParams({
-        user_id: userStore.userId,
         page: String(page.value),
         page_size: String(pageSize.value)
       })
@@ -84,7 +86,9 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
       if (filters.value.tagId) params.set('tag_id', filters.value.tagId)
       if (filters.value.search) params.set('search', filters.value.search)
 
-      const res = await fetch(`/api/wrong-notebook/items?${params}`)
+      const res = await fetch(`/api/wrong-notebook/items?${params}`, {
+        headers: { 'X-User-Id': userStore.userId }
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
       const data = await res.json()
@@ -112,9 +116,11 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
 
     const res = await fetch('/api/wrong-notebook/items', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-User-Id': userStore.userId
+      },
       body: JSON.stringify({
-        user_id: userStore.userId,
         source_type: item.sourceType,
         original_image: item.originalImage,
         ai_question_text: item.aiQuestionText,
@@ -141,7 +147,10 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
   }) {
     const res = await fetch(`/api/wrong-notebook/items/${itemId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-User-Id': userStore.userId
+      },
       body: JSON.stringify({
         mastery_level: updates.masteryLevel,
         user_notes: updates.userNotes,
@@ -163,7 +172,10 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
   }
 
   async function deleteItem(itemId: number) {
-    const res = await fetch(`/api/wrong-notebook/items/${itemId}`, { method: 'DELETE' })
+    const res = await fetch(`/api/wrong-notebook/items/${itemId}`, {
+      method: 'DELETE',
+      headers: { 'X-User-Id': userStore.userId }
+    })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     items.value = items.value.filter(i => i.id !== itemId)
   }
@@ -171,10 +183,11 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
   async function loadTags(subject?: string) {
     const params = new URLSearchParams()
     if (subject) params.set('subject', subject)
-    if (userStore.userId) params.set('user_id', userStore.userId)
     params.set('include_system', 'true')
 
-    const res = await fetch(`/api/wrong-notebook/tags?${params}`)
+    const res = await fetch(`/api/wrong-notebook/tags?${params}`, {
+      headers: { 'X-User-Id': userStore.userId }
+    })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     tags.value = await res.json()
   }
@@ -184,12 +197,14 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
 
     const res = await fetch('/api/wrong-notebook/tags', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-User-Id': userStore.userId
+      },
       body: JSON.stringify({
         name: tag.name,
         subject: tag.subject,
-        parent_id: tag.parentId,
-        user_id: userStore.userId
+        parent_id: tag.parentId
       })
     })
 
@@ -207,6 +222,7 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
   ): Promise<AnalyzeResult> {
     analyzing.value = true
     analyzeText.value = ''
+    analyzeThinking.value = ''
     analyzeResult.value = null
     analyzeError.value = null
 
@@ -222,38 +238,44 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
       }).then(async response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-        const reader = response.body?.getReader()
-        if (!reader) throw new Error('No response body')
+        if (!response.body) throw new Error('No response body')
+        let streamEnded = false
 
-        const decoder = new TextDecoder()
-        let buffer = ''
+        try {
+          for await (const data of readSseJson<any>(response.body)) {
+            if (data.type === 'token') {
+              const content = data.content || ''
+              const kind = data.kind || 'content'
 
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-
-          buffer += decoder.decode(value, { stream: true })
-          const lines = buffer.split('\n')
-          buffer = lines.pop() || ''
-
-          for (const line of lines) {
-            if (!line.startsWith('data: ')) continue
-            try {
-              const data = JSON.parse(line.slice(6))
-              if (data.type === 'content') {
-                analyzeText.value += data.text
-              } else if (data.type === 'done') {
-                analyzeResult.value = data.result
-                analyzing.value = false
-                resolve(data.result)
-              } else if (data.type === 'error') {
-                analyzeError.value = data.message
-                analyzing.value = false
-                reject(new Error(data.message))
+              if (kind === 'reasoning') {
+                analyzeThinking.value += content
+              } else {
+                analyzeText.value += content
               }
-            } catch {
-              // Ignore JSON parse errors for incomplete lines
+            } else if (data.type === 'content') {
+              // Backward compatibility: legacy format
+              analyzeText.value += data.text
+            } else if (data.type === 'done') {
+              analyzeResult.value = data.result
+              analyzing.value = false
+              streamEnded = true
+              resolve(data.result)
+              return
+            } else if (data.type === 'error') {
+              analyzeError.value = data.message
+              analyzing.value = false
+              streamEnded = true
+              reject(new Error(data.message))
+              return
             }
+          }
+
+          // Stream ended without done/error event
+          if (!streamEnded) {
+            const errMsg = 'Stream ended unexpectedly'
+            analyzeError.value = errMsg
+            analyzing.value = false
+            reject(new Error(errMsg))
           }
         }
       }).catch(err => {
@@ -296,6 +318,7 @@ export const useWrongNotebookStore = defineStore('wrongNotebook', () => {
     pageSize,
     filters,
     analyzeText,
+    analyzeThinking,
     analyzeResult,
     analyzeError,
     // Actions

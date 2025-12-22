@@ -145,17 +145,18 @@ async def get_wrong_questions(user_id: str, exam_id: int):
     """获取用户在某试卷的所有错题"""
     db = get_db_manager()
 
-    rows = await db.fetch_all(
-        """
-        SELECT uwq.question_no, uwq.user_answer, uwq.status, uwq.marked_at,
-               ea.answer as correct_answer
-        FROM user_wrong_questions uwq
-        LEFT JOIN exam_answers ea ON uwq.exam_id = ea.exam_id AND uwq.question_no = ea.question_no
-        WHERE uwq.user_id = ? AND uwq.exam_id = ? AND uwq.status = 'wrong'
-        ORDER BY uwq.question_no
-        """,
-        (user_id, exam_id)
-    )
+    async with db.transaction():
+        rows = await db.fetch_all(
+            """
+            SELECT uwq.question_no, uwq.user_answer, uwq.status, uwq.marked_at,
+                   ea.answer as correct_answer
+            FROM user_wrong_questions uwq
+            LEFT JOIN exam_answers ea ON uwq.exam_id = ea.exam_id AND uwq.question_no = ea.question_no
+            WHERE uwq.user_id = ? AND uwq.exam_id = ? AND uwq.status = 'wrong'
+            ORDER BY uwq.question_no
+            """,
+            (user_id, exam_id)
+        )
 
     return [
         WrongQuestionOut(

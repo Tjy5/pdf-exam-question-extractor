@@ -145,6 +145,21 @@
           >
             {{ store.analyzing ? '分析中...' : '开始 AI 分析' }}
           </button>
+
+          <!-- Streaming Analysis Progress -->
+          <div v-if="store.analyzing || store.analyzeThinking" class="mt-6 w-full">
+            <ThinkingBlock
+              v-if="store.analyzeThinking"
+              :thinking="store.analyzeThinking"
+              :is-streaming="store.analyzing"
+              :default-expanded="true"
+            />
+
+            <div v-if="store.analyzeText" class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="text-xs font-medium text-slate-400 mb-2 uppercase tracking-wider">内容预览</div>
+              <div class="whitespace-pre-wrap text-sm text-slate-700 leading-relaxed">{{ store.analyzeText }}</div>
+            </div>
+          </div>
         </div>
 
         <!-- Step 2: Edit AI Result -->
@@ -242,10 +257,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useWrongNotebookStore, type WrongItem } from '@/stores/useWrongNotebookStore'
-import { useUserStore } from '@/stores/useUserStore'
+import ThinkingBlock from '@/components/chat/ThinkingBlock.vue'
 
 const store = useWrongNotebookStore()
-const userStore = useUserStore()
 
 // Filter state
 const filterSubject = ref('')
@@ -277,7 +291,6 @@ const editForm = ref({
 const selectedItem = ref<WrongItem | null>(null)
 
 onMounted(async () => {
-  await userStore.initUser()
   await store.loadItems()
 })
 

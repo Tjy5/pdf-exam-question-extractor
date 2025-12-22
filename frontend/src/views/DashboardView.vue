@@ -5,7 +5,6 @@ import UploadZone from '@/components/upload/UploadZone.vue'
 import LogTerminal from '@/components/logs/LogTerminal.vue'
 import PipelineView from '@/components/pipeline/PipelineView.vue'
 import ResultGallery from '@/components/results/ResultGallery.vue'
-import ExamList from '@/components/exams/ExamList.vue'
 </script>
 
 <template>
@@ -22,13 +21,8 @@ import ExamList from '@/components/exams/ExamList.vue'
       <p class="text-lg text-slate-500 max-w-2xl mx-auto mb-6">
         上传 PDF 试卷，自动进行切题、去重、数据分析重组。全流程可视化，让复杂的代码逻辑变得简单直观。
       </p>
-      <RouterLink
-        to="/wrong-notebook"
-        class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-      >
-        <span class="text-xl">📚</span>
-        错题本
-      </RouterLink>
+
+
     </header>
 
     <!-- Main Content Area -->
@@ -45,11 +39,6 @@ import ExamList from '@/components/exams/ExamList.vue'
           <PipelineView />
           <ResultGallery />
         </div>
-      </div>
-
-      <!-- Exam List Section -->
-      <div class="mt-8">
-        <ExamList />
       </div>
     </ErrorBoundary>
   </div>

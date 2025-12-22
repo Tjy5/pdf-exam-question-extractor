@@ -56,6 +56,11 @@ class AppConfig(BaseModel):
     ai_top_p: float = 0.95
     ai_max_tokens: int = 2000
     ai_timeout: float = 60.0
+    # Gemini "thoughts" extraction (optional)
+    # Some gateways expose Gemini v1beta endpoints with thought parts; many do not.
+    # Default to False to avoid extra failing calls; the thinking panel should rely on upstream native fields,
+    # not prompt-injected <think> tags.
+    ai_gemini_use_v1beta: bool = False
 
     # AI Session Title Configuration (optional)
     # When AI_TITLE_MODEL is set, the backend can use it to auto-generate chat session titles.
@@ -88,6 +93,7 @@ class AppConfig(BaseModel):
             ai_top_p=float(os.getenv("AI_TOP_P", "0.95")),
             ai_max_tokens=int(os.getenv("AI_MAX_TOKENS", "2000")),
             ai_timeout=float(os.getenv("AI_TIMEOUT", "60.0")),
+            ai_gemini_use_v1beta=os.getenv("AI_GEMINI_USE_V1BETA", "0") == "1",
             ai_title_model=os.getenv("AI_TITLE_MODEL", ""),
             ai_title_temperature=float(os.getenv("AI_TITLE_TEMPERATURE", "0.2")),
             ai_title_max_tokens=int(os.getenv("AI_TITLE_MAX_TOKENS", "64")),

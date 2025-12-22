@@ -8,6 +8,7 @@ Provides endpoints for wrong question management, including:
 - Practice generation
 """
 
+import logging
 import json
 import uuid
 from datetime import datetime
@@ -28,8 +29,10 @@ from ...services.ai import (
     parse_analyze_response,
 )
 from ..config import config
+from ..dependencies import get_current_user, verify_owner
 
 router = APIRouter(prefix="/api/wrong-notebook", tags=["wrong-notebook"])
+logger = logging.getLogger(__name__)
 
 
 # ==================== Request/Response Models ====================
@@ -43,7 +46,6 @@ class AnalyzeRequest(BaseModel):
 
 class WrongItemCreate(BaseModel):
     """Create wrong question request."""
-    user_id: str
     source_type: str = Field(default="upload", pattern="^(exam|upload)$")
     exam_id: Optional[int] = None
     question_no: Optional[int] = None
@@ -74,7 +76,6 @@ class TagCreate(BaseModel):
     name: str
     subject: str
     parent_id: Optional[str] = None
-    user_id: str
 
 
 class PracticeGenerateRequest(BaseModel):
@@ -108,15 +109,16 @@ def _get_ai_provider():
 async def _ensure_user(user_id: str):
     """Ensure user exists in database."""
     db = get_db_manager()
-    existing = await db.fetch_one(
-        "SELECT user_id FROM users WHERE user_id = ?", (user_id,)
-    )
-    if not existing:
-        now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        await db.execute(
-            "INSERT INTO users (user_id, created_at) VALUES (?, ?)",
-            (user_id, now)
+    async with db.transaction():
+        existing = await db.fetch_one(
+            "SELECT user_id FROM users WHERE user_id = ?", (user_id,)
         )
+        if not existing:
+            now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+            await db.execute(
+                "INSERT INTO users (user_id, created_at) VALUES (?, ?)",
+                (user_id, now)
+            )
 
 
 def _generate_id() -> str:
@@ -132,9 +134,14 @@ async def analyze_image(request: AnalyzeRequest):
     Upload image for AI analysis.
 
     Returns SSE stream:
-    - {"type": "content", "text": "..."} - incremental text
+    - {"type": "start"} - stream started
+    - {"type": "token", "kind": "reasoning", "content": "..."} - thinking process
+    - {"type": "token", "kind": "content", "content": "..."} - main content
     - {"type": "done", "result": {...}} - complete with parsed result
     - {"type": "error", "message": "..."} - error
+
+    Legacy format (backward compatible):
+    - {"type": "content", "text": "..."} - incremental text
     """
     provider = _get_ai_provider()
     system_prompt = build_analyze_prompt(request.subject)
@@ -149,22 +156,30 @@ async def analyze_image(request: AnalyzeRequest):
     ]
 
     async def event_generator():
-        full_text = ""
+        full_content_text = ""
         try:
+            yield f"data: {json.dumps({'type': 'start'}, ensure_ascii=False)}\n\n"
+
             async for chunk in provider.stream_chat(
                 messages,
                 temperature=0.7,
                 max_tokens=4000
             ):
                 if chunk.content:
-                    full_text += chunk.content
-                    yield f"data: {json.dumps({'type': 'content', 'text': chunk.content}, ensure_ascii=False)}\n\n"
+                    if chunk.kind == "reasoning":
+                        yield f"data: {json.dumps({'type': 'token', 'kind': 'reasoning', 'content': chunk.content}, ensure_ascii=False)}\n\n"
+                    elif chunk.kind == "content" or chunk.kind is None:
+                        full_content_text += chunk.content
+                        yield f"data: {json.dumps({'type': 'token', 'kind': 'content', 'content': chunk.content}, ensure_ascii=False)}\n\n"
+                if chunk.finish_reason:
+                    break
 
-            result = parse_analyze_response(full_text)
+            result = parse_analyze_response(full_content_text)
             yield f"data: {json.dumps({'type': 'done', 'result': result.model_dump()}, ensure_ascii=False)}\n\n"
 
-        except Exception as e:
-            yield f"data: {json.dumps({'type': 'error', 'message': str(e)}, ensure_ascii=False)}\n\n"
+        except Exception:
+            logger.exception("Wrong notebook analyze stream error")
+            yield f"data: {json.dumps({'type': 'error', 'message': 'Analysis failed'}, ensure_ascii=False)}\n\n"
 
     return StreamingResponse(
         event_generator(),
@@ -181,7 +196,7 @@ async def analyze_image(request: AnalyzeRequest):
 
 @router.get("/items")
 async def list_wrong_items(
-    user_id: str,
+    current_user: str = Depends(get_current_user),
     source_type: Optional[str] = None,
     subject: Optional[str] = None,
     mastery_level: Optional[int] = None,
@@ -194,7 +209,7 @@ async def list_wrong_items(
     db = get_db_manager()
 
     conditions = ["w.user_id = ?"]
-    params: List = [user_id]
+    params: List = [current_user]
 
     if source_type:
         conditions.append("w.source_type = ?")
@@ -225,35 +240,36 @@ async def list_wrong_items(
     where_clause = " AND ".join(conditions)
     offset = (page - 1) * page_size
 
-    # Query total count
-    count_row = await db.fetch_one(
-        f"SELECT COUNT(*) as total FROM user_wrong_questions w WHERE {where_clause}",
-        tuple(params)
-    )
-    total = count_row["total"] if count_row else 0
+    async with db.transaction():
+        # Query total count
+        count_row = await db.fetch_one(
+            f"SELECT COUNT(*) as total FROM user_wrong_questions w WHERE {where_clause}",
+            tuple(params)
+        )
+        total = count_row["total"] if count_row else 0
 
-    # Query data
-    rows = await db.fetch_all(f"""
-        SELECT w.*
-        FROM user_wrong_questions w
-        WHERE {where_clause}
-        ORDER BY w.updated_at DESC
-        LIMIT ? OFFSET ?
-    """, (*params, page_size, offset))
+        # Query data
+        rows = await db.fetch_all(f"""
+            SELECT w.*
+            FROM user_wrong_questions w
+            WHERE {where_clause}
+            ORDER BY w.updated_at DESC
+            LIMIT ? OFFSET ?
+        """, (*params, page_size, offset))
 
-    # Get tags for each item
-    items = []
-    for row in rows:
-        tags = await db.fetch_all("""
-            SELECT t.id, t.name, t.subject
-            FROM knowledge_tags t
-            INNER JOIN wrong_question_tags wt ON t.id = wt.tag_id
-            WHERE wt.wrong_question_id = ?
-        """, (row["id"],))
+        # Get tags for each item
+        items = []
+        for row in rows:
+            tags = await db.fetch_all("""
+                SELECT t.id, t.name, t.subject
+                FROM knowledge_tags t
+                INNER JOIN wrong_question_tags wt ON t.id = wt.tag_id
+                WHERE wt.wrong_question_id = ?
+            """, (row["id"],))
 
-        item = dict(row)
-        item["tags"] = [dict(t) for t in tags]
-        items.append(item)
+            item = dict(row)
+            item["tags"] = [dict(t) for t in tags]
+            items.append(item)
 
     return {
         "items": items,
@@ -264,58 +280,64 @@ async def list_wrong_items(
 
 
 @router.post("/items")
-async def create_wrong_item(item: WrongItemCreate):
+async def create_wrong_item(
+    item: WrongItemCreate,
+    current_user: str = Depends(get_current_user),
+):
     """Save wrong question."""
     db = get_db_manager()
 
-    await _ensure_user(item.user_id)
+    await _ensure_user(current_user)
     now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
-    result = await db.execute("""
-        INSERT INTO user_wrong_questions (
-            user_id, source_type, exam_id, question_no, user_answer,
-            original_image, ai_question_text, ai_answer_text, ai_analysis,
-            subject, source_name, error_type, user_notes,
-            marked_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        item.user_id, item.source_type, item.exam_id, item.question_no,
-        item.user_answer, item.original_image, item.ai_question_text,
-        item.ai_answer_text, item.ai_analysis, item.subject,
-        item.source_name, item.error_type, item.user_notes, now, now
-    ))
+    async with db.transaction():
+        result = await db.execute("""
+            INSERT INTO user_wrong_questions (
+                user_id, source_type, exam_id, question_no, user_answer,
+                original_image, ai_question_text, ai_answer_text, ai_analysis,
+                subject, source_name, error_type, user_notes,
+                marked_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            current_user, item.source_type, item.exam_id, item.question_no,
+            item.user_answer, item.original_image, item.ai_question_text,
+            item.ai_answer_text, item.ai_analysis, item.subject,
+            item.source_name, item.error_type, item.user_notes, now, now
+        ))
 
-    item_id = result.lastrowid
+        item_id = result.lastrowid
 
-    # Associate tags
-    for tag_id in item.tag_ids:
-        await db.execute(
-            "INSERT OR IGNORE INTO wrong_question_tags (wrong_question_id, tag_id) VALUES (?, ?)",
-            (item_id, tag_id)
-        )
+        # Associate tags
+        for tag_id in item.tag_ids:
+            await db.execute(
+                "INSERT OR IGNORE INTO wrong_question_tags (wrong_question_id, tag_id) VALUES (?, ?)",
+                (item_id, tag_id)
+            )
 
     return {"id": item_id, "created_at": now}
 
 
 @router.get("/items/{item_id}")
-async def get_wrong_item(item_id: int):
+async def get_wrong_item(item_id: int, current_user: str = Depends(get_current_user)):
     """Get single wrong question detail."""
     db = get_db_manager()
 
-    row = await db.fetch_one(
-        "SELECT * FROM user_wrong_questions WHERE id = ?",
-        (item_id,)
-    )
+    async with db.transaction():
+        row = await db.fetch_one(
+            "SELECT * FROM user_wrong_questions WHERE id = ?",
+            (item_id,)
+        )
 
-    if not row:
-        raise HTTPException(status_code=404, detail="错题不存在")
+        if not row:
+            raise HTTPException(status_code=404, detail="错题不存在")
+        verify_owner(row["user_id"], current_user)
 
-    tags = await db.fetch_all("""
-        SELECT t.id, t.name, t.subject
-        FROM knowledge_tags t
-        INNER JOIN wrong_question_tags wt ON t.id = wt.tag_id
-        WHERE wt.wrong_question_id = ?
-    """, (item_id,))
+        tags = await db.fetch_all("""
+            SELECT t.id, t.name, t.subject
+            FROM knowledge_tags t
+            INNER JOIN wrong_question_tags wt ON t.id = wt.tag_id
+            WHERE wt.wrong_question_id = ?
+        """, (item_id,))
 
     result = dict(row)
     result["tags"] = [dict(t) for t in tags]
@@ -323,79 +345,91 @@ async def get_wrong_item(item_id: int):
 
 
 @router.patch("/items/{item_id}")
-async def update_wrong_item(item_id: int, update: WrongItemUpdate):
+async def update_wrong_item(
+    item_id: int,
+    update: WrongItemUpdate,
+    current_user: str = Depends(get_current_user),
+):
     """Update wrong question."""
     db = get_db_manager()
 
-    existing = await db.fetch_one(
-        "SELECT id FROM user_wrong_questions WHERE id = ?",
-        (item_id,)
-    )
-    if not existing:
-        raise HTTPException(status_code=404, detail="错题不存在")
-
-    # Build update fields
-    updates = []
-    params = []
-
-    if update.mastery_level is not None:
-        updates.append("mastery_level = ?")
-        params.append(update.mastery_level)
-
-    if update.user_notes is not None:
-        updates.append("user_notes = ?")
-        params.append(update.user_notes)
-
-    if update.ai_question_text is not None:
-        updates.append("ai_question_text = ?")
-        params.append(update.ai_question_text)
-
-    if update.ai_answer_text is not None:
-        updates.append("ai_answer_text = ?")
-        params.append(update.ai_answer_text)
-
-    if update.ai_analysis is not None:
-        updates.append("ai_analysis = ?")
-        params.append(update.ai_analysis)
-
-    if updates:
-        now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        updates.append("updated_at = ?")
-        params.append(now)
-        params.append(item_id)
-
-        await db.execute(
-            f"UPDATE user_wrong_questions SET {', '.join(updates)} WHERE id = ?",
-            tuple(params)
-        )
-
-    # Update tag associations
-    if update.tag_ids is not None:
-        await db.execute(
-            "DELETE FROM wrong_question_tags WHERE wrong_question_id = ?",
+    async with db.transaction():
+        existing = await db.fetch_one(
+            "SELECT id, user_id FROM user_wrong_questions WHERE id = ?",
             (item_id,)
         )
-        for tag_id in update.tag_ids:
+        if not existing:
+            raise HTTPException(status_code=404, detail="错题不存在")
+        verify_owner(existing["user_id"], current_user)
+
+        # Build update fields
+        updates = []
+        params = []
+
+        if update.mastery_level is not None:
+            updates.append("mastery_level = ?")
+            params.append(update.mastery_level)
+
+        if update.user_notes is not None:
+            updates.append("user_notes = ?")
+            params.append(update.user_notes)
+
+        if update.ai_question_text is not None:
+            updates.append("ai_question_text = ?")
+            params.append(update.ai_question_text)
+
+        if update.ai_answer_text is not None:
+            updates.append("ai_answer_text = ?")
+            params.append(update.ai_answer_text)
+
+        if update.ai_analysis is not None:
+            updates.append("ai_analysis = ?")
+            params.append(update.ai_analysis)
+
+        if updates:
+            now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+            updates.append("updated_at = ?")
+            params.append(now)
+            params.append(item_id)
+
             await db.execute(
-                "INSERT OR IGNORE INTO wrong_question_tags (wrong_question_id, tag_id) VALUES (?, ?)",
-                (item_id, tag_id)
+                f"UPDATE user_wrong_questions SET {', '.join(updates)} WHERE id = ?",
+                tuple(params)
             )
+
+        # Update tag associations
+        if update.tag_ids is not None:
+            await db.execute(
+                "DELETE FROM wrong_question_tags WHERE wrong_question_id = ?",
+                (item_id,)
+            )
+            for tag_id in update.tag_ids:
+                await db.execute(
+                    "INSERT OR IGNORE INTO wrong_question_tags (wrong_question_id, tag_id) VALUES (?, ?)",
+                    (item_id, tag_id)
+                )
 
     return {"success": True}
 
 
 @router.delete("/items/{item_id}")
-async def delete_wrong_item(item_id: int):
+async def delete_wrong_item(item_id: int, current_user: str = Depends(get_current_user)):
     """Delete wrong question."""
     db = get_db_manager()
 
-    result = await db.execute(
-        "DELETE FROM user_wrong_questions WHERE id = ?",
-        (item_id,)
-    )
+    async with db.transaction():
+        existing = await db.fetch_one(
+            "SELECT user_id FROM user_wrong_questions WHERE id = ?",
+            (item_id,)
+        )
+        if not existing:
+            raise HTTPException(status_code=404, detail="错题不存在")
+        verify_owner(existing["user_id"], current_user)
 
-    if result.rowcount == 0:
-        raise HTTPException(status_code=404, detail="错题不存在")
+        await db.execute(
+            "DELETE FROM user_wrong_questions WHERE id = ?",
+            (item_id,)
+        )
 
     return {"success": True}
 
@@ -406,7 +440,8 @@ async def delete_wrong_item(item_id: int):
 async def list_tags(
     subject: Optional[str] = None,
     user_id: Optional[str] = None,
-    include_system: bool = True
+    include_system: bool = True,
+    current_user: str = Depends(get_current_user),
 ):
     """Get tag list (tree structure)."""
     db = get_db_manager()
@@ -422,21 +457,30 @@ async def list_tags(
     user_conditions = []
     if include_system:
         user_conditions.append("is_system = 1")
-    if user_id:
+
+    # Determine which user's tags to include
+    target_user_id = user_id
+    if not include_system and not target_user_id:
+        # When only custom tags requested, default to current user
+        target_user_id = current_user
+
+    if target_user_id:
+        verify_owner(target_user_id, current_user)
         user_conditions.append("user_id = ?")
-        params.append(user_id)
+        params.append(target_user_id)
 
     if user_conditions:
         conditions.append(f"({' OR '.join(user_conditions)})")
 
     where_clause = " AND ".join(conditions) if conditions else "1=1"
 
-    rows = await db.fetch_all(f"""
-        SELECT id, name, subject, parent_id, is_system, sort_order
-        FROM knowledge_tags
-        WHERE {where_clause}
-        ORDER BY sort_order, name
-    """, tuple(params))
+    async with db.transaction():
+        rows = await db.fetch_all(f"""
+            SELECT id, name, subject, parent_id, is_system, sort_order
+            FROM knowledge_tags
+            WHERE {where_clause}
+            ORDER BY sort_order, name
+        """, tuple(params))
 
     # Build tree structure
     return _build_tag_tree([dict(r) for r in rows])
@@ -458,38 +502,46 @@ def _build_tag_tree(tags: List[dict]) -> List[dict]:
 
 
 @router.post("/tags")
-async def create_tag(tag: TagCreate):
+async def create_tag(
+    tag: TagCreate,
+    current_user: str = Depends(get_current_user),
+):
     """Create custom tag."""
     db = get_db_manager()
 
     tag_id = _generate_id()
     now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
-    try:
-        await db.execute("""
-            INSERT INTO knowledge_tags (id, name, subject, parent_id, is_system, user_id, created_at)
-            VALUES (?, ?, ?, ?, 0, ?, ?)
-        """, (tag_id, tag.name, tag.subject, tag.parent_id, tag.user_id, now))
-    except Exception as e:
-        if "UNIQUE constraint" in str(e):
-            raise HTTPException(status_code=400, detail="标签已存在")
-        raise
+    async with db.transaction():
+        try:
+            await db.execute("""
+                INSERT INTO knowledge_tags (id, name, subject, parent_id, is_system, user_id, created_at)
+                VALUES (?, ?, ?, ?, 0, ?, ?)
+            """, (tag_id, tag.name, tag.subject, tag.parent_id, current_user, now))
+        except Exception as e:
+            if "UNIQUE constraint" in str(e):
+                raise HTTPException(status_code=400, detail="标签已存在")
+            raise
 
     return {"id": tag_id, "created_at": now}
 
 
 @router.delete("/tags/{tag_id}")
-async def delete_tag(tag_id: str, user_id: str):
+async def delete_tag(
+    tag_id: str,
+    current_user: str = Depends(get_current_user),
+):
     """Delete custom tag (only user's own tags)."""
     db = get_db_manager()
 
-    result = await db.execute(
-        "DELETE FROM knowledge_tags WHERE id = ? AND user_id = ? AND is_system = 0",
-        (tag_id, user_id)
-    )
+    async with db.transaction():
+        result = await db.execute(
+            "DELETE FROM knowledge_tags WHERE id = ? AND user_id = ? AND is_system = 0",
+            (tag_id, current_user)
+        )
 
-    if result.rowcount == 0:
-        raise HTTPException(status_code=404, detail="标签不存在或无权删除")
+        if result.rowcount == 0:
+            raise HTTPException(status_code=404, detail="标签不存在或无权删除")
 
     return {"success": True}
 
@@ -507,24 +559,40 @@ async def generate_practice(request: PracticeGenerateRequest):
     )
 
     async def event_generator():
-        full_text = ""
+        full_content_text = ""
         try:
+            yield f"data: {json.dumps({'type': 'start'}, ensure_ascii=False)}\n\n"
+
             async for chunk in provider.stream_chat(
                 [ChatMessage(role="user", content=prompt)],
                 temperature=0.8,
                 max_tokens=4000
             ):
                 if chunk.content:
-                    full_text += chunk.content
-                    yield f"data: {json.dumps({'type': 'content', 'text': chunk.content}, ensure_ascii=False)}\n\n"
+                    if chunk.kind == "reasoning":
+                        yield f"data: {json.dumps({'type': 'token', 'kind': 'reasoning', 'content': chunk.content}, ensure_ascii=False)}\n\n"
+                    elif chunk.kind == "content" or chunk.kind is None:
+                        full_content_text += chunk.content
+                        yield f"data: {json.dumps({'type': 'token', 'kind': 'content', 'content': chunk.content}, ensure_ascii=False)}\n\n"
+                if chunk.finish_reason:
+                    break
 
-            result = parse_analyze_response(full_text)
+            result = parse_analyze_response(full_content_text)
             yield f"data: {json.dumps({'type': 'done', 'result': result.model_dump()}, ensure_ascii=False)}\n\n"
 
-        except Exception as e:
-            yield f"data: {json.dumps({'type': 'error', 'message': str(e)}, ensure_ascii=False)}\n\n"
+        except Exception:
+            logger.exception("Wrong notebook similar practice stream error")
+            yield f"data: {json.dumps({'type': 'error', 'message': 'Processing error'}, ensure_ascii=False)}\n\n"
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 
 @router.post("/practice/reanswer")
@@ -548,21 +616,37 @@ async def reanswer_question(request: ReanswerRequest):
         messages = [ChatMessage(role="user", content=prompt)]
 
     async def event_generator():
-        full_text = ""
+        full_content_text = ""
         try:
+            yield f"data: {json.dumps({'type': 'start'}, ensure_ascii=False)}\n\n"
+
             async for chunk in provider.stream_chat(
                 messages,
                 temperature=0.7,
                 max_tokens=4000
             ):
                 if chunk.content:
-                    full_text += chunk.content
-                    yield f"data: {json.dumps({'type': 'content', 'text': chunk.content}, ensure_ascii=False)}\n\n"
+                    if chunk.kind == "reasoning":
+                        yield f"data: {json.dumps({'type': 'token', 'kind': 'reasoning', 'content': chunk.content}, ensure_ascii=False)}\n\n"
+                    elif chunk.kind == "content" or chunk.kind is None:
+                        full_content_text += chunk.content
+                        yield f"data: {json.dumps({'type': 'token', 'kind': 'content', 'content': chunk.content}, ensure_ascii=False)}\n\n"
+                if chunk.finish_reason:
+                    break
 
-            result = parse_analyze_response(full_text)
+            result = parse_analyze_response(full_content_text)
             yield f"data: {json.dumps({'type': 'done', 'result': result.model_dump()}, ensure_ascii=False)}\n\n"
 
-        except Exception as e:
-            yield f"data: {json.dumps({'type': 'error', 'message': str(e)}, ensure_ascii=False)}\n\n"
+        except Exception:
+            logger.exception("Wrong notebook reanswer stream error")
+            yield f"data: {json.dumps({'type': 'error', 'message': 'Processing error'}, ensure_ascii=False)}\n\n"
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )

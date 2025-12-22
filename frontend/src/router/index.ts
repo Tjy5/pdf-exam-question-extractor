@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const LAST_VISITED_KEY = 'newvl:lastVisitedRoute'
+export const LAST_CHAT_ROUTE_KEY = 'newvl:lastChatRoute'
 
 function readLastVisitedRoute(): string | null {
   try {
@@ -20,8 +21,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Root',
-      redirect: () => readLastVisitedRoute() || '/dashboard'
+      name: 'Home',
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/dashboard',
@@ -29,15 +30,20 @@ const router = createRouter({
       component: () => import('@/views/DashboardView.vue')
     },
     {
+      path: '/exams',
+      name: 'ExamList',
+      component: () => import('@/views/ExamListView.vue')
+    },
+    {
       path: '/chat',
-      name: 'Chat',
-      component: () => import('@/views/ChatView.vue')
+      name: 'ChatLanding',
+      component: () => import('@/views/chat/ChatLandingView.vue')
     },
     {
       path: '/exam/:examId/chat',
       name: 'ExamChat',
       component: () => import('@/views/ChatView.vue'),
-      props: true
+      props: route => ({ examId: String(route.params.examId) })
     },
     {
       path: '/exam/:examId/review',
@@ -68,6 +74,9 @@ router.afterEach((to) => {
     }
 
     window.localStorage.setItem(LAST_VISITED_KEY, persisted)
+    if (to.name === 'ExamChat') {
+      window.localStorage.setItem(LAST_CHAT_ROUTE_KEY, persisted)
+    }
   } catch {
     // ignore storage failures (private mode / quota / etc.)
   }

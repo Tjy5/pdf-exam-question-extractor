@@ -50,8 +50,11 @@ class MockProvider:
                 last_user_message = self._message_text(msg)
                 break
 
-        # 模拟回复内容
-        mock_response = f"""【模拟 AI 解析】
+        reasoning_text = """1. 识别题型与提问意图
+2. 提取关键信息与考点
+3. 组织解题步骤与答案依据"""
+
+        content_text = f"""【模拟 AI 解析】
 
 您的问题是：{last_user_message}
 
@@ -77,11 +80,17 @@ class MockProvider:
 *提示：这是Mock Provider的测试回复，配置真实AI模型后将显示真实内容*
 """
 
-        # 模拟逐字流式输出
-        words = mock_response.split()
-        for i, word in enumerate(words):
-            await asyncio.sleep(0.05)  # 模拟网络延迟
+        # 模拟逐字流式输出（先思考后正文）
+        reasoning_words = reasoning_text.split()
+        for word in reasoning_words:
+            await asyncio.sleep(0.15)  # 增加延迟使流式效果更明显
+            yield StreamChunk(content=word + " ", finish_reason=None, kind="reasoning")
+
+        content_words = content_text.split()
+        for i, word in enumerate(content_words):
+            await asyncio.sleep(0.1)  # 增加延迟使流式效果更明显
             yield StreamChunk(
-                content=word + (" " if i < len(words) - 1 else ""),
-                finish_reason="stop" if i == len(words) - 1 else None
+                content=word + (" " if i < len(content_words) - 1 else ""),
+                finish_reason="stop" if i == len(content_words) - 1 else None,
+                kind="content"
             )

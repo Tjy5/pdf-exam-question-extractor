@@ -119,11 +119,10 @@ class OpenAICompatibleProvider:
             # 记录请求参数（调试用）
             import logging
             logger = logging.getLogger(__name__)
-            logger.debug(f"[OpenAI API] Request to {url}")
-            logger.debug(f"[OpenAI API] Payload keys: {list(payload.keys())}")
-            logger.debug(f"[OpenAI API] model={payload.get('model')}, temperature={payload.get('temperature')}, max_tokens={payload.get('max_tokens')}")
 
-            async with httpx.AsyncClient(timeout=timeout) as client:
+            # Do not inherit system proxy env vars (HTTP_PROXY/HTTPS_PROXY), which can break
+            # outbound calls in some dev environments.
+            async with httpx.AsyncClient(timeout=timeout, trust_env=False) as client:
                 async with client.stream("POST", url, headers=headers, json=payload) as response:
                     if response.status_code != 200:
                         error_bytes = await response.aread()
@@ -155,6 +154,71 @@ class OpenAICompatibleProvider:
                         except json.JSONDecodeError:
                             return None
 
+                    _debug_chunk_count = 0
+
+                    def _iter_chunks_from_data(data: dict[str, Any]):
+                        nonlocal _debug_chunk_count
+                        choices = data.get("choices", [])
+                        if not isinstance(choices, list) or not choices:
+                            return
+                        for choice in choices:
+                            _debug_chunk_count += 1
+                            if not isinstance(choice, dict):
+                                continue
+                            delta = choice.get("delta") or {}
+                            if not isinstance(delta, dict):
+                                delta = {}
+                            # Some providers may return content in "message" for JSON-line streams
+                            if not delta and isinstance(choice.get("message"), dict):
+                                delta = choice.get("message") or {}
+
+                            reasoning_keys = (
+                                "reasoning_content",
+                                "reasoning",
+                                "thinking",
+                                "thoughts",
+                                "reasoning_details",
+                                "thought",
+                                "internal_monologue",
+                                "internal_thoughts",
+                                "chain_of_thought",
+                            )
+                            reasoning_content: Optional[str] = None
+                            for key in reasoning_keys:
+                                value = delta.get(key)
+                                if isinstance(value, str) and value:
+                                    reasoning_content = value
+                                    break
+                                if value is not None and _debug_chunk_count <= 5:
+                                    logger.debug(
+                                        f"[OpenAI API] Non-string reasoning field: {key} type={type(value).__name__}"
+                                    )
+                            if reasoning_content is None and _debug_chunk_count <= 5:
+                                candidate_keys = []
+                                for key in delta.keys():
+                                    if key in reasoning_keys or key == "content":
+                                        continue
+                                    lowered = key.lower()
+                                    if any(tok in lowered for tok in ("reason", "think", "thought", "chain", "monologue")):
+                                        candidate_keys.append(key)
+                                if candidate_keys:
+                                    logger.debug(
+                                        f"[OpenAI API] Unmapped reasoning-like fields in delta: {candidate_keys}"
+                                    )
+                            if isinstance(reasoning_content, str) and reasoning_content:
+                                logger.debug(f"[OpenAI API] Found reasoning content: {reasoning_content[:50]}...")
+                                yield StreamChunk(content=reasoning_content, finish_reason=None, kind="reasoning")
+
+                            content = delta.get("content")
+                            if isinstance(content, str) and content:
+                                logger.debug(f"[OpenAI API] Found content: {content[:50]}...")
+                                yield StreamChunk(content=content, finish_reason=None)
+
+                            finish_reason = choice.get("finish_reason")
+                            if finish_reason:
+                                yield StreamChunk(content="", finish_reason=str(finish_reason))
+                                return
+
                     async for line in response.aiter_lines():
                         # SSE 事件边界：空行或仅包含空格的行结束一个事件
                         if not line.strip():
@@ -174,35 +238,8 @@ class OpenAICompatibleProvider:
                                 continue
 
                             data = data_or_none
-                            choices = data.get("choices", [])
-                            if not isinstance(choices, list) or not choices:
-                                continue
-
-                            for choice in choices:
-                                if not isinstance(choice, dict):
-                                    continue
-
-                                delta = choice.get("delta") or {}
-                                if not isinstance(delta, dict):
-                                    delta = {}
-
-                                # Stream reasoning content with special marker
-                                # Note: No HTML escaping - frontend Markdown renderer handles sanitization
-                                reasoning_content = delta.get("reasoning_content")
-                                if isinstance(reasoning_content, str) and reasoning_content:
-                                    # Wrap each reasoning chunk in <think> tags
-                                    # Frontend will parse and merge all <think> blocks
-                                    yield StreamChunk(content=f"<think>{reasoning_content}</think>", finish_reason=None)
-
-                                # Stream normal content
-                                content = delta.get("content")
-                                if isinstance(content, str) and content:
-                                    yield StreamChunk(content=content, finish_reason=None)
-
-                                finish_reason = choice.get("finish_reason")
-                                if finish_reason:
-                                    yield StreamChunk(content="", finish_reason=str(finish_reason))
-                                    return
+                            for chunk in _iter_chunks_from_data(data):
+                                yield chunk
 
                             continue
 
@@ -211,21 +248,24 @@ class OpenAICompatibleProvider:
                             event_data_lines.append(line[5:].lstrip())
                             continue
 
+                        # Fallback: some providers stream JSON lines without SSE "data:" prefix
+                        cleaned = line.strip()
+                        if cleaned.startswith("{") and cleaned.endswith("}"):
+                            try:
+                                data = json.loads(cleaned)
+                                for chunk in _iter_chunks_from_data(data):
+                                    yield chunk
+                            except json.JSONDecodeError:
+                                continue
+
                     # 处理流结束时未被空行终止的最后一个事件
                     if event_data_lines:
                         data_str = "\n".join(event_data_lines)
                         flushed = _flush_sse_event(data_str)
                         if flushed and flushed[0]:
                             data = flushed[0]
-                            choices = data.get("choices", [])
-                            if isinstance(choices, list):
-                                for choice in choices:
-                                    if isinstance(choice, dict):
-                                        delta = choice.get("delta") or {}
-                                        if isinstance(delta, dict):
-                                            content = delta.get("content")
-                                            if isinstance(content, str) and content:
-                                                yield StreamChunk(content=content, finish_reason=None)
+                            for chunk in _iter_chunks_from_data(data):
+                                yield chunk
 
         except httpx.TimeoutException as e:
             raise AIProviderConnectionError(f"Request timeout: {e}")

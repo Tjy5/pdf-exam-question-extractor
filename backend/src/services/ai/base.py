@@ -24,6 +24,8 @@ class StreamChunk:
     """流式响应片段"""
     content: str
     finish_reason: Optional[str] = None
+    # kind: "reasoning" | "content" | None
+    kind: Optional[str] = None
 
 
 class AIProvider(Protocol):

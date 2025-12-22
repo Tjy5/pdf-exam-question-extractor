@@ -56,16 +56,15 @@ class SQLiteEventStore:
         payload_json = json.dumps(payload, ensure_ascii=False)
         created_at = _now_iso()
 
-        cursor = await self._db.execute(
-            """
-            INSERT INTO task_events (task_id, event_type, payload_json, created_at)
-            VALUES (?, ?, ?, ?)
-            """,
-            (task_id, event_type, payload_json, created_at),
-        )
-        await self._db.commit()
-
-        event_id = cursor.lastrowid
+        async with self._db.transaction():
+            cursor = await self._db.execute(
+                """
+                INSERT INTO task_events (task_id, event_type, payload_json, created_at)
+                VALUES (?, ?, ?, ?)
+                """,
+                (task_id, event_type, payload_json, created_at),
+            )
+            event_id = cursor.lastrowid
 
         return StoredEvent(
             id=event_id,
@@ -83,16 +82,17 @@ class SQLiteEventStore:
         limit: int = 500,
     ) -> Sequence[StoredEvent]:
         """List events after the given ID for replay."""
-        rows = await self._db.fetch_all(
-            """
-            SELECT id, task_id, event_type, payload_json, created_at
-            FROM task_events
-            WHERE task_id = ? AND id > ?
-            ORDER BY id ASC
-            LIMIT ?
-            """,
-            (task_id, after_id, limit),
-        )
+        async with self._db.transaction():
+            rows = await self._db.fetch_all(
+                """
+                SELECT id, task_id, event_type, payload_json, created_at
+                FROM task_events
+                WHERE task_id = ? AND id > ?
+                ORDER BY id ASC
+                LIMIT ?
+                """,
+                (task_id, after_id, limit),
+            )
 
         events = []
         for row in rows:
@@ -115,22 +115,24 @@ class SQLiteEventStore:
 
     async def get_latest_id(self, *, task_id: str) -> int:
         """Get the latest event ID for a task (0 if no events)."""
-        row = await self._db.fetch_one(
-            """
-            SELECT MAX(id) as max_id FROM task_events WHERE task_id = ?
-            """,
-            (task_id,),
-        )
+        async with self._db.transaction():
+            row = await self._db.fetch_one(
+                """
+                SELECT MAX(id) as max_id FROM task_events WHERE task_id = ?
+                """,
+                (task_id,),
+            )
         return row["max_id"] if row and row["max_id"] else 0
 
     async def delete_for_task(self, *, task_id: str) -> int:
         """Delete all events for a task. Returns count deleted."""
-        cursor = await self._db.execute(
-            "DELETE FROM task_events WHERE task_id = ?",
-            (task_id,),
-        )
-        await self._db.commit()
-        return cursor.rowcount
+        async with self._db.transaction():
+            cursor = await self._db.execute(
+                "DELETE FROM task_events WHERE task_id = ?",
+                (task_id,),
+            )
+            rowcount = cursor.rowcount
+        return rowcount
 
 
 class CompositeEventSinkImpl:
