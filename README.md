@@ -70,6 +70,8 @@ newvl/
 │       │   ├── main.py          # 应用入口（含静态资源、API v1 重定向）
 │       │   ├── config.py        # 配置管理
 │       │   ├── schemas.py       # 数据模型
+│       │   ├── dependencies.py  # 依赖注入（用户ID等）
+│       │   ├── limiter.py       # API 速率限制
 │       │   ├── routers/         # API 路由
 │       │   │   ├── tasks.py     # 任务管理 + SSE 实时流
 │       │   │   ├── files.py     # 文件下载
@@ -122,7 +124,10 @@ newvl/
 │   ├── src/
 │   │   ├── views/               # 页面视图
 │   │   │   ├── DashboardView.vue    # 主页（PDF处理）
+│   │   │   ├── HomeView.vue         # 首页入口
+│   │   │   ├── ExamListView.vue     # 试卷列表
 │   │   │   ├── ChatView.vue         # AI 聊天页
+│   │   │   ├── chat/ChatLandingView.vue  # AI答疑入口
 │   │   │   ├── ReviewView.vue       # 试卷复习页
 │   │   │   └── WrongNotebook.vue    # 错题本页
 │   │   ├── components/          # Vue 组件
@@ -401,6 +406,11 @@ pdf_images/{文件名stem}__{sha256前8位}/
 
 后端 API 使用 `/api` 前缀，同时提供 `/api/v1/* → /api/*` 的兼容重定向。
 
+**通用约定**:
+- 用户身份传递方式因端点而异：`X-User-Id` Header、Query `user_id`、Body `user_id` 或 Path `user_id`
+- SSE 端点返回 `text/event-stream`，文件端点返回二进制
+- 其他请求/响应均为 JSON 格式
+
 ### 任务与流水线
 
 | 方法 | 端点 | 说明 |
@@ -427,16 +437,20 @@ pdf_images/{文件名stem}__{sha256前8位}/
 |------|------|------|
 | `GET` | `/api/health/live` | 存活探针 |
 | `GET` | `/api/health/ready` | 就绪探针（包含 GPU 信息） |
+| `GET` | `/api/health/config` | 获取应用配置（app_mode 等） |
 | `GET` | `/api/health/models/ppstructure` | PP-StructureV3 模型状态与 GPU 信息 |
 
 ### AI 聊天功能
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
-| `POST` | `/api/chat/sessions` | 创建聊天会话（JSON: `{"user_id": "...", "exam_id": ..., "question_no": ...}`） |
-| `GET` | `/api/chat/sessions` | 获取用户的聊天会话列表（Query: `user_id`, 可选 `exam_id`） |
-| `GET` | `/api/chat/sessions/{session_id}/messages` | 获取会话的所有消息 |
-| `POST` | `/api/chat/sessions/{session_id}/messages:stream` | **SSE 流式聊天**（发送消息并流式接收AI回复）<br>Content-Type: `application/json`, Body: `{"content": "...", "model": "..."}` |
+| `POST` | `/api/chat/sessions` | 创建聊天会话（Body: `{"user_id": "...", "exam_id": ..., "question_no": ...}`） |
+| `GET` | `/api/chat/sessions` | 获取会话列表（Query: `user_id`, 可选 `exam_id`） |
+| `DELETE` | `/api/chat/sessions/{session_id}` | 删除单个会话（Query: `user_id`） |
+| `DELETE` | `/api/chat/sessions` | 删除用户所有会话（Header: `X-User-Id`, 可选 Query: `exam_id`） |
+| `GET` | `/api/chat/sessions/{session_id}/messages` | 获取会话消息（Header: `X-User-Id`） |
+| `POST` | `/api/chat/sessions/{session_id}/title:generate` | AI生成会话标题（Body: `{"user_id": "..."}`） |
+| `POST` | `/api/chat/sessions/{session_id}/messages:stream` | **SSE 流式聊天**（Header: `X-User-Id`，支持 `hint_mode`, `use_image` 等） |
 
 ### 试卷管理
 
@@ -448,27 +462,31 @@ pdf_images/{文件名stem}__{sha256前8位}/
 | `POST` | `/api/exams/{exam_id}/answers:import` | 批量导入标准答案（支持JSON/CSV/PDF格式） |
 | `GET` | `/api/exams/{exam_id}/answers` | 获取试卷的所有答案（返回 `{"question_no": "answer"}` 映射） |
 | `POST` | `/api/exams/answers:import-pdfs` | 批量导入服务器端answer目录中的PDF答案（自动匹配试卷） |
+| `GET` | `/api/exams/local/directories` | 扫描 `pdf_images/` 下可导入的本地试卷目录 |
+| `POST` | `/api/exams/local:import` | 导入本地试卷目录（JSON: `{"exam_dir_name": "...", "display_name": "..."}`） |
 
 ### 用户错题管理
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
-| `POST` | `/api/users/{user_id}/exams/{exam_id}/wrongs` | 标记错题（JSON: `{"answers": {"1": "A", "2": "B"}}`） |
-| `GET` | `/api/users/{user_id}/exams/{exam_id}/wrongs` | 获取用户的错题列表 |
-| `DELETE` | `/api/users/{user_id}/exams/{exam_id}/wrongs/{question_no}` | 删除错题标记 |
+| `POST` | `/api/users/{user_id}/exams/{exam_id}/wrong-questions` | 标记错题（JSON: `{"answers": {"1": "A", "2": "B"}}`） |
+| `GET` | `/api/users/{user_id}/exams/{exam_id}/wrong-questions` | 获取用户的错题列表 |
 
 ### 错题本管理
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
-| `POST` | `/api/wrong-notebook/analyze` | AI分析上传的错题图片（返回题目信息和知识点） |
-| `POST` | `/api/wrong-notebook/items` | 创建错题本条目（JSON: 参考`WrongItemCreate`模型） |
-| `GET` | `/api/wrong-notebook/items` | 获取用户的错题本条目（Query: `user_id`, 可选过滤条件） |
+| `POST` | `/api/wrong-notebook/analyze` | AI分析错题图片（**SSE流式**，Header: `X-User-Id`） |
+| `GET` | `/api/wrong-notebook/items` | 获取错题本列表（Header: `X-User-Id`，Query: `subject`, `mastery_level`, `tag_id`, `search`, `page`） |
+| `POST` | `/api/wrong-notebook/items` | 创建错题本条目（Header: `X-User-Id`） |
 | `GET` | `/api/wrong-notebook/items/{item_id}` | 获取错题本条目详情 |
-| `POST` | `/api/wrong-notebook/items/{item_id}/practice` | 生成相似题目练习（SSE流式） |
-| `POST` | `/api/wrong-notebook/items/{item_id}/reanswer` | 重新作答（获取AI解析指导） |
-| `GET` | `/api/wrong-notebook/tags` | 获取知识标签树（按科目分类的层级结构） |
-| `POST` | `/api/wrong-notebook/tags` | 创建知识标签（管理员功能） |
+| `PATCH` | `/api/wrong-notebook/items/{item_id}` | 更新错题本条目（如标记掌握度） |
+| `DELETE` | `/api/wrong-notebook/items/{item_id}` | 删除错题本条目 |
+| `GET` | `/api/wrong-notebook/tags` | 获取知识标签树 |
+| `POST` | `/api/wrong-notebook/tags` | 创建知识标签（Header: `X-User-Id`） |
+| `DELETE` | `/api/wrong-notebook/tags/{tag_id}` | 删除知识标签 |
+| `POST` | `/api/wrong-notebook/practice/generate` | 生成相似题目练习（SSE流式） |
+| `POST` | `/api/wrong-notebook/practice/reanswer` | 重新作答获取AI解析（SSE流式） |
 
 ### SSE 事件流说明
 

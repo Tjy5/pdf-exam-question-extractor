@@ -1,6 +1,6 @@
 # AI 聊天解析功能 - 核心规格
 
-**版本**: 2.0 | **日期**: 2025-12-17 | **状态**: 全部完成
+**版本**: 2.1 | **日期**: 2025-12-22 | **状态**: 功能完成（测试清单待验证）
 
 ---
 
@@ -29,15 +29,19 @@
 
 ```powershell
 # 后端
-python -m venv venv && .\venv\Scripts\activate
+python -m venv venv
+.\venv\Scripts\Activate.ps1
 pip install -r requirements.txt -r web_requirements.txt
 python manage.py
 
 # 前端（开发）
-cd frontend && npm install && npm run dev
+cd frontend
+npm install
+npm run dev
 
 # 前端（生产）
-cd frontend && npm run build
+cd frontend
+npm run build
 ```
 
 ### AI配置
@@ -59,7 +63,7 @@ AI_MODEL=llama3
 GET  /api/exams                              # 试卷列表
 GET  /api/exams/{id}                         # 试卷详情（含题目列表）
 GET  /api/exams/{id}/questions/{no}/image    # 题目图片
-POST /api/exams/{id}/answers:import          # 导入答案（JSON/CSV）
+POST /api/exams/{id}/answers:import          # 导入答案（JSON/CSV/PDF）
 GET  /api/exams/{id}/answers                 # 获取答案
 ```
 
@@ -100,29 +104,41 @@ GET  /api/users/{uid}/exams/{eid}/wrong-questions  # 错题列表
 ### 路由
 
 ```typescript
-/dashboard                    // 试卷列表入口
-/exam/:examId/chat?q=N       // AI答疑（三栏布局）
+/                             // 首页入口
+/dashboard                    // PDF处理页
+/exams                        // 试卷列表
+/chat                         // AI答疑入口（选择试卷）
+/exam/:examId/chat?q=N        // AI答疑（三栏布局）
 /exam/:examId/review          // 错题复习
+/wrong-notebook               // 错题本
 ```
 
 ### 核心组件
 
 ```
 views/
-├── ChatView.vue              # AI答疑主视图（540行）
-├── ReviewView.vue            # 错题复习（342行）
-└── DashboardView.vue         # 首页
+├── ChatView.vue              # AI答疑主视图
+├── ReviewView.vue            # 错题复习
+├── DashboardView.vue         # 首页（PDF处理）
+├── HomeView.vue              # 主页入口
+├── ExamListView.vue          # 试卷列表
+├── WrongNotebook.vue         # 错题本
+└── chat/
+    └── ChatLandingView.vue   # AI答疑入口页
 
 components/chat/
-├── ExamSelector.vue          # 试卷选择器（220行）
-├── QuestionNavigator.vue     # 题目导航网格（240行）
-├── LeftSidebar.vue           # 双标签侧边栏（101行）
-├── SessionList.vue           # 会话历史分组（217行）
-├── ContextPanel.vue          # 题目上下文（156行）
-└── MarkdownRenderer.vue      # Markdown渲染
+├── ExamSelector.vue          # 试卷选择器
+├── QuestionNavigator.vue     # 题目导航网格
+├── LeftSidebar.vue           # 双标签侧边栏
+├── SessionList.vue           # 会话历史分组
+├── ContextPanel.vue          # 题目上下文
+├── MarkdownRenderer.vue      # Markdown渲染
+└── ThinkingBlock.vue         # AI思考过程展示
 
 components/common/
-└── ImageViewer.vue           # 图片查看器（140行）
+├── ImageViewer.vue           # 图片查看器
+├── ErrorBoundary.vue         # 错误边界
+└── SkeletonCard.vue          # 骨架屏加载
 ```
 
 ### Store
@@ -216,13 +232,16 @@ if (data.type === 'error') throw new Error(data.message)
 - `backend/src/web/routers/chat.py` - 聊天API
 - `backend/src/web/routers/exams.py` - 试卷API
 - `backend/src/web/routers/users.py` - 用户/错题API
+- `backend/src/web/routers/wrong_notebook.py` - 错题本API
 - `backend/src/services/ai/` - AI Provider抽象
 
 **前端**
-- `frontend/src/stores/useChatStore.ts` - 聊天状态（382行）
-- `frontend/src/stores/useWrongStore.ts` - 错题状态（203行）
-- `frontend/src/views/ChatView.vue` - AI答疑视图（540行）
-- `frontend/src/views/ReviewView.vue` - 错题复习（342行）
+- `frontend/src/stores/useChatStore.ts` - 聊天状态
+- `frontend/src/stores/useWrongStore.ts` - 错题状态
+- `frontend/src/stores/useWrongNotebookStore.ts` - 错题本状态
+- `frontend/src/views/ChatView.vue` - AI答疑视图
+- `frontend/src/views/ReviewView.vue` - 错题复习
+- `frontend/src/views/WrongNotebook.vue` - 错题本
 
 ---
 
